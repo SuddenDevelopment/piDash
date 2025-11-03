@@ -38,10 +38,11 @@ export default function Dashboard() {
     <View style={styles.container}>
       <StatusBar style="light" hidden />
 
-      {/* Header */}
+      {/* Thin Header */}
       <View style={styles.header}>
-        <Text style={styles.logo}>🥧 piDash</Text>
-        <Text style={styles.subtitle}>Raspberry Pi Dashboard</Text>
+        <Text style={styles.headerText}>piDash v0.1.0</Text>
+        <Text style={styles.headerText}>{DISPLAY_CONFIG.width}×{DISPLAY_CONFIG.height}</Text>
+        <Text style={styles.headerText}>{formatDate(time)}</Text>
       </View>
 
       {/* Main Content */}
@@ -49,7 +50,6 @@ export default function Dashboard() {
         {/* Time Display */}
         <View style={styles.card}>
           <Text style={styles.time}>{formatTime(time)}</Text>
-          <Text style={styles.date}>{formatDate(time)}</Text>
         </View>
 
         {/* System Info */}
@@ -99,27 +99,21 @@ const styles = StyleSheet.create({
     padding: 0,
   },
   header: {
-    height: scale(60),
+    height: 30,
     paddingHorizontal: scale(12),
-    paddingTop: scale(12),
-    paddingBottom: scale(8),
     borderBottomWidth: 1,
     borderBottomColor: '#1f2937',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  logo: {
-    fontSize: scale(24),
-    fontWeight: 'bold',
-    color: '#f9fafb',
-  },
-  subtitle: {
-    fontSize: scale(11),
-    color: '#9ca3af',
+  headerText: {
+    fontSize: scale(9),
+    color: '#6b7280',
+    letterSpacing: 0.5,
   },
   content: {
-    height: DISPLAY_CONFIG.height - scale(60) - scale(30), // Total height minus header and footer
+    height: DISPLAY_CONFIG.height - 30 - 30, // 420px: Total height minus header and footer
     paddingHorizontal: scale(12),
     paddingVertical: scale(10),
     gap: scale(10),
@@ -133,15 +127,10 @@ const styles = StyleSheet.create({
     borderColor: '#374151',
   },
   time: {
-    fontSize: scale(48),
+    fontSize: scale(56),
     fontWeight: 'bold',
     color: '#3b82f6',
-    marginBottom: scale(4),
     fontVariant: ['tabular-nums'],
-  },
-  date: {
-    fontSize: scale(14),
-    color: '#9ca3af',
   },
   infoGrid: {
     flexDirection: 'row',
@@ -191,7 +180,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   footer: {
-    height: scale(30),
+    height: 30,
     paddingHorizontal: scale(12),
     borderTopWidth: 1,
     borderTopColor: '#1f2937',
