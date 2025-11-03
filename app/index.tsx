@@ -2,6 +2,7 @@ import { View, Text, StyleSheet, Platform } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import { DISPLAY_CONFIG, scale } from '../config/display';
+import { VERSION_INFO } from '../config/version';
 
 export default function Dashboard() {
   const [time, setTime] = useState(new Date());
@@ -42,7 +43,7 @@ export default function Dashboard() {
       <View style={styles.header}>
         <Text style={styles.headerText}>piDash v0.1.0</Text>
         <Text style={styles.headerText}>{DISPLAY_CONFIG.width}×{DISPLAY_CONFIG.height}</Text>
-        <Text style={styles.headerText}>{formatDate(time)}</Text>
+        <Text style={styles.headerText}>{VERSION_INFO.version}</Text>
       </View>
 
       {/* Main Content */}

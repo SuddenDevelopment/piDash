@@ -63,6 +63,9 @@ Thumbs.db
 # TypeScript
 *.tsbuildinfo
 
+# Auto-generated files
+config/version.ts
+
 # Optional npm cache directory
 .npm
 
