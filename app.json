@@ -1,0 +1,33 @@
+{
+  "expo": {
+    "name": "piDash",
+    "slug": "piDash",
+    "version": "0.1.0",
+    "orientation": "landscape",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "resizeMode": "contain",
+      "backgroundColor": "#111827"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.suddendevelopment.piDash"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#111827"
+      },
+      "package": "com.suddendevelopment.piDash"
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static"
+    },
+    "plugins": [
+      "expo-router"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
