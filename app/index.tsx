@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet, Platform } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
+import { DISPLAY_CONFIG, scale } from '../config/display';
 
 export default function Dashboard() {
   const [time, setTime] = useState(new Date());
@@ -27,16 +28,15 @@ export default function Dashboard() {
 
   const formatDate = (date: Date) => {
     return date.toLocaleDateString('en-US', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
+      weekday: 'short',
+      month: 'short',
       day: 'numeric',
     });
   };
 
   return (
     <View style={styles.container}>
-      <StatusBar style="light" />
+      <StatusBar style="light" hidden />
 
       {/* Header */}
       <View style={styles.header}>
@@ -55,13 +55,18 @@ export default function Dashboard() {
         {/* System Info */}
         <View style={styles.infoGrid}>
           <View style={styles.infoCard}>
-            <Text style={styles.infoLabel}>Platform</Text>
+            <Text style={styles.infoLabel}>PLATFORM</Text>
             <Text style={styles.infoValue}>{systemInfo.platform}</Text>
           </View>
 
           <View style={styles.infoCard}>
-            <Text style={styles.infoLabel}>Status</Text>
+            <Text style={styles.infoLabel}>STATUS</Text>
             <Text style={[styles.infoValue, styles.statusOnline]}>● Online</Text>
+          </View>
+
+          <View style={styles.infoCard}>
+            <Text style={styles.infoLabel}>DISPLAY</Text>
+            <Text style={styles.infoValue}>{DISPLAY_CONFIG.width}x{DISPLAY_CONFIG.height}</Text>
           </View>
         </View>
 
@@ -69,21 +74,15 @@ export default function Dashboard() {
         <View style={styles.welcomeCard}>
           <Text style={styles.welcomeTitle}>✨ Dashboard Ready!</Text>
           <Text style={styles.welcomeText}>
-            Your piDash is successfully running. This is a starter dashboard that you can customize with JSON configuration.
+            Optimized for {DISPLAY_CONFIG.width}x{DISPLAY_CONFIG.height} display
           </Text>
-          <View style={styles.instructions}>
-            <Text style={styles.instructionItem}>📊 Add charts and visualizations</Text>
-            <Text style={styles.instructionItem}>🔄 Configure auto-refresh intervals</Text>
-            <Text style={styles.instructionItem}>🎨 Customize with JSON configs</Text>
-            <Text style={styles.instructionItem}>📱 Works on web and mobile</Text>
-          </View>
         </View>
       </View>
 
       {/* Footer */}
       <View style={styles.footer}>
         <Text style={styles.footerText}>
-          piDash v0.1.0 | Build: {new Date().toISOString().split('T')[0]}
+          piDash v0.1.0 | {DISPLAY_CONFIG.deviceType}
         </Text>
       </View>
     </View>
@@ -92,71 +91,80 @@ export default function Dashboard() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    width: DISPLAY_CONFIG.width,
+    height: DISPLAY_CONFIG.height,
     backgroundColor: '#111827',
+    overflow: 'hidden', // Prevent any scrolling
+    margin: 0,
+    padding: 0,
   },
   header: {
-    paddingTop: 40,
-    paddingHorizontal: 24,
-    paddingBottom: 20,
+    height: scale(60),
+    paddingHorizontal: scale(12),
+    paddingTop: scale(12),
+    paddingBottom: scale(8),
     borderBottomWidth: 1,
     borderBottomColor: '#1f2937',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   logo: {
-    fontSize: 32,
+    fontSize: scale(24),
     fontWeight: 'bold',
     color: '#f9fafb',
-    marginBottom: 4,
   },
   subtitle: {
-    fontSize: 14,
+    fontSize: scale(11),
     color: '#9ca3af',
   },
   content: {
-    flex: 1,
-    padding: 24,
-    gap: 16,
+    height: DISPLAY_CONFIG.height - scale(60) - scale(30), // Total height minus header and footer
+    paddingHorizontal: scale(12),
+    paddingVertical: scale(10),
+    gap: scale(10),
   },
   card: {
     backgroundColor: '#1f2937',
-    borderRadius: 12,
-    padding: 32,
+    borderRadius: scale(8),
+    padding: scale(20),
     alignItems: 'center',
     borderWidth: 1,
     borderColor: '#374151',
   },
   time: {
-    fontSize: 56,
+    fontSize: scale(48),
     fontWeight: 'bold',
     color: '#3b82f6',
-    marginBottom: 8,
+    marginBottom: scale(4),
     fontVariant: ['tabular-nums'],
   },
   date: {
-    fontSize: 18,
+    fontSize: scale(14),
     color: '#9ca3af',
   },
   infoGrid: {
     flexDirection: 'row',
-    gap: 16,
+    gap: scale(10),
   },
   infoCard: {
     flex: 1,
     backgroundColor: '#1f2937',
-    borderRadius: 12,
-    padding: 20,
+    borderRadius: scale(8),
+    padding: scale(12),
     borderWidth: 1,
     borderColor: '#374151',
+    alignItems: 'center',
   },
   infoLabel: {
-    fontSize: 12,
+    fontSize: scale(9),
     color: '#9ca3af',
-    marginBottom: 8,
+    marginBottom: scale(6),
     textTransform: 'uppercase',
-    letterSpacing: 1,
+    letterSpacing: 0.5,
   },
   infoValue: {
-    fontSize: 24,
+    fontSize: scale(16),
     fontWeight: 'bold',
     color: '#f9fafb',
   },
@@ -165,39 +173,33 @@ const styles = StyleSheet.create({
   },
   welcomeCard: {
     backgroundColor: '#1f2937',
-    borderRadius: 12,
-    padding: 24,
+    borderRadius: scale(8),
+    padding: scale(16),
     borderWidth: 1,
     borderColor: '#374151',
+    alignItems: 'center',
   },
   welcomeTitle: {
-    fontSize: 24,
+    fontSize: scale(18),
     fontWeight: 'bold',
     color: '#f9fafb',
-    marginBottom: 12,
+    marginBottom: scale(6),
   },
   welcomeText: {
-    fontSize: 16,
+    fontSize: scale(12),
     color: '#9ca3af',
-    lineHeight: 24,
-    marginBottom: 20,
-  },
-  instructions: {
-    gap: 12,
-  },
-  instructionItem: {
-    fontSize: 14,
-    color: '#d1d5db',
-    lineHeight: 20,
+    textAlign: 'center',
   },
   footer: {
-    padding: 16,
+    height: scale(30),
+    paddingHorizontal: scale(12),
     borderTopWidth: 1,
     borderTopColor: '#1f2937',
+    justifyContent: 'center',
     alignItems: 'center',
   },
   footerText: {
-    fontSize: 12,
+    fontSize: scale(10),
     color: '#6b7280',
   },
 });
