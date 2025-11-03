@@ -1,0 +1,14 @@
+{
+  "name": "piDash",
+  "version": "0.1.0",
+  "scripts": {
+    "start": "expo start",
+    "start:network": "expo start --host 0.0.0.0",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web",
+    "build:web": "expo export:web",
+    "deploy:pi": "./scripts/deploy-to-pi.sh",
+    "watch:pi": "./scripts/watch-and-deploy.sh"
+  }
+}
