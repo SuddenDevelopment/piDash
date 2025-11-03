@@ -53,3 +53,4 @@ ssh "$PI_USER@$PI_HOST" "sudo systemctl restart pidash 2>/dev/null || echo 'Serv
 
 echo "✅ Deployment complete!"
 echo "🌐 Access at: http://$PI_HOST:3000"
+echo "📱 Browser will auto-refresh within a few seconds"

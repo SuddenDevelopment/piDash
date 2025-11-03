@@ -1,6 +1,7 @@
-import { View, Text, StyleSheet, Platform } from 'react-native';
+import { Platform } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
+import { Box, Text, Card, HStack, VStack } from '../components/ui';
 import { DISPLAY_CONFIG, scale } from '../config/display';
 import { VERSION_INFO } from '../config/version';
 
@@ -64,160 +65,150 @@ export default function Dashboard() {
   };
 
   return (
-    <View style={styles.container}>
+    <Box
+      sx={{
+        width: DISPLAY_CONFIG.width,
+        height: DISPLAY_CONFIG.height,
+        bg: '$background',
+        overflow: 'hidden',
+        m: 0,
+        p: 0,
+      }}
+    >
       <StatusBar style="light" hidden />
 
       {/* Thin Header */}
-      <View style={styles.header}>
-        <Text style={styles.headerText}>piDash v0.1.0</Text>
-        <Text style={styles.headerText}>{DISPLAY_CONFIG.width}×{DISPLAY_CONFIG.height}</Text>
-        <Text style={styles.headerText}>{VERSION_INFO.version}</Text>
-      </View>
+      <HStack
+        sx={{
+          h: 30,
+          px: scale(12),
+          borderBottomWidth: 1,
+          borderBottomColor: '$backgroundLight',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
+        <Text sx={{ fontSize: scale(9), color: '$textMuted', letterSpacing: 0.5 }}>
+          piDash v0.1.0
+        </Text>
+        <Text sx={{ fontSize: scale(9), color: '$textMuted', letterSpacing: 0.5 }}>
+          {DISPLAY_CONFIG.width}×{DISPLAY_CONFIG.height}
+        </Text>
+        <Text sx={{ fontSize: scale(9), color: '$textMuted', letterSpacing: 0.5 }}>
+          {VERSION_INFO.version}
+        </Text>
+      </HStack>
 
       {/* Main Content */}
-      <View style={styles.content}>
+      <VStack
+        sx={{
+          h: DISPLAY_CONFIG.height - 60,
+          px: scale(12),
+          py: scale(10),
+          gap: scale(10),
+        }}
+      >
         {/* Time Display */}
-        <View style={styles.card}>
-          <Text style={styles.time}>{formatTime(time)}</Text>
-        </View>
+        <Card
+          sx={{
+            alignItems: 'center',
+            p: scale(20),
+          }}
+        >
+          <Text
+            sx={{
+              fontSize: scale(56),
+              fontWeight: 'bold',
+              color: '$primary',
+              fontVariant: ['tabular-nums'],
+            }}
+          >
+            {formatTime(time)}
+          </Text>
+        </Card>
 
         {/* System Info */}
-        <View style={styles.infoGrid}>
-          <View style={styles.infoCard}>
-            <Text style={styles.infoLabel}>PLATFORM</Text>
-            <Text style={styles.infoValue}>{systemInfo.platform}</Text>
-          </View>
+        <HStack sx={{ gap: scale(10) }}>
+          <Card sx={{ flex: 1, alignItems: 'center', p: scale(12) }}>
+            <Text
+              sx={{
+                fontSize: scale(9),
+                color: '$textSecondary',
+                mb: scale(6),
+                textTransform: 'uppercase',
+                letterSpacing: 0.5,
+              }}
+            >
+              PLATFORM
+            </Text>
+            <Text sx={{ fontSize: scale(16), fontWeight: 'bold', color: '$text' }}>
+              {systemInfo.platform}
+            </Text>
+          </Card>
 
-          <View style={styles.infoCard}>
-            <Text style={styles.infoLabel}>STATUS</Text>
-            <Text style={[styles.infoValue, styles.statusOnline]}>● Online</Text>
-          </View>
+          <Card sx={{ flex: 1, alignItems: 'center', p: scale(12) }}>
+            <Text
+              sx={{
+                fontSize: scale(9),
+                color: '$textSecondary',
+                mb: scale(6),
+                textTransform: 'uppercase',
+                letterSpacing: 0.5,
+              }}
+            >
+              STATUS
+            </Text>
+            <Text sx={{ fontSize: scale(16), fontWeight: 'bold', color: '$success' }}>
+              ● Online
+            </Text>
+          </Card>
 
-          <View style={styles.infoCard}>
-            <Text style={styles.infoLabel}>DISPLAY</Text>
-            <Text style={styles.infoValue}>{DISPLAY_CONFIG.width}x{DISPLAY_CONFIG.height}</Text>
-          </View>
-        </View>
+          <Card sx={{ flex: 1, alignItems: 'center', p: scale(12) }}>
+            <Text
+              sx={{
+                fontSize: scale(9),
+                color: '$textSecondary',
+                mb: scale(6),
+                textTransform: 'uppercase',
+                letterSpacing: 0.5,
+              }}
+            >
+              DISPLAY
+            </Text>
+            <Text sx={{ fontSize: scale(16), fontWeight: 'bold', color: '$text' }}>
+              {DISPLAY_CONFIG.width}x{DISPLAY_CONFIG.height}
+            </Text>
+          </Card>
+        </HStack>
 
         {/* Welcome Message */}
-        <View style={styles.welcomeCard}>
-          <Text style={styles.welcomeTitle}>✨ Dashboard Ready!</Text>
-          <Text style={styles.welcomeText}>
+        <Card sx={{ alignItems: 'center', p: scale(16) }}>
+          <Text
+            sx={{ fontSize: scale(18), fontWeight: 'bold', color: '$text', mb: scale(6) }}
+          >
+            ✨ Dashboard Ready!
+          </Text>
+          <Text sx={{ fontSize: scale(12), color: '$textSecondary', textAlign: 'center' }}>
             Optimized for {DISPLAY_CONFIG.width}x{DISPLAY_CONFIG.height} display
           </Text>
-        </View>
-      </View>
+        </Card>
+      </VStack>
 
       {/* Footer */}
-      <View style={styles.footer}>
-        <Text style={styles.footerText}>
+      <HStack
+        sx={{
+          h: 30,
+          px: scale(12),
+          borderTopWidth: 1,
+          borderTopColor: '$backgroundLight',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <Text sx={{ fontSize: scale(10), color: '$textMuted' }}>
           piDash v0.1.0 | {DISPLAY_CONFIG.deviceType}
         </Text>
-      </View>
-    </View>
+      </HStack>
+    </Box>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    width: DISPLAY_CONFIG.width,
-    height: DISPLAY_CONFIG.height,
-    backgroundColor: '#111827',
-    overflow: 'hidden', // Prevent any scrolling
-    margin: 0,
-    padding: 0,
-  },
-  header: {
-    height: 30,
-    paddingHorizontal: scale(12),
-    borderBottomWidth: 1,
-    borderBottomColor: '#1f2937',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  headerText: {
-    fontSize: scale(9),
-    color: '#6b7280',
-    letterSpacing: 0.5,
-  },
-  content: {
-    height: DISPLAY_CONFIG.height - 30 - 30, // 420px: Total height minus header and footer
-    paddingHorizontal: scale(12),
-    paddingVertical: scale(10),
-    gap: scale(10),
-  },
-  card: {
-    backgroundColor: '#1f2937',
-    borderRadius: scale(8),
-    padding: scale(20),
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#374151',
-  },
-  time: {
-    fontSize: scale(56),
-    fontWeight: 'bold',
-    color: '#3b82f6',
-    fontVariant: ['tabular-nums'],
-  },
-  infoGrid: {
-    flexDirection: 'row',
-    gap: scale(10),
-  },
-  infoCard: {
-    flex: 1,
-    backgroundColor: '#1f2937',
-    borderRadius: scale(8),
-    padding: scale(12),
-    borderWidth: 1,
-    borderColor: '#374151',
-    alignItems: 'center',
-  },
-  infoLabel: {
-    fontSize: scale(9),
-    color: '#9ca3af',
-    marginBottom: scale(6),
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
-  infoValue: {
-    fontSize: scale(16),
-    fontWeight: 'bold',
-    color: '#f9fafb',
-  },
-  statusOnline: {
-    color: '#10b981',
-  },
-  welcomeCard: {
-    backgroundColor: '#1f2937',
-    borderRadius: scale(8),
-    padding: scale(16),
-    borderWidth: 1,
-    borderColor: '#374151',
-    alignItems: 'center',
-  },
-  welcomeTitle: {
-    fontSize: scale(18),
-    fontWeight: 'bold',
-    color: '#f9fafb',
-    marginBottom: scale(6),
-  },
-  welcomeText: {
-    fontSize: scale(12),
-    color: '#9ca3af',
-    textAlign: 'center',
-  },
-  footer: {
-    height: 30,
-    paddingHorizontal: scale(12),
-    borderTopWidth: 1,
-    borderTopColor: '#1f2937',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  footerText: {
-    fontSize: scale(10),
-    color: '#6b7280',
-  },
-});

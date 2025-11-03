@@ -801,8 +801,8 @@ MIT
 
 ## Roadmap
 
-- [ ] Initial project setup with Expo
-- [ ] Gluestack UI integration
+- [x] Initial project setup with Expo
+- [x] Gluestack UI integration
 - [ ] Victory charts implementation
 - [ ] JSON configuration parser
 - [ ] Dynamic component renderer

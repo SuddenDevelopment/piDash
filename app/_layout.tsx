@@ -1,6 +1,8 @@
 import { Stack } from 'expo-router';
 import { useEffect } from 'react';
 import { Platform } from 'react-native';
+import { GluestackUIProvider } from '@gluestack-ui/themed';
+import { config } from '../config/gluestack-ui.config';
 import { DISPLAY_CONFIG } from '../config/display';
 
 export default function RootLayout() {
@@ -54,15 +56,17 @@ export default function RootLayout() {
   }, []);
 
   return (
-    <Stack
-      screenOptions={{
-        headerShown: false,
-        contentStyle: {
-          backgroundColor: '#111827',
-          margin: 0,
-          padding: 0,
-        },
-      }}
-    />
+    <GluestackUIProvider config={config}>
+      <Stack
+        screenOptions={{
+          headerShown: false,
+          contentStyle: {
+            backgroundColor: '#111827',
+            margin: 0,
+            padding: 0,
+          },
+        }}
+      />
+    </GluestackUIProvider>
   );
 }
