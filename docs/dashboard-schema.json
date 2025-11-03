@@ -1,0 +1,969 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://pidash.dev/schemas/dashboard-config.json",
+  "title": "PiDash Dashboard Configuration",
+  "description": "JSON schema for flexible, JSON-driven dashboards with real-time updates, animations, and event handling",
+  "type": "object",
+  "required": ["version", "config", "pages", "navigation", "dataSources"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "description": "Configuration schema version",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "examples": ["1.0.0"]
+    },
+    "config": {
+      "$ref": "#/definitions/GlobalConfig"
+    },
+    "pages": {
+      "type": "array",
+      "description": "Array of dashboard pages",
+      "items": {
+        "$ref": "#/definitions/Page"
+      },
+      "minItems": 1
+    },
+    "navigation": {
+      "$ref": "#/definitions/NavigationConfig"
+    },
+    "dataSources": {
+      "type": "object",
+      "description": "Named data sources (WebSocket, HTTP, local)",
+      "patternProperties": {
+        ".*": {
+          "$ref": "#/definitions/DataSource"
+        }
+      }
+    },
+    "globalEvents": {
+      "type": "array",
+      "description": "Global event handlers",
+      "items": {
+        "$ref": "#/definitions/GlobalEvent"
+      }
+    }
+  },
+  "definitions": {
+    "GlobalConfig": {
+      "type": "object",
+      "description": "Global dashboard configuration",
+      "properties": {
+        "websocket": {
+          "type": "object",
+          "properties": {
+            "url": {
+              "type": "string",
+              "format": "uri"
+            },
+            "reconnect": {
+              "type": "boolean",
+              "default": true
+            },
+            "reconnectInterval": {
+              "type": "number",
+              "default": 5000,
+              "description": "Milliseconds between reconnection attempts"
+            }
+          }
+        },
+        "theme": {
+          "type": "string",
+          "enum": ["light", "dark"],
+          "default": "dark"
+        },
+        "transitions": {
+          "type": "object",
+          "properties": {
+            "duration": {
+              "type": "number",
+              "default": 300,
+              "description": "Default transition duration in milliseconds"
+            },
+            "easing": {
+              "$ref": "#/definitions/EasingType"
+            }
+          }
+        }
+      }
+    },
+    "Page": {
+      "type": "object",
+      "description": "A full-screen dashboard page",
+      "required": ["id", "name", "layout", "panels"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique page identifier"
+        },
+        "name": {
+          "type": "string",
+          "description": "Human-readable page name"
+        },
+        "layout": {
+          "$ref": "#/definitions/LayoutConfig"
+        },
+        "transitions": {
+          "type": "object",
+          "description": "Page transition animations",
+          "properties": {
+            "enter": {
+              "$ref": "#/definitions/TransitionConfig"
+            },
+            "exit": {
+              "$ref": "#/definitions/TransitionConfig"
+            }
+          }
+        },
+        "panels": {
+          "type": "array",
+          "description": "Array of panels within the page",
+          "items": {
+            "$ref": "#/definitions/Panel"
+          }
+        },
+        "events": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PageEvent"
+          }
+        }
+      }
+    },
+    "LayoutConfig": {
+      "type": "object",
+      "description": "Flex or grid layout configuration with animation support",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["flex", "grid", "absolute"],
+          "description": "Layout algorithm"
+        },
+        "direction": {
+          "type": "string",
+          "enum": ["row", "column"],
+          "default": "column",
+          "description": "Flex direction (flex only)"
+        },
+        "gap": {
+          "type": "number",
+          "description": "Space between children in pixels"
+        },
+        "padding": {
+          "oneOf": [
+            {
+              "type": "number"
+            },
+            {
+              "$ref": "#/definitions/PaddingConfig"
+            }
+          ]
+        },
+        "height": {
+          "oneOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string",
+              "enum": ["auto"]
+            }
+          ]
+        },
+        "width": {
+          "oneOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string",
+              "enum": ["auto"]
+            }
+          ]
+        },
+        "wrap": {
+          "type": "boolean",
+          "default": false
+        },
+        "justify": {
+          "type": "string",
+          "enum": ["flex-start", "flex-end", "center", "space-between", "space-around", "space-evenly"]
+        },
+        "align": {
+          "type": "string",
+          "enum": ["flex-start", "flex-end", "center", "stretch", "baseline"]
+        },
+        "columns": {
+          "type": "number",
+          "description": "Number of grid columns (grid only)"
+        },
+        "rows": {
+          "type": "number",
+          "description": "Number of grid rows (grid only)"
+        },
+        "animated": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable smooth animations for height/width changes"
+        }
+      }
+    },
+    "PaddingConfig": {
+      "type": "object",
+      "properties": {
+        "top": {
+          "type": "number"
+        },
+        "right": {
+          "type": "number"
+        },
+        "bottom": {
+          "type": "number"
+        },
+        "left": {
+          "type": "number"
+        },
+        "horizontal": {
+          "type": "number"
+        },
+        "vertical": {
+          "type": "number"
+        }
+      }
+    },
+    "Panel": {
+      "type": "object",
+      "description": "A panel component (metric, chart, table, canvas, etc.)",
+      "required": ["id", "type"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique panel identifier"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["container", "metric", "chart", "table", "canvas", "text", "button", "input", "list", "json"],
+          "description": "Panel component type"
+        },
+        "layout": {
+          "$ref": "#/definitions/LayoutConfig"
+        },
+        "style": {
+          "$ref": "#/definitions/StyleConfig"
+        },
+        "flex": {
+          "type": "number",
+          "description": "Flex grow factor"
+        },
+        "label": {
+          "$ref": "#/definitions/LabelConfig"
+        },
+        "children": {
+          "type": "array",
+          "description": "Nested child panels (n-tier hierarchy)",
+          "items": {
+            "$ref": "#/definitions/Panel"
+          }
+        },
+        "events": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ComponentEvent"
+          }
+        },
+        "value": {
+          "$ref": "#/definitions/ValueConfig",
+          "description": "For metric panels: real-time value configuration"
+        },
+        "chartType": {
+          "type": "string",
+          "enum": ["line", "bar", "area", "pie", "scatter", "gauge", "candlestick"],
+          "description": "For chart panels: chart type"
+        },
+        "data": {
+          "$ref": "#/definitions/DataConfig",
+          "description": "Data source configuration"
+        },
+        "chartConfig": {
+          "$ref": "#/definitions/ChartConfig"
+        },
+        "columns": {
+          "type": "array",
+          "description": "For table panels: column definitions",
+          "items": {
+            "$ref": "#/definitions/ColumnConfig"
+          }
+        },
+        "maxRows": {
+          "type": "number",
+          "description": "For table panels: maximum visible rows"
+        },
+        "canvasType": {
+          "type": "string",
+          "enum": ["r3f", "webgl", "2d"],
+          "description": "For canvas panels: rendering type"
+        },
+        "canvasConfig": {
+          "$ref": "#/definitions/CanvasConfig"
+        },
+        "text": {
+          "type": "string",
+          "description": "For text panels: static or template text"
+        }
+      }
+    },
+    "LabelConfig": {
+      "type": "object",
+      "description": "Label positioning and styling",
+      "required": ["text", "position"],
+      "properties": {
+        "text": {
+          "type": "string",
+          "description": "Label text (supports template strings: {{path}})"
+        },
+        "position": {
+          "type": "string",
+          "enum": [
+            "top-left",
+            "top-center",
+            "top-right",
+            "center-left",
+            "center",
+            "center-right",
+            "bottom-left",
+            "bottom-center",
+            "bottom-right"
+          ],
+          "description": "Anchor position within panel"
+        },
+        "style": {
+          "$ref": "#/definitions/StyleConfig"
+        },
+        "offset": {
+          "type": "object",
+          "properties": {
+            "x": {
+              "type": "number"
+            },
+            "y": {
+              "type": "number"
+            }
+          }
+        }
+      }
+    },
+    "ValueConfig": {
+      "type": "object",
+      "description": "Real-time value from data source",
+      "required": ["source", "path"],
+      "properties": {
+        "source": {
+          "type": "string",
+          "description": "Data source reference (e.g., 'ws://stats')"
+        },
+        "path": {
+          "type": "string",
+          "description": "JSON path to value (e.g., 'cpu.usage')"
+        },
+        "format": {
+          "type": "string",
+          "description": "Format string (e.g., '{value}%', '{value:.2f} MB')"
+        },
+        "style": {
+          "$ref": "#/definitions/StyleConfig"
+        },
+        "updateInterval": {
+          "type": "number",
+          "description": "Override update interval in milliseconds"
+        }
+      }
+    },
+    "DataConfig": {
+      "type": "object",
+      "required": ["source", "path"],
+      "properties": {
+        "source": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "maxPoints": {
+          "type": "number",
+          "description": "For time-series data: max data points to retain"
+        },
+        "updateInterval": {
+          "type": "number"
+        }
+      }
+    },
+    "ChartConfig": {
+      "type": "object",
+      "description": "Chart visualization configuration",
+      "properties": {
+        "xKey": {
+          "type": "string",
+          "description": "Data key for X axis"
+        },
+        "yKey": {
+          "type": "string",
+          "description": "Data key for Y axis"
+        },
+        "color": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ]
+        },
+        "strokeWidth": {
+          "type": "number"
+        },
+        "showGrid": {
+          "type": "boolean"
+        },
+        "showLegend": {
+          "type": "boolean"
+        },
+        "animate": {
+          "type": "boolean"
+        },
+        "min": {
+          "type": "number",
+          "description": "For gauge charts: minimum value"
+        },
+        "max": {
+          "type": "number",
+          "description": "For gauge charts: maximum value"
+        },
+        "unit": {
+          "type": "string",
+          "description": "For gauge charts: unit label"
+        },
+        "zones": {
+          "type": "array",
+          "description": "For gauge charts: colored zones",
+          "items": {
+            "type": "object",
+            "required": ["from", "to", "color"],
+            "properties": {
+              "from": {
+                "type": "number"
+              },
+              "to": {
+                "type": "number"
+              },
+              "color": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "ColumnConfig": {
+      "type": "object",
+      "required": ["key", "label"],
+      "properties": {
+        "key": {
+          "type": "string",
+          "description": "Data object key"
+        },
+        "label": {
+          "type": "string",
+          "description": "Column header label"
+        },
+        "width": {
+          "type": "number",
+          "description": "Fixed width in pixels"
+        },
+        "flex": {
+          "type": "number",
+          "description": "Flex grow factor"
+        },
+        "align": {
+          "type": "string",
+          "enum": ["left", "center", "right"]
+        },
+        "format": {
+          "type": "string"
+        },
+        "sortable": {
+          "type": "boolean"
+        }
+      }
+    },
+    "CanvasConfig": {
+      "type": "object",
+      "description": "Canvas rendering configuration (R3F, WebGL, 2D)",
+      "properties": {
+        "scene": {
+          "type": "string",
+          "description": "Scene type or preset"
+        },
+        "backgroundColor": {
+          "type": "string"
+        },
+        "camera": {
+          "type": "object",
+          "properties": {
+            "position": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 3,
+              "maxItems": 3
+            },
+            "fov": {
+              "type": "number"
+            },
+            "near": {
+              "type": "number"
+            },
+            "far": {
+              "type": "number"
+            }
+          }
+        },
+        "controls": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "autoRotate": {
+              "type": "boolean"
+            },
+            "autoRotateSpeed": {
+              "type": "number"
+            }
+          }
+        }
+      }
+    },
+    "StyleConfig": {
+      "type": "object",
+      "description": "React Native style properties with theme token support (use $token for theme values)",
+      "properties": {
+        "bg": {
+          "type": "string",
+          "description": "Background color (alias)"
+        },
+        "backgroundColor": {
+          "type": "string"
+        },
+        "color": {
+          "type": "string"
+        },
+        "width": {
+          "oneOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "height": {
+          "oneOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "padding": {
+          "oneOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "margin": {
+          "oneOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "borderRadius": {
+          "oneOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "fontSize": {
+          "oneOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "fontWeight": {
+          "oneOf": [
+            {
+              "type": "string",
+              "enum": ["normal", "bold"]
+            },
+            {
+              "type": "string",
+              "pattern": "^[1-9]00$"
+            }
+          ]
+        },
+        "flex": {
+          "type": "number"
+        },
+        "flexDirection": {
+          "type": "string",
+          "enum": ["row", "column", "row-reverse", "column-reverse"]
+        },
+        "opacity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "additionalProperties": true
+    },
+    "PageEvent": {
+      "type": "object",
+      "required": ["type", "actions"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["onLoad", "onUnload", "onFocus", "onBlur"]
+        },
+        "condition": {
+          "type": "string",
+          "description": "JavaScript expression for conditional execution"
+        },
+        "actions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Action"
+          }
+        }
+      }
+    },
+    "ComponentEvent": {
+      "type": "object",
+      "required": ["type", "actions"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["onClick", "onDoubleClick", "onLongPress", "onValueChange", "onDataUpdate", "onError"]
+        },
+        "condition": {
+          "type": "string"
+        },
+        "actions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Action"
+          }
+        }
+      }
+    },
+    "GlobalEvent": {
+      "type": "object",
+      "required": ["type", "actions"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["onWebSocketMessage", "onApiResponse", "onKeyPress", "onSchedule"]
+        },
+        "key": {
+          "type": "string",
+          "description": "For onKeyPress: key code"
+        },
+        "channel": {
+          "type": "string",
+          "description": "For onWebSocketMessage: data source"
+        },
+        "path": {
+          "type": "string",
+          "description": "JSON path for data filtering"
+        },
+        "condition": {
+          "type": "string"
+        },
+        "actions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Action"
+          }
+        }
+      }
+    },
+    "Action": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "navigateTo",
+            "navigateNext",
+            "navigatePrevious",
+            "navigateBack",
+            "updateStyle",
+            "toggleStyle",
+            "updateValue",
+            "subscribe",
+            "unsubscribe",
+            "refresh",
+            "notification",
+            "setFullscreen",
+            "toggleFullscreen",
+            "exitFullscreen",
+            "custom"
+          ]
+        },
+        "target": {
+          "type": "string",
+          "description": "Target element ID or 'self', 'parent', 'focused'"
+        },
+        "style": {
+          "$ref": "#/definitions/StyleConfig"
+        },
+        "duration": {
+          "type": "number"
+        },
+        "transition": {
+          "$ref": "#/definitions/TransitionConfig"
+        },
+        "channel": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "severity": {
+          "type": "string",
+          "enum": ["info", "success", "warning", "error"]
+        }
+      }
+    },
+    "TransitionConfig": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["fade", "slide", "scale", "rotate", "none"]
+        },
+        "direction": {
+          "type": "string",
+          "enum": ["left", "right", "up", "down"]
+        },
+        "duration": {
+          "type": "number",
+          "description": "Duration in milliseconds"
+        },
+        "easing": {
+          "$ref": "#/definitions/EasingType"
+        },
+        "delay": {
+          "type": "number"
+        }
+      }
+    },
+    "EasingType": {
+      "type": "string",
+      "enum": [
+        "linear",
+        "easeIn",
+        "easeOut",
+        "easeInOut",
+        "easeInQuad",
+        "easeOutQuad",
+        "easeInOutQuad",
+        "easeInCubic",
+        "easeOutCubic",
+        "easeInOutCubic"
+      ]
+    },
+    "NavigationConfig": {
+      "type": "object",
+      "required": ["initialPage"],
+      "properties": {
+        "initialPage": {
+          "type": "string",
+          "description": "Initial page ID to display"
+        },
+        "transitions": {
+          "type": "object",
+          "properties": {
+            "default": {
+              "$ref": "#/definitions/TransitionConfig"
+            },
+            "pageSpecific": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/definitions/TransitionConfig"
+              }
+            }
+          }
+        },
+        "events": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NavigationEvent"
+          }
+        }
+      }
+    },
+    "NavigationEvent": {
+      "type": "object",
+      "required": ["type", "actions"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["onSwipeLeft", "onSwipeRight", "onSwipeUp", "onSwipeDown", "onSchedule", "onIdle"]
+        },
+        "schedule": {
+          "type": "object",
+          "properties": {
+            "interval": {
+              "type": "number",
+              "description": "Milliseconds between executions"
+            },
+            "cron": {
+              "type": "string",
+              "description": "Cron expression"
+            },
+            "rotate": {
+              "type": "boolean",
+              "description": "Auto-rotate through pages"
+            }
+          }
+        },
+        "actions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Action"
+          }
+        }
+      }
+    },
+    "DataSource": {
+      "oneOf": [
+        {
+          "$ref": "#/definitions/WebSocketSource"
+        },
+        {
+          "$ref": "#/definitions/HttpSource"
+        },
+        {
+          "$ref": "#/definitions/LocalSource"
+        }
+      ]
+    },
+    "WebSocketSource": {
+      "type": "object",
+      "required": ["type", "url"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "websocket"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "reconnect": {
+          "type": "boolean",
+          "default": true
+        },
+        "reconnectInterval": {
+          "type": "number",
+          "default": 5000
+        },
+        "subscriptions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Channels to subscribe to on connect"
+        },
+        "transform": {
+          "type": "string",
+          "description": "JavaScript function to transform incoming data"
+        }
+      }
+    },
+    "HttpSource": {
+      "type": "object",
+      "required": ["type", "url"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "http"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "method": {
+          "type": "string",
+          "enum": ["GET", "POST", "PUT", "DELETE", "PATCH"],
+          "default": "GET"
+        },
+        "headers": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "body": {},
+        "pollInterval": {
+          "type": "number",
+          "description": "Auto-refresh interval in milliseconds"
+        },
+        "transform": {
+          "type": "string"
+        }
+      }
+    },
+    "LocalSource": {
+      "type": "object",
+      "required": ["type", "data"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "local"
+        },
+        "data": {
+          "description": "Static data or initial values"
+        },
+        "refreshInterval": {
+          "type": "number"
+        }
+      }
+    }
+  }
+}

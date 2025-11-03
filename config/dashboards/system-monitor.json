@@ -1,0 +1,759 @@
+{
+  "version": "1.0.0",
+  "config": {
+    "websocket": {
+      "url": "ws://localhost:3000",
+      "reconnect": true,
+      "reconnectInterval": 5000
+    },
+    "theme": "dark",
+    "transitions": {
+      "duration": 300,
+      "easing": "easeInOut"
+    }
+  },
+  "pages": [
+    {
+      "id": "system-overview",
+      "name": "System Overview",
+      "layout": {
+        "type": "flex",
+        "direction": "column",
+        "gap": 12,
+        "padding": 12
+      },
+      "transitions": {
+        "enter": {
+          "type": "fade",
+          "duration": 300
+        },
+        "exit": {
+          "type": "slide",
+          "direction": "left",
+          "duration": 300
+        }
+      },
+      "panels": [
+        {
+          "id": "metrics-row",
+          "type": "container",
+          "layout": {
+            "type": "flex",
+            "direction": "row",
+            "height": 100,
+            "gap": 12,
+            "animated": true
+          },
+          "children": [
+            {
+              "id": "cpu-metric",
+              "type": "metric",
+              "flex": 1,
+              "style": {
+                "bg": "$backgroundLight",
+                "borderRadius": "$md",
+                "padding": 12
+              },
+              "label": {
+                "text": "CPU Usage",
+                "position": "top-left",
+                "style": {
+                  "fontSize": "$sm",
+                  "color": "$textSecondary",
+                  "fontWeight": "600"
+                }
+              },
+              "value": {
+                "source": "ws://stats",
+                "path": "cpu.usage",
+                "format": "{value}%",
+                "style": {
+                  "fontSize": "$4xl",
+                  "color": "$primary",
+                  "fontWeight": "bold"
+                }
+              },
+              "events": [
+                {
+                  "type": "onValueChange",
+                  "condition": "value > 80",
+                  "actions": [
+                    {
+                      "type": "notification",
+                      "message": "High CPU usage: {value}%",
+                      "severity": "warning",
+                      "duration": 5000
+                    },
+                    {
+                      "type": "updateStyle",
+                      "target": "self",
+                      "style": {
+                        "bg": "$warning"
+                      },
+                      "duration": 300
+                    }
+                  ]
+                },
+                {
+                  "type": "onClick",
+                  "actions": [
+                    {
+                      "type": "navigateTo",
+                      "target": "cpu-details"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "memory-metric",
+              "type": "metric",
+              "flex": 1,
+              "style": {
+                "bg": "$backgroundLight",
+                "borderRadius": "$md",
+                "padding": 12
+              },
+              "label": {
+                "text": "Memory",
+                "position": "top-left",
+                "style": {
+                  "fontSize": "$sm",
+                  "color": "$textSecondary",
+                  "fontWeight": "600"
+                }
+              },
+              "value": {
+                "source": "ws://stats",
+                "path": "memory.usage",
+                "format": "{value} MB",
+                "style": {
+                  "fontSize": "$4xl",
+                  "color": "$success",
+                  "fontWeight": "bold"
+                }
+              }
+            },
+            {
+              "id": "temp-metric",
+              "type": "metric",
+              "flex": 1,
+              "style": {
+                "bg": "$backgroundLight",
+                "borderRadius": "$md",
+                "padding": 12
+              },
+              "label": {
+                "text": "Temperature",
+                "position": "top-left",
+                "style": {
+                  "fontSize": "$sm",
+                  "color": "$textSecondary",
+                  "fontWeight": "600"
+                }
+              },
+              "value": {
+                "source": "ws://stats",
+                "path": "temperature",
+                "format": "{value}°C",
+                "style": {
+                  "fontSize": "$4xl",
+                  "color": "$info",
+                  "fontWeight": "bold"
+                }
+              },
+              "events": [
+                {
+                  "type": "onValueChange",
+                  "condition": "value > 85",
+                  "actions": [
+                    {
+                      "type": "updateStyle",
+                      "target": "self",
+                      "style": {
+                        "bg": "$error"
+                      }
+                    },
+                    {
+                      "type": "notification",
+                      "message": "Critical temperature: {value}°C!",
+                      "severity": "error",
+                      "duration": 10000
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "uptime-metric",
+              "type": "metric",
+              "flex": 1,
+              "style": {
+                "bg": "$backgroundLight",
+                "borderRadius": "$md",
+                "padding": 12
+              },
+              "label": {
+                "text": "Uptime",
+                "position": "top-left",
+                "style": {
+                  "fontSize": "$sm",
+                  "color": "$textSecondary",
+                  "fontWeight": "600"
+                }
+              },
+              "value": {
+                "source": "api://system",
+                "path": "uptime",
+                "format": "{value}",
+                "style": {
+                  "fontSize": "$2xl",
+                  "color": "$textMuted",
+                  "fontWeight": "600"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "charts-row",
+          "type": "container",
+          "layout": {
+            "type": "flex",
+            "direction": "row",
+            "height": 220,
+            "gap": 12,
+            "animated": true
+          },
+          "children": [
+            {
+              "id": "cpu-chart",
+              "type": "chart",
+              "chartType": "line",
+              "flex": 2,
+              "style": {
+                "bg": "$backgroundLight",
+                "borderRadius": "$md",
+                "padding": 12
+              },
+              "label": {
+                "text": "CPU History (60s)",
+                "position": "top-center",
+                "style": {
+                  "fontSize": "$md",
+                  "fontWeight": "600"
+                }
+              },
+              "data": {
+                "source": "ws://stats",
+                "path": "cpu.history",
+                "maxPoints": 60
+              },
+              "chartConfig": {
+                "xKey": "timestamp",
+                "yKey": "value",
+                "color": "$primary",
+                "strokeWidth": 2,
+                "showGrid": true,
+                "animate": true
+              },
+              "events": [
+                {
+                  "type": "onDoubleClick",
+                  "actions": [
+                    {
+                      "type": "setFullscreen",
+                      "target": "self",
+                      "transition": {
+                        "type": "scale",
+                        "duration": 400
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "memory-chart",
+              "type": "chart",
+              "chartType": "area",
+              "flex": 2,
+              "style": {
+                "bg": "$backgroundLight",
+                "borderRadius": "$md",
+                "padding": 12
+              },
+              "label": {
+                "text": "Memory History",
+                "position": "top-center",
+                "style": {
+                  "fontSize": "$md",
+                  "fontWeight": "600"
+                }
+              },
+              "data": {
+                "source": "ws://stats",
+                "path": "memory.history",
+                "maxPoints": 60
+              },
+              "chartConfig": {
+                "xKey": "timestamp",
+                "yKey": "value",
+                "color": "$success",
+                "strokeWidth": 2,
+                "showGrid": true,
+                "animate": true
+              }
+            },
+            {
+              "id": "temp-gauge",
+              "type": "chart",
+              "chartType": "gauge",
+              "flex": 1,
+              "style": {
+                "bg": "$backgroundLight",
+                "borderRadius": "$md",
+                "padding": 12
+              },
+              "label": {
+                "text": "Temp",
+                "position": "top-center",
+                "style": {
+                  "fontSize": "$md",
+                  "fontWeight": "600"
+                }
+              },
+              "data": {
+                "source": "ws://stats",
+                "path": "temperature"
+              },
+              "chartConfig": {
+                "min": 0,
+                "max": 100,
+                "unit": "°C",
+                "zones": [
+                  {
+                    "from": 0,
+                    "to": 60,
+                    "color": "$success"
+                  },
+                  {
+                    "from": 60,
+                    "to": 80,
+                    "color": "$warning"
+                  },
+                  {
+                    "from": 80,
+                    "to": 100,
+                    "color": "$error"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "process-table",
+          "type": "table",
+          "layout": {
+            "type": "flex",
+            "height": "auto",
+            "maxHeight": 120
+          },
+          "style": {
+            "bg": "$backgroundLight",
+            "borderRadius": "$md",
+            "padding": 12
+          },
+          "label": {
+            "text": "Top Processes",
+            "position": "top-left",
+            "style": {
+              "fontSize": "$md",
+              "fontWeight": "600",
+              "marginBottom": 8
+            }
+          },
+          "data": {
+            "source": "ws://stats",
+            "path": "processes"
+          },
+          "columns": [
+            {
+              "key": "pid",
+              "label": "PID",
+              "width": 60,
+              "align": "right"
+            },
+            {
+              "key": "name",
+              "label": "Process",
+              "flex": 1
+            },
+            {
+              "key": "cpu",
+              "label": "CPU %",
+              "width": 80,
+              "align": "right"
+            },
+            {
+              "key": "memory",
+              "label": "Memory",
+              "width": 100,
+              "align": "right"
+            }
+          ],
+          "maxRows": 5,
+          "scrollable": false,
+          "sortable": true
+        }
+      ],
+      "events": [
+        {
+          "type": "onLoad",
+          "actions": [
+            {
+              "type": "subscribe",
+              "channel": "ws://stats"
+            }
+          ]
+        },
+        {
+          "type": "onUnload",
+          "actions": [
+            {
+              "type": "unsubscribe",
+              "channel": "ws://stats"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cpu-details",
+      "name": "CPU Details",
+      "layout": {
+        "type": "flex",
+        "direction": "column",
+        "gap": 12,
+        "padding": 12
+      },
+      "panels": [
+        {
+          "id": "cpu-header",
+          "type": "container",
+          "layout": {
+            "type": "flex",
+            "direction": "row",
+            "height": 60,
+            "gap": 12
+          },
+          "children": [
+            {
+              "id": "back-button",
+              "type": "text",
+              "text": "← Back",
+              "style": {
+                "fontSize": "$lg",
+                "color": "$primary",
+                "padding": 16
+              },
+              "events": [
+                {
+                  "type": "onClick",
+                  "actions": [
+                    {
+                      "type": "navigateBack"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "cpu-title",
+              "type": "text",
+              "text": "CPU Detailed View",
+              "style": {
+                "fontSize": "$2xl",
+                "fontWeight": "bold",
+                "flex": 1,
+                "padding": 16
+              }
+            }
+          ]
+        },
+        {
+          "id": "cpu-fullscreen-chart",
+          "type": "chart",
+          "chartType": "line",
+          "layout": {
+            "type": "flex",
+            "height": 380
+          },
+          "style": {
+            "bg": "$backgroundLight",
+            "borderRadius": "$md",
+            "padding": 16
+          },
+          "data": {
+            "source": "ws://stats",
+            "path": "cpu.history",
+            "maxPoints": 120
+          },
+          "chartConfig": {
+            "xKey": "timestamp",
+            "yKey": "value",
+            "color": "$primary",
+            "strokeWidth": 3,
+            "showGrid": true,
+            "showLegend": true,
+            "animate": true
+          }
+        }
+      ],
+      "events": [
+        {
+          "type": "onLoad",
+          "actions": [
+            {
+              "type": "subscribe",
+              "channel": "ws://stats"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "network-monitor",
+      "name": "Network Monitor",
+      "layout": {
+        "type": "flex",
+        "direction": "column",
+        "gap": 12,
+        "padding": 12
+      },
+      "panels": [
+        {
+          "id": "network-metrics",
+          "type": "container",
+          "layout": {
+            "type": "flex",
+            "direction": "row",
+            "height": 100,
+            "gap": 12
+          },
+          "children": [
+            {
+              "id": "download-metric",
+              "type": "metric",
+              "flex": 1,
+              "style": {
+                "bg": "$backgroundLight",
+                "borderRadius": "$md",
+                "padding": 12
+              },
+              "label": {
+                "text": "Download",
+                "position": "top-left",
+                "style": {
+                  "fontSize": "$sm",
+                  "color": "$textSecondary"
+                }
+              },
+              "value": {
+                "source": "ws://network",
+                "path": "download.speed",
+                "format": "{value} Mb/s",
+                "style": {
+                  "fontSize": "$4xl",
+                  "color": "$success",
+                  "fontWeight": "bold"
+                }
+              }
+            },
+            {
+              "id": "upload-metric",
+              "type": "metric",
+              "flex": 1,
+              "style": {
+                "bg": "$backgroundLight",
+                "borderRadius": "$md",
+                "padding": 12
+              },
+              "label": {
+                "text": "Upload",
+                "position": "top-left",
+                "style": {
+                  "fontSize": "$sm",
+                  "color": "$textSecondary"
+                }
+              },
+              "value": {
+                "source": "ws://network",
+                "path": "upload.speed",
+                "format": "{value} Mb/s",
+                "style": {
+                  "fontSize": "$4xl",
+                  "color": "$info",
+                  "fontWeight": "bold"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "network-chart",
+          "type": "chart",
+          "chartType": "line",
+          "layout": {
+            "type": "flex",
+            "height": 300
+          },
+          "style": {
+            "bg": "$backgroundLight",
+            "borderRadius": "$md",
+            "padding": 12
+          },
+          "label": {
+            "text": "Network Traffic",
+            "position": "top-center",
+            "style": {
+              "fontSize": "$lg",
+              "fontWeight": "600"
+            }
+          },
+          "data": {
+            "source": "ws://network",
+            "path": "traffic",
+            "maxPoints": 60
+          },
+          "chartConfig": {
+            "xKey": "timestamp",
+            "yKey": "value",
+            "color": ["$success", "$info"],
+            "strokeWidth": 2,
+            "showGrid": true,
+            "showLegend": true,
+            "animate": true
+          }
+        }
+      ],
+      "events": [
+        {
+          "type": "onLoad",
+          "actions": [
+            {
+              "type": "subscribe",
+              "channel": "ws://network"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "navigation": {
+    "initialPage": "system-overview",
+    "transitions": {
+      "default": {
+        "type": "slide",
+        "direction": "left",
+        "duration": 300
+      }
+    },
+    "events": [
+      {
+        "type": "onSwipeLeft",
+        "actions": [
+          {
+            "type": "navigateNext"
+          }
+        ]
+      },
+      {
+        "type": "onSwipeRight",
+        "actions": [
+          {
+            "type": "navigatePrevious"
+          }
+        ]
+      },
+      {
+        "type": "onSchedule",
+        "schedule": {
+          "interval": 30000,
+          "rotate": true
+        },
+        "actions": [
+          {
+            "type": "navigateNext"
+          }
+        ]
+      }
+    ]
+  },
+  "dataSources": {
+    "ws://stats": {
+      "type": "websocket",
+      "url": "ws://localhost:3000/stats",
+      "reconnect": true,
+      "reconnectInterval": 5000,
+      "subscriptions": [
+        "cpu",
+        "memory",
+        "temperature",
+        "processes"
+      ]
+    },
+    "ws://network": {
+      "type": "websocket",
+      "url": "ws://localhost:3000/network",
+      "reconnect": true,
+      "subscriptions": [
+        "traffic",
+        "download",
+        "upload"
+      ]
+    },
+    "api://system": {
+      "type": "http",
+      "url": "http://localhost:3000/api/system",
+      "method": "GET",
+      "pollInterval": 10000
+    }
+  },
+  "globalEvents": [
+    {
+      "type": "onWebSocketMessage",
+      "channel": "ws://stats",
+      "path": "alert",
+      "actions": [
+        {
+          "type": "notification",
+          "message": "System Alert: {{data.message}}",
+          "severity": "warning",
+          "duration": 5000
+        }
+      ]
+    },
+    {
+      "type": "onKeyPress",
+      "key": "f",
+      "actions": [
+        {
+          "type": "toggleFullscreen",
+          "target": "focused"
+        }
+      ]
+    },
+    {
+      "type": "onKeyPress",
+      "key": "Escape",
+      "actions": [
+        {
+          "type": "exitFullscreen",
+          "target": "focused"
+        }
+      ]
+    }
+  ]
+}

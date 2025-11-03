@@ -1,0 +1,995 @@
+{
+  "version": "1.0.0",
+  "config": {
+    "theme": "dark",
+    "transitions": {
+      "duration": 300,
+      "easing": "easeInOut"
+    }
+  },
+  "pages": [
+    {
+      "id": "welcome",
+      "name": "Welcome",
+      "layout": {
+        "type": "flex",
+        "direction": "column",
+        "gap": 16,
+        "padding": 16,
+        "justify": "center",
+        "align": "center"
+      },
+      "transitions": {
+        "enter": {
+          "type": "fade",
+          "duration": 500
+        }
+      },
+      "panels": [
+        {
+          "id": "welcome-title",
+          "type": "text",
+          "text": "🚀 PiDash MVP",
+          "style": {
+            "fontSize": "$5xl",
+            "fontWeight": "bold",
+            "color": "$primary",
+            "textAlign": "center",
+            "marginBottom": 16
+          }
+        },
+        {
+          "id": "welcome-subtitle",
+          "type": "text",
+          "text": "JSON-Driven Dashboard System",
+          "style": {
+            "fontSize": "$xl",
+            "color": "$textSecondary",
+            "textAlign": "center",
+            "marginBottom": 32
+          }
+        },
+        {
+          "id": "welcome-description",
+          "type": "text",
+          "text": "Swipe or use arrows to navigate →",
+          "style": {
+            "fontSize": "$md",
+            "color": "$textMuted",
+            "textAlign": "center"
+          }
+        },
+        {
+          "id": "features-container",
+          "type": "container",
+          "layout": {
+            "type": "flex",
+            "direction": "column",
+            "gap": 12
+          },
+          "style": {
+            "marginTop": 48,
+            "width": "100%"
+          },
+          "children": [
+            {
+              "id": "feature-1",
+              "type": "text",
+              "text": "✓ Multiple pages with transitions",
+              "style": {
+                "fontSize": "$md",
+                "color": "$success",
+                "textAlign": "center"
+              }
+            },
+            {
+              "id": "feature-2",
+              "type": "text",
+              "text": "✓ Flex layouts (row/column)",
+              "style": {
+                "fontSize": "$md",
+                "color": "$success",
+                "textAlign": "center"
+              }
+            },
+            {
+              "id": "feature-3",
+              "type": "text",
+              "text": "✓ Label positioning (9 positions)",
+              "style": {
+                "fontSize": "$md",
+                "color": "$success",
+                "textAlign": "center"
+              }
+            },
+            {
+              "id": "feature-4",
+              "type": "text",
+              "text": "✓ Theme tokens",
+              "style": {
+                "fontSize": "$md",
+                "color": "$success",
+                "textAlign": "center"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "row-layout",
+      "name": "Row Layout",
+      "layout": {
+        "type": "flex",
+        "direction": "column",
+        "gap": 16,
+        "padding": 16
+      },
+      "transitions": {
+        "enter": {
+          "type": "slide",
+          "direction": "left",
+          "duration": 400
+        }
+      },
+      "panels": [
+        {
+          "id": "page-title",
+          "type": "text",
+          "text": "Horizontal Row Layout",
+          "style": {
+            "fontSize": "$3xl",
+            "fontWeight": "bold",
+            "color": "$primary",
+            "marginBottom": 8
+          }
+        },
+        {
+          "id": "metrics-row",
+          "type": "container",
+          "layout": {
+            "type": "flex",
+            "direction": "row",
+            "gap": 16,
+            "height": 120
+          },
+          "children": [
+            {
+              "id": "metric-1",
+              "type": "metric",
+              "flex": 1,
+              "style": {
+                "bg": "$backgroundLight",
+                "borderRadius": "$lg",
+                "padding": 16
+              },
+              "label": {
+                "text": "CPU",
+                "position": "top-left",
+                "style": {
+                  "fontSize": "$sm",
+                  "color": "$textSecondary"
+                }
+              },
+              "value": {
+                "source": "mock://data",
+                "path": "cpu",
+                "format": "{value}%",
+                "style": {
+                  "fontSize": "$4xl",
+                  "color": "$primary",
+                  "fontWeight": "bold"
+                }
+              }
+            },
+            {
+              "id": "metric-2",
+              "type": "metric",
+              "flex": 1,
+              "style": {
+                "bg": "$backgroundLight",
+                "borderRadius": "$lg",
+                "padding": 16
+              },
+              "label": {
+                "text": "Memory",
+                "position": "top-center",
+                "style": {
+                  "fontSize": "$sm",
+                  "color": "$textSecondary"
+                }
+              },
+              "value": {
+                "source": "mock://data",
+                "path": "memory",
+                "format": "{value} MB",
+                "style": {
+                  "fontSize": "$4xl",
+                  "color": "$success",
+                  "fontWeight": "bold"
+                }
+              }
+            },
+            {
+              "id": "metric-3",
+              "type": "metric",
+              "flex": 1,
+              "style": {
+                "bg": "$backgroundLight",
+                "borderRadius": "$lg",
+                "padding": 16
+              },
+              "label": {
+                "text": "Temperature",
+                "position": "top-right",
+                "style": {
+                  "fontSize": "$sm",
+                  "color": "$textSecondary"
+                }
+              },
+              "value": {
+                "source": "mock://data",
+                "path": "temp",
+                "format": "{value}°C",
+                "style": {
+                  "fontSize": "$4xl",
+                  "color": "$warning",
+                  "fontWeight": "bold"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "chart-placeholder",
+          "type": "chart",
+          "chartType": "line",
+          "layout": {
+            "type": "flex",
+            "height": 200
+          },
+          "style": {
+            "bg": "$backgroundLight",
+            "borderRadius": "$lg",
+            "padding": 16
+          },
+          "label": {
+            "text": "CPU History",
+            "position": "top-center",
+            "style": {
+              "fontSize": "$lg",
+              "fontWeight": "600",
+              "color": "$text"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "column-layout",
+      "name": "Column Layout",
+      "layout": {
+        "type": "flex",
+        "direction": "column",
+        "gap": 16,
+        "padding": 16
+      },
+      "transitions": {
+        "enter": {
+          "type": "slide",
+          "direction": "left",
+          "duration": 400
+        }
+      },
+      "panels": [
+        {
+          "id": "page-title-2",
+          "type": "text",
+          "text": "Vertical Column Layout",
+          "style": {
+            "fontSize": "$3xl",
+            "fontWeight": "bold",
+            "color": "$secondary",
+            "marginBottom": 8
+          }
+        },
+        {
+          "id": "content-row",
+          "type": "container",
+          "layout": {
+            "type": "flex",
+            "direction": "row",
+            "gap": 16
+          },
+          "children": [
+            {
+              "id": "left-column",
+              "type": "container",
+              "flex": 1,
+              "layout": {
+                "type": "flex",
+                "direction": "column",
+                "gap": 16
+              },
+              "children": [
+                {
+                  "id": "status-card",
+                  "type": "container",
+                  "layout": {
+                    "type": "flex",
+                    "height": 100
+                  },
+                  "style": {
+                    "bg": "$success",
+                    "borderRadius": "$lg",
+                    "padding": 16
+                  },
+                  "label": {
+                    "text": "Status",
+                    "position": "top-left",
+                    "style": {
+                      "fontSize": "$sm",
+                      "color": "rgba(255, 255, 255, 0.8)"
+                    }
+                  },
+                  "children": [
+                    {
+                      "id": "status-text",
+                      "type": "text",
+                      "text": "✓ Online",
+                      "style": {
+                        "fontSize": "$2xl",
+                        "fontWeight": "bold",
+                        "color": "$text",
+                        "textAlign": "center"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "id": "info-card",
+                  "type": "container",
+                  "layout": {
+                    "type": "flex",
+                    "height": 100
+                  },
+                  "style": {
+                    "bg": "$info",
+                    "borderRadius": "$lg",
+                    "padding": 16
+                  },
+                  "label": {
+                    "text": "Info",
+                    "position": "bottom-left",
+                    "style": {
+                      "fontSize": "$sm",
+                      "color": "rgba(255, 255, 255, 0.8)"
+                    }
+                  },
+                  "children": [
+                    {
+                      "id": "info-text",
+                      "type": "text",
+                      "text": "Version 1.0",
+                      "style": {
+                        "fontSize": "$xl",
+                        "fontWeight": "600",
+                        "color": "$text",
+                        "textAlign": "center"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "id": "warning-card",
+                  "type": "container",
+                  "layout": {
+                    "type": "flex",
+                    "height": 100
+                  },
+                  "style": {
+                    "bg": "$warning",
+                    "borderRadius": "$lg",
+                    "padding": 16
+                  },
+                  "label": {
+                    "text": "Alert",
+                    "position": "center-left",
+                    "style": {
+                      "fontSize": "$sm",
+                      "color": "rgba(0, 0, 0, 0.8)"
+                    }
+                  },
+                  "children": [
+                    {
+                      "id": "warning-text",
+                      "type": "text",
+                      "text": "⚠ Check logs",
+                      "style": {
+                        "fontSize": "$xl",
+                        "fontWeight": "600",
+                        "color": "$text",
+                        "textAlign": "center"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "right-column",
+              "type": "container",
+              "flex": 1,
+              "layout": {
+                "type": "flex",
+                "direction": "column",
+                "gap": 16
+              },
+              "children": [
+                {
+                  "id": "data-card",
+                  "type": "table",
+                  "layout": {
+                    "type": "flex"
+                  },
+                  "style": {
+                    "bg": "$backgroundLight",
+                    "borderRadius": "$lg",
+                    "padding": 16,
+                    "height": 200
+                  },
+                  "label": {
+                    "text": "Data Table",
+                    "position": "top-center",
+                    "style": {
+                      "fontSize": "$md",
+                      "fontWeight": "600"
+                    }
+                  }
+                },
+                {
+                  "id": "canvas-card",
+                  "type": "canvas",
+                  "canvasType": "r3f",
+                  "layout": {
+                    "type": "flex"
+                  },
+                  "style": {
+                    "bg": "$backgroundLight",
+                    "borderRadius": "$lg",
+                    "padding": 16,
+                    "flex": 1
+                  },
+                  "label": {
+                    "text": "3D Canvas",
+                    "position": "bottom-right",
+                    "style": {
+                      "fontSize": "$sm",
+                      "color": "$textSecondary"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nested-layout",
+      "name": "Nested Layout",
+      "layout": {
+        "type": "flex",
+        "direction": "column",
+        "gap": 12,
+        "padding": 12
+      },
+      "transitions": {
+        "enter": {
+          "type": "scale",
+          "duration": 400
+        }
+      },
+      "panels": [
+        {
+          "id": "nested-title",
+          "type": "text",
+          "text": "N-Tier Nested Layout",
+          "style": {
+            "fontSize": "$3xl",
+            "fontWeight": "bold",
+            "color": "$info",
+            "marginBottom": 4
+          }
+        },
+        {
+          "id": "level-1",
+          "type": "container",
+          "layout": {
+            "type": "flex",
+            "direction": "row",
+            "gap": 12
+          },
+          "style": {
+            "bg": "rgba(59, 130, 246, 0.1)",
+            "borderRadius": "$md",
+            "padding": 12
+          },
+          "label": {
+            "text": "Level 1 (Row)",
+            "position": "top-left",
+            "style": {
+              "fontSize": "$xs",
+              "color": "$primary"
+            }
+          },
+          "children": [
+            {
+              "id": "level-2-left",
+              "type": "container",
+              "flex": 1,
+              "layout": {
+                "type": "flex",
+                "direction": "column",
+                "gap": 12
+              },
+              "style": {
+                "bg": "rgba(139, 92, 246, 0.1)",
+                "borderRadius": "$md",
+                "padding": 12
+              },
+              "label": {
+                "text": "Level 2 (Column)",
+                "position": "top-left",
+                "style": {
+                  "fontSize": "$xs",
+                  "color": "$secondary"
+                }
+              },
+              "children": [
+                {
+                  "id": "level-3-top",
+                  "type": "container",
+                  "layout": {
+                    "type": "flex",
+                    "direction": "row",
+                    "gap": 8,
+                    "height": 80
+                  },
+                  "style": {
+                    "bg": "rgba(16, 185, 129, 0.1)",
+                    "borderRadius": "$sm",
+                    "padding": 8
+                  },
+                  "label": {
+                    "text": "Level 3 (Row)",
+                    "position": "center",
+                    "style": {
+                      "fontSize": "$2xs",
+                      "color": "$success"
+                    }
+                  },
+                  "children": [
+                    {
+                      "id": "leaf-1",
+                      "type": "text",
+                      "text": "A",
+                      "flex": 1,
+                      "style": {
+                        "bg": "$success",
+                        "borderRadius": "$xs",
+                        "padding": 8,
+                        "fontSize": "$xl",
+                        "fontWeight": "bold",
+                        "textAlign": "center",
+                        "color": "$text"
+                      }
+                    },
+                    {
+                      "id": "leaf-2",
+                      "type": "text",
+                      "text": "B",
+                      "flex": 1,
+                      "style": {
+                        "bg": "$info",
+                        "borderRadius": "$xs",
+                        "padding": 8,
+                        "fontSize": "$xl",
+                        "fontWeight": "bold",
+                        "textAlign": "center",
+                        "color": "$text"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "id": "level-3-bottom",
+                  "type": "text",
+                  "text": "Nested Container C",
+                  "style": {
+                    "bg": "$warning",
+                    "borderRadius": "$sm",
+                    "padding": 16,
+                    "fontSize": "$lg",
+                    "fontWeight": "600",
+                    "textAlign": "center",
+                    "color": "$text",
+                    "height": 80
+                  }
+                }
+              ]
+            },
+            {
+              "id": "level-2-right",
+              "type": "container",
+              "flex": 1,
+              "layout": {
+                "type": "flex",
+                "direction": "column",
+                "gap": 8
+              },
+              "style": {
+                "bg": "rgba(239, 68, 68, 0.1)",
+                "borderRadius": "$md",
+                "padding": 12
+              },
+              "label": {
+                "text": "Level 2 (Column)",
+                "position": "top-right",
+                "style": {
+                  "fontSize": "$xs",
+                  "color": "$error"
+                }
+              },
+              "children": [
+                {
+                  "id": "metric-d",
+                  "type": "metric",
+                  "style": {
+                    "bg": "$primary",
+                    "borderRadius": "$sm",
+                    "padding": 12,
+                    "height": 60
+                  },
+                  "label": {
+                    "text": "D",
+                    "position": "top-left",
+                    "style": {
+                      "fontSize": "$2xs",
+                      "color": "rgba(255, 255, 255, 0.8)"
+                    }
+                  }
+                },
+                {
+                  "id": "metric-e",
+                  "type": "metric",
+                  "style": {
+                    "bg": "$secondary",
+                    "borderRadius": "$sm",
+                    "padding": 12,
+                    "height": 60
+                  },
+                  "label": {
+                    "text": "E",
+                    "position": "center-right",
+                    "style": {
+                      "fontSize": "$2xs",
+                      "color": "rgba(255, 255, 255, 0.8)"
+                    }
+                  }
+                },
+                {
+                  "id": "metric-f",
+                  "type": "metric",
+                  "style": {
+                    "bg": "$error",
+                    "borderRadius": "$sm",
+                    "padding": 12,
+                    "flex": 1
+                  },
+                  "label": {
+                    "text": "F",
+                    "position": "bottom-right",
+                    "style": {
+                      "fontSize": "$2xs",
+                      "color": "rgba(255, 255, 255, 0.8)"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "label-showcase",
+      "name": "Label Positions",
+      "layout": {
+        "type": "flex",
+        "direction": "column",
+        "gap": 12,
+        "padding": 12
+      },
+      "transitions": {
+        "enter": {
+          "type": "fade",
+          "duration": 400
+        }
+      },
+      "panels": [
+        {
+          "id": "label-title",
+          "type": "text",
+          "text": "Label Position Showcase",
+          "style": {
+            "fontSize": "$3xl",
+            "fontWeight": "bold",
+            "color": "$success",
+            "marginBottom": 4,
+            "textAlign": "center"
+          }
+        },
+        {
+          "id": "label-subtitle",
+          "type": "text",
+          "text": "All 9 anchor positions demonstrated",
+          "style": {
+            "fontSize": "$md",
+            "color": "$textSecondary",
+            "marginBottom": 12,
+            "textAlign": "center"
+          }
+        },
+        {
+          "id": "label-grid",
+          "type": "container",
+          "layout": {
+            "type": "flex",
+            "direction": "column",
+            "gap": 12
+          },
+          "children": [
+            {
+              "id": "label-row-1",
+              "type": "container",
+              "layout": {
+                "type": "flex",
+                "direction": "row",
+                "gap": 12,
+                "height": 100
+              },
+              "children": [
+                {
+                  "id": "pos-top-left",
+                  "type": "container",
+                  "flex": 1,
+                  "style": {
+                    "bg": "$backgroundLight",
+                    "borderRadius": "$md",
+                    "padding": 8
+                  },
+                  "label": {
+                    "text": "top-left",
+                    "position": "top-left",
+                    "style": {
+                      "fontSize": "$xs",
+                      "color": "$primary",
+                      "fontWeight": "600"
+                    }
+                  }
+                },
+                {
+                  "id": "pos-top-center",
+                  "type": "container",
+                  "flex": 1,
+                  "style": {
+                    "bg": "$backgroundLight",
+                    "borderRadius": "$md",
+                    "padding": 8
+                  },
+                  "label": {
+                    "text": "top-center",
+                    "position": "top-center",
+                    "style": {
+                      "fontSize": "$xs",
+                      "color": "$success",
+                      "fontWeight": "600"
+                    }
+                  }
+                },
+                {
+                  "id": "pos-top-right",
+                  "type": "container",
+                  "flex": 1,
+                  "style": {
+                    "bg": "$backgroundLight",
+                    "borderRadius": "$md",
+                    "padding": 8
+                  },
+                  "label": {
+                    "text": "top-right",
+                    "position": "top-right",
+                    "style": {
+                      "fontSize": "$xs",
+                      "color": "$warning",
+                      "fontWeight": "600"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "id": "label-row-2",
+              "type": "container",
+              "layout": {
+                "type": "flex",
+                "direction": "row",
+                "gap": 12,
+                "height": 100
+              },
+              "children": [
+                {
+                  "id": "pos-center-left",
+                  "type": "container",
+                  "flex": 1,
+                  "style": {
+                    "bg": "$backgroundLight",
+                    "borderRadius": "$md",
+                    "padding": 8
+                  },
+                  "label": {
+                    "text": "center-left",
+                    "position": "center-left",
+                    "style": {
+                      "fontSize": "$xs",
+                      "color": "$info",
+                      "fontWeight": "600"
+                    }
+                  }
+                },
+                {
+                  "id": "pos-center",
+                  "type": "container",
+                  "flex": 1,
+                  "style": {
+                    "bg": "$backgroundLight",
+                    "borderRadius": "$md",
+                    "padding": 8
+                  },
+                  "label": {
+                    "text": "center",
+                    "position": "center",
+                    "style": {
+                      "fontSize": "$xs",
+                      "color": "$secondary",
+                      "fontWeight": "600"
+                    }
+                  }
+                },
+                {
+                  "id": "pos-center-right",
+                  "type": "container",
+                  "flex": 1,
+                  "style": {
+                    "bg": "$backgroundLight",
+                    "borderRadius": "$md",
+                    "padding": 8
+                  },
+                  "label": {
+                    "text": "center-right",
+                    "position": "center-right",
+                    "style": {
+                      "fontSize": "$xs",
+                      "color": "$error",
+                      "fontWeight": "600"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "id": "label-row-3",
+              "type": "container",
+              "layout": {
+                "type": "flex",
+                "direction": "row",
+                "gap": 12,
+                "height": 100
+              },
+              "children": [
+                {
+                  "id": "pos-bottom-left",
+                  "type": "container",
+                  "flex": 1,
+                  "style": {
+                    "bg": "$backgroundLight",
+                    "borderRadius": "$md",
+                    "padding": 8
+                  },
+                  "label": {
+                    "text": "bottom-left",
+                    "position": "bottom-left",
+                    "style": {
+                      "fontSize": "$xs",
+                      "color": "$primary",
+                      "fontWeight": "600"
+                    }
+                  }
+                },
+                {
+                  "id": "pos-bottom-center",
+                  "type": "container",
+                  "flex": 1,
+                  "style": {
+                    "bg": "$backgroundLight",
+                    "borderRadius": "$md",
+                    "padding": 8
+                  },
+                  "label": {
+                    "text": "bottom-center",
+                    "position": "bottom-center",
+                    "style": {
+                      "fontSize": "$xs",
+                      "color": "$success",
+                      "fontWeight": "600"
+                    }
+                  }
+                },
+                {
+                  "id": "pos-bottom-right",
+                  "type": "container",
+                  "flex": 1,
+                  "style": {
+                    "bg": "$backgroundLight",
+                    "borderRadius": "$md",
+                    "padding": 8
+                  },
+                  "label": {
+                    "text": "bottom-right",
+                    "position": "bottom-right",
+                    "style": {
+                      "fontSize": "$xs",
+                      "color": "$warning",
+                      "fontWeight": "600"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "navigation": {
+    "initialPage": "welcome",
+    "transitions": {
+      "default": {
+        "type": "slide",
+        "direction": "left",
+        "duration": 300
+      }
+    },
+    "events": [
+      {
+        "type": "onSwipeLeft",
+        "actions": [
+          {
+            "type": "navigateNext"
+          }
+        ]
+      },
+      {
+        "type": "onSwipeRight",
+        "actions": [
+          {
+            "type": "navigatePrevious"
+          }
+        ]
+      }
+    ]
+  },
+  "dataSources": {},
+  "globalEvents": []
+}
