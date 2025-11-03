@@ -1,0 +1,84 @@
+name: Deploy to Raspberry Pi
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '**.md'
+      - '.gitignore'
+      - 'PI_SETUP_COMPLETE.md'
+      - 'QUICKSTART.md'
+      - 'PI_DEPLOYMENT_GUIDE.md'
+      - 'DEPLOYMENT_CHEATSHEET.md'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build production bundle
+        run: npm run build:web
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.PI_SSH_KEY }}" > ~/.ssh/pi_deploy_key
+          chmod 600 ~/.ssh/pi_deploy_key
+          ssh-keyscan -H ${{ secrets.PI_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy to Raspberry Pi
+        env:
+          PI_USER: ${{ secrets.PI_USER }}
+          PI_HOST: ${{ secrets.PI_HOST }}
+          PI_PATH: ${{ secrets.PI_PATH }}
+        run: |
+          echo "🚀 Deploying to Raspberry Pi at $PI_HOST..."
+
+          # Sync files to Pi
+          rsync -avz --delete \
+            -e "ssh -i ~/.ssh/pi_deploy_key -o StrictHostKeyChecking=no" \
+            --exclude 'node_modules' \
+            --exclude '.git' \
+            dist/ \
+            $PI_USER@$PI_HOST:$PI_PATH/dist/
+
+          # Restart the service
+          ssh -i ~/.ssh/pi_deploy_key -o StrictHostKeyChecking=no \
+            $PI_USER@$PI_HOST \
+            "sudo systemctl restart pidash"
+
+          echo "✅ Deployment complete!"
+
+      - name: Verify deployment
+        env:
+          PI_USER: ${{ secrets.PI_USER }}
+          PI_HOST: ${{ secrets.PI_HOST }}
+        run: |
+          echo "🔍 Verifying deployment..."
+          sleep 5
+
+          ssh -i ~/.ssh/pi_deploy_key -o StrictHostKeyChecking=no \
+            $PI_USER@$PI_HOST \
+            "sudo systemctl status pidash --no-pager"
+
+          # Check health endpoint
+          curl -f http://$PI_HOST:3000/health || echo "⚠️ Health check failed"
+
+          echo "✅ Verification complete!"
+
+      - name: Cleanup
+        if: always()
+        run: rm -f ~/.ssh/pi_deploy_key
