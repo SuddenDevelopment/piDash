@@ -9,14 +9,15 @@ try {
   const versionPath = path.join(__dirname, '../config/version.ts');
   if (fs.existsSync(versionPath)) {
     const versionContent = fs.readFileSync(versionPath, 'utf8');
-    const match = versionContent.match(/buildNumber:\s*(\d+)/);
+    const match = versionContent.match(/"?buildNumber"?:\s*(\d+)/);
     if (match) {
       versionInfo.buildNumber = parseInt(match[1], 10);
       versionInfo.version = `build #${versionInfo.buildNumber}`;
+      console.log(`📦 Loaded version: ${versionInfo.version}`);
     }
   }
 } catch (error) {
-  console.warn('Could not read version info:', error.message);
+  console.warn('⚠️  Could not read version info:', error.message);
 }
 
 // Serve static files from dist directory

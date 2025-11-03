@@ -26,12 +26,26 @@ fi
 
 # Sync to Pi using rsync
 echo "📡 Syncing to $PI_HOST..."
+
+# Sync dist directory
 rsync -avz --delete \
     --exclude 'node_modules' \
     --exclude '.git' \
     --progress \
     "$LOCAL_BUILD_DIR/" \
     "$PI_USER@$PI_HOST:$PI_PATH/dist/"
+
+# Sync server directory
+rsync -avz \
+    --progress \
+    server/ \
+    "$PI_USER@$PI_HOST:$PI_PATH/server/"
+
+# Sync config directory (for version.ts)
+rsync -avz \
+    --progress \
+    config/ \
+    "$PI_USER@$PI_HOST:$PI_PATH/config/"
 
 # Restart the service on Pi (if using systemd)
 echo "🔄 Restarting piDash service..."
