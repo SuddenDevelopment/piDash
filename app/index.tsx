@@ -19,6 +19,34 @@ export default function Dashboard() {
     return () => clearInterval(timer);
   }, []);
 
+  // Auto-reload when new version is deployed
+  useEffect(() => {
+    if (Platform.OS !== 'web') return;
+
+    const currentBuildNumber = VERSION_INFO.buildNumber;
+
+    const checkForUpdates = async () => {
+      try {
+        const response = await fetch('/api/version');
+        const serverVersion = await response.json();
+
+        // If server has newer build, reload the page
+        if (serverVersion.buildNumber > currentBuildNumber) {
+          console.log(`New version available: ${serverVersion.version} (current: ${VERSION_INFO.version})`);
+          window.location.reload();
+        }
+      } catch (error) {
+        // Silently fail - server might be restarting
+        console.debug('Version check failed:', error.message);
+      }
+    };
+
+    // Check every 10 seconds
+    const updateChecker = setInterval(checkForUpdates, 10000);
+
+    return () => clearInterval(updateChecker);
+  }, []);
+
   const formatTime = (date: Date) => {
     return date.toLocaleTimeString('en-US', {
       hour: '2-digit',

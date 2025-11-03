@@ -1,9 +1,31 @@
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
 const app = express();
+
+// Read version info at startup
+let versionInfo = { buildNumber: 0, version: 'unknown' };
+try {
+  const versionPath = path.join(__dirname, '../config/version.ts');
+  if (fs.existsSync(versionPath)) {
+    const versionContent = fs.readFileSync(versionPath, 'utf8');
+    const match = versionContent.match(/buildNumber:\s*(\d+)/);
+    if (match) {
+      versionInfo.buildNumber = parseInt(match[1], 10);
+      versionInfo.version = `build #${versionInfo.buildNumber}`;
+    }
+  }
+} catch (error) {
+  console.warn('Could not read version info:', error.message);
+}
 
 // Serve static files from dist directory
 app.use(express.static(path.join(__dirname, '../dist')));
+
+// Version check endpoint for auto-reload
+app.get('/api/version', (req, res) => {
+  res.json(versionInfo);
+});
 
 // Health check endpoint
 app.get('/health', (req, res) => {
@@ -11,7 +33,8 @@ app.get('/health', (req, res) => {
     status: 'ok',
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
-    version: '0.1.0',
+    version: versionInfo.version,
+    buildNumber: versionInfo.buildNumber,
   });
 });
 
