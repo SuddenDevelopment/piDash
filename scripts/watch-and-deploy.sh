@@ -3,9 +3,15 @@
 # Watch for file changes and auto-deploy to Pi
 # Requires fswatch (install with: brew install fswatch)
 
+# Default Configuration
 PI_USER="pi"
 PI_HOST="raspberrypi.local"
 PI_PATH="/home/pi/piDash"
+
+# Load local configuration if it exists (overrides defaults)
+if [ -f "pi-config.local.sh" ]; then
+    source pi-config.local.sh
+fi
 
 echo "👀 Watching for changes..."
 echo "Press Ctrl+C to stop"

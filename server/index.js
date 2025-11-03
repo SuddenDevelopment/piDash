@@ -30,7 +30,7 @@ app.get('/api/system', (req, res) => {
 });
 
 // Handle client-side routing - serve index.html for all routes
-app.get('*', (req, res) => {
+app.use((req, res) => {
   res.sendFile(path.join(__dirname, '../dist/index.html'));
 });
 

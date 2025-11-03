@@ -1,10 +1,16 @@
 #!/bin/bash
 
-# Configuration
+# Default Configuration
 PI_USER="pi"
-PI_HOST="raspberrypi.local"  # or use IP like 192.168.1.100
+PI_HOST="raspberrypi.local"
 PI_PATH="/home/pi/piDash"
 LOCAL_BUILD_DIR="dist"
+
+# Load local configuration if it exists (overrides defaults)
+if [ -f "pi-config.local.sh" ]; then
+    echo "📝 Loading local Pi configuration..."
+    source pi-config.local.sh
+fi
 
 echo "🚀 Deploying to Raspberry Pi..."
 
