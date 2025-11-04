@@ -5,6 +5,7 @@
 import React, { useEffect } from 'react';
 import { View, StyleSheet, TouchableOpacity, Text, PanResponder } from 'react-native';
 import type { Page, NavigationConfig } from '@/types/dashboard-schema';
+import { useSettings } from '@/contexts/SettingsContext';
 
 type PageNavigatorProps = {
   currentIndex: number;
@@ -25,17 +26,25 @@ export function PageNavigator({
   onNavigateTo,
   navigationConfig,
 }: PageNavigatorProps) {
-  // Auto-rotation support
+  const { settings } = useSettings();
+
+  // Auto-transition support with settings toggle
   useEffect(() => {
     const scheduleEvent = navigationConfig.events?.find(e => e.type === 'onSchedule');
-    if (scheduleEvent?.schedule?.rotate && scheduleEvent.schedule.interval) {
+
+    // Only auto-transition if enabled in settings AND configured in JSON
+    if (
+      settings.autoTransitionEnabled &&
+      scheduleEvent?.schedule?.rotate &&
+      scheduleEvent.schedule.interval
+    ) {
       const interval = setInterval(() => {
         onNavigateNext();
       }, scheduleEvent.schedule.interval);
 
       return () => clearInterval(interval);
     }
-  }, [navigationConfig, onNavigateNext]);
+  }, [navigationConfig, onNavigateNext, settings.autoTransitionEnabled]);
 
   // Swipe gestures using PanResponder
   const panResponder = PanResponder.create({

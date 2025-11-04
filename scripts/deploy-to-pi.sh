@@ -51,6 +51,10 @@ rsync -avz \
 echo "🔄 Restarting piDash service..."
 ssh "$PI_USER@$PI_HOST" "sudo systemctl restart pidash 2>/dev/null || echo 'Service not found, skipping restart'"
 
+# Trigger browser refresh by bumping deployment version
+echo "📱 Triggering browser refresh..."
+ssh "$PI_USER@$PI_HOST" "curl -X POST http://localhost:3001/api/version/bump -s > /dev/null 2>&1 || echo 'Could not trigger refresh (API not running)'"
+
 echo "✅ Deployment complete!"
 echo "🌐 Access at: http://$PI_HOST:3000"
-echo "📱 Browser will auto-refresh within a few seconds"
+echo "📱 Browser will auto-refresh within 3 seconds"

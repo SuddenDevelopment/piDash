@@ -40,13 +40,13 @@ function getLabelPositionStyle(
     case 'top-left':
       return {
         ...baseStyle,
-        top: 8 + offsetY,
+        bottom: 8 - offsetY,
         left: 8 + offsetX,
       };
     case 'top-center':
       return {
         ...baseStyle,
-        top: 8 + offsetY,
+        bottom: 8 - offsetY,
         left: 0,
         right: 0,
         alignItems: 'center',
@@ -54,7 +54,7 @@ function getLabelPositionStyle(
     case 'top-right':
       return {
         ...baseStyle,
-        top: 8 + offsetY,
+        bottom: 8 - offsetY,
         right: 8 + offsetX,
       };
     case 'center-left':
@@ -86,13 +86,13 @@ function getLabelPositionStyle(
     case 'bottom-left':
       return {
         ...baseStyle,
-        bottom: 8 + offsetY,
+        top: 8 - offsetY,
         left: 8 + offsetX,
       };
     case 'bottom-center':
       return {
         ...baseStyle,
-        bottom: 8 + offsetY,
+        top: 8 - offsetY,
         left: 0,
         right: 0,
         alignItems: 'center',
@@ -100,7 +100,7 @@ function getLabelPositionStyle(
     case 'bottom-right':
       return {
         ...baseStyle,
-        bottom: 8 + offsetY,
+        top: 8 - offsetY,
         right: 8 + offsetX,
       };
     default:

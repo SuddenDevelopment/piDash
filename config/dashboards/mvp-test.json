@@ -960,6 +960,445 @@
           ]
         }
       ]
+    },
+    {
+      "id": "three-column-layout",
+      "name": "3 Columns",
+      "layout": {
+        "type": "flex",
+        "direction": "column",
+        "gap": 16,
+        "padding": 16
+      },
+      "transitions": {
+        "enter": {
+          "type": "slide",
+          "direction": "left",
+          "duration": 400
+        }
+      },
+      "panels": [
+        {
+          "id": "three-col-title",
+          "type": "text",
+          "text": "Three Column Layout",
+          "style": {
+            "fontSize": "$3xl",
+            "fontWeight": "bold",
+            "color": "$primary",
+            "marginBottom": 8,
+            "textAlign": "center"
+          }
+        },
+        {
+          "id": "three-columns-container",
+          "type": "container",
+          "layout": {
+            "type": "flex",
+            "direction": "row",
+            "gap": 16
+          },
+          "children": [
+            {
+              "id": "column-1",
+              "type": "container",
+              "flex": 1,
+              "layout": {
+                "type": "flex",
+                "direction": "column",
+                "gap": 12
+              },
+              "children": [
+                {
+                  "id": "col1-metric-1",
+                  "type": "metric",
+                  "style": {
+                    "bg": "$primary",
+                    "borderRadius": "$lg",
+                    "padding": 16,
+                    "height": 120
+                  },
+                  "label": {
+                    "text": "Metric A",
+                    "position": "top-left",
+                    "style": {
+                      "fontSize": "$sm",
+                      "color": "rgba(255, 255, 255, 0.8)"
+                    }
+                  },
+                  "value": {
+                    "source": "mock://data",
+                    "path": "cpu",
+                    "format": "{value}%",
+                    "style": {
+                      "fontSize": "$3xl",
+                      "color": "$text",
+                      "fontWeight": "bold"
+                    }
+                  }
+                },
+                {
+                  "id": "col1-metric-2",
+                  "type": "metric",
+                  "style": {
+                    "bg": "$backgroundLight",
+                    "borderRadius": "$lg",
+                    "padding": 16,
+                    "height": 120
+                  },
+                  "label": {
+                    "text": "Status",
+                    "position": "top-center",
+                    "style": {
+                      "fontSize": "$sm",
+                      "color": "$textSecondary"
+                    }
+                  },
+                  "value": {
+                    "source": "mock://data",
+                    "path": "status",
+                    "format": "{value}",
+                    "style": {
+                      "fontSize": "$2xl",
+                      "color": "$success",
+                      "fontWeight": "600"
+                    }
+                  }
+                },
+                {
+                  "id": "col1-chart",
+                  "type": "chart",
+                  "chartType": "bar",
+                  "style": {
+                    "bg": "$backgroundLight",
+                    "borderRadius": "$lg",
+                    "padding": 16,
+                    "flex": 1
+                  },
+                  "label": {
+                    "text": "Chart A",
+                    "position": "top-center",
+                    "style": {
+                      "fontSize": "$md",
+                      "fontWeight": "600"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "id": "column-2",
+              "type": "container",
+              "flex": 1,
+              "layout": {
+                "type": "flex",
+                "direction": "column",
+                "gap": 12
+              },
+              "children": [
+                {
+                  "id": "col2-metric-1",
+                  "type": "metric",
+                  "style": {
+                    "bg": "$success",
+                    "borderRadius": "$lg",
+                    "padding": 16,
+                    "height": 120
+                  },
+                  "label": {
+                    "text": "Metric B",
+                    "position": "top-left",
+                    "style": {
+                      "fontSize": "$sm",
+                      "color": "rgba(255, 255, 255, 0.8)"
+                    }
+                  },
+                  "value": {
+                    "source": "mock://data",
+                    "path": "memory",
+                    "format": "{value} MB",
+                    "style": {
+                      "fontSize": "$3xl",
+                      "color": "$text",
+                      "fontWeight": "bold"
+                    }
+                  }
+                },
+                {
+                  "id": "col2-table",
+                  "type": "table",
+                  "style": {
+                    "bg": "$backgroundLight",
+                    "borderRadius": "$lg",
+                    "padding": 16,
+                    "flex": 1
+                  },
+                  "label": {
+                    "text": "Data Table",
+                    "position": "top-center",
+                    "style": {
+                      "fontSize": "$md",
+                      "fontWeight": "600"
+                    }
+                  }
+                },
+                {
+                  "id": "col2-metric-2",
+                  "type": "metric",
+                  "style": {
+                    "bg": "$backgroundLight",
+                    "borderRadius": "$lg",
+                    "padding": 16,
+                    "height": 100
+                  },
+                  "label": {
+                    "text": "Info",
+                    "position": "center",
+                    "style": {
+                      "fontSize": "$sm",
+                      "color": "$textSecondary"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "id": "column-3",
+              "type": "container",
+              "flex": 1,
+              "layout": {
+                "type": "flex",
+                "direction": "column",
+                "gap": 12
+              },
+              "children": [
+                {
+                  "id": "col3-canvas",
+                  "type": "canvas",
+                  "canvasType": "r3f",
+                  "style": {
+                    "bg": "$backgroundLight",
+                    "borderRadius": "$lg",
+                    "padding": 16,
+                    "height": 200
+                  },
+                  "label": {
+                    "text": "3D Viz",
+                    "position": "top-center",
+                    "style": {
+                      "fontSize": "$md",
+                      "fontWeight": "600"
+                    }
+                  }
+                },
+                {
+                  "id": "col3-metric-1",
+                  "type": "metric",
+                  "style": {
+                    "bg": "$warning",
+                    "borderRadius": "$lg",
+                    "padding": 16,
+                    "height": 120
+                  },
+                  "label": {
+                    "text": "Metric C",
+                    "position": "top-left",
+                    "style": {
+                      "fontSize": "$sm",
+                      "color": "rgba(0, 0, 0, 0.8)"
+                    }
+                  },
+                  "value": {
+                    "source": "mock://data",
+                    "path": "temp",
+                    "format": "{value}°C",
+                    "style": {
+                      "fontSize": "$3xl",
+                      "color": "$text",
+                      "fontWeight": "bold"
+                    }
+                  }
+                },
+                {
+                  "id": "col3-chart",
+                  "type": "chart",
+                  "chartType": "line",
+                  "style": {
+                    "bg": "$backgroundLight",
+                    "borderRadius": "$lg",
+                    "padding": 16,
+                    "flex": 1
+                  },
+                  "label": {
+                    "text": "Trends",
+                    "position": "top-center",
+                    "style": {
+                      "fontSize": "$md",
+                      "fontWeight": "600"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "quadrant-layout",
+      "name": "Quadrants",
+      "layout": {
+        "type": "flex",
+        "direction": "column",
+        "gap": 16,
+        "padding": 16
+      },
+      "transitions": {
+        "enter": {
+          "type": "scale",
+          "duration": 400
+        }
+      },
+      "panels": [
+        {
+          "id": "quad-title",
+          "type": "text",
+          "text": "Quadrant Layout (Full Height)",
+          "style": {
+            "fontSize": "$3xl",
+            "fontWeight": "bold",
+            "color": "$secondary",
+            "marginBottom": 8,
+            "textAlign": "center"
+          }
+        },
+        {
+          "id": "quadrant-grid",
+          "type": "container",
+          "layout": {
+            "type": "flex",
+            "direction": "column",
+            "gap": 16
+          },
+          "style": {
+            "flex": 1
+          },
+          "children": [
+            {
+              "id": "quad-row-1",
+              "type": "container",
+              "flex": 1,
+              "layout": {
+                "type": "flex",
+                "direction": "row",
+                "gap": 16
+              },
+              "children": [
+                {
+                  "id": "quadrant-1",
+                  "type": "metric",
+                  "flex": 1,
+                  "style": {
+                    "bg": "$primary",
+                    "borderRadius": "$lg",
+                    "padding": 24
+                  },
+                  "label": {
+                    "text": "Quadrant 1",
+                    "position": "top-left",
+                    "style": {
+                      "fontSize": "$lg",
+                      "color": "rgba(255, 255, 255, 0.9)",
+                      "fontWeight": "600"
+                    }
+                  },
+                  "value": {
+                    "source": "mock://data",
+                    "path": "cpu",
+                    "format": "{value}%",
+                    "style": {
+                      "fontSize": "$5xl",
+                      "color": "$text",
+                      "fontWeight": "bold"
+                    }
+                  }
+                },
+                {
+                  "id": "quadrant-2",
+                  "type": "chart",
+                  "chartType": "line",
+                  "flex": 1,
+                  "style": {
+                    "bg": "$success",
+                    "borderRadius": "$lg",
+                    "padding": 24
+                  },
+                  "label": {
+                    "text": "Quadrant 2",
+                    "position": "top-center",
+                    "style": {
+                      "fontSize": "$lg",
+                      "color": "rgba(255, 255, 255, 0.9)",
+                      "fontWeight": "600"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "id": "quad-row-2",
+              "type": "container",
+              "flex": 1,
+              "layout": {
+                "type": "flex",
+                "direction": "row",
+                "gap": 16
+              },
+              "children": [
+                {
+                  "id": "quadrant-3",
+                  "type": "table",
+                  "flex": 1,
+                  "style": {
+                    "bg": "$warning",
+                    "borderRadius": "$lg",
+                    "padding": 24
+                  },
+                  "label": {
+                    "text": "Quadrant 3",
+                    "position": "bottom-left",
+                    "style": {
+                      "fontSize": "$lg",
+                      "color": "rgba(0, 0, 0, 0.8)",
+                      "fontWeight": "600"
+                    }
+                  }
+                },
+                {
+                  "id": "quadrant-4",
+                  "type": "canvas",
+                  "canvasType": "r3f",
+                  "flex": 1,
+                  "style": {
+                    "bg": "$info",
+                    "borderRadius": "$lg",
+                    "padding": 24
+                  },
+                  "label": {
+                    "text": "Quadrant 4",
+                    "position": "bottom-right",
+                    "style": {
+                      "fontSize": "$lg",
+                      "color": "rgba(255, 255, 255, 0.9)",
+                      "fontWeight": "600"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ],
   "navigation": {
@@ -985,6 +1424,18 @@
         "actions": [
           {
             "type": "navigatePrevious"
+          }
+        ]
+      },
+      {
+        "type": "onSchedule",
+        "schedule": {
+          "interval": 10000,
+          "rotate": true
+        },
+        "actions": [
+          {
+            "type": "navigateNext"
           }
         ]
       }

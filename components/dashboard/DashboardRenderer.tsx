@@ -3,10 +3,11 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Dimensions } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import type { DashboardConfig, Page } from '@/types/dashboard-schema';
 import { PageRenderer } from './PageRenderer';
 import { PageNavigator } from './PageNavigator';
+import { SettingsModal } from './SettingsModal';
 import { validateDashboardConfig } from '@/lib/dashboard-validator';
 
 type DashboardRendererProps = {
@@ -17,6 +18,7 @@ type DashboardRendererProps = {
 export function DashboardRenderer({ config, onError }: DashboardRendererProps) {
   const [currentPageId, setCurrentPageId] = useState<string>(config.navigation.initialPage);
   const [isValidated, setIsValidated] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
 
   // Validate config on mount
   useEffect(() => {
@@ -56,6 +58,11 @@ export function DashboardRenderer({ config, onError }: DashboardRendererProps) {
     setCurrentPageId(pageId);
   };
 
+  // Get auto-transition interval from config
+  const autoTransitionInterval = config.navigation.events
+    ?.find(e => e.type === 'onSchedule')
+    ?.schedule?.interval;
+
   return (
     <View style={styles.container}>
       <PageRenderer
@@ -73,6 +80,21 @@ export function DashboardRenderer({ config, onError }: DashboardRendererProps) {
         onNavigateTo={handleNavigateTo}
         navigationConfig={config.navigation}
       />
+
+      {/* Settings Icon */}
+      <TouchableOpacity
+        style={styles.settingsButton}
+        onPress={() => setShowSettings(true)}
+      >
+        <Text style={styles.settingsIcon}>⚙️</Text>
+      </TouchableOpacity>
+
+      {/* Settings Modal */}
+      <SettingsModal
+        visible={showSettings}
+        onClose={() => setShowSettings(false)}
+        autoTransitionInterval={autoTransitionInterval}
+      />
     </View>
   );
 }
@@ -82,5 +104,20 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     height: '100%',
+  },
+  settingsButton: {
+    position: 'absolute',
+    top: 12,
+    right: 12,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 200,
+  },
+  settingsIcon: {
+    fontSize: 24,
   },
 });

@@ -4,21 +4,42 @@
 
 import type { StyleConfig, DashboardConfig } from '@/types/dashboard-schema';
 
-// Theme tokens mapping
-const THEME_TOKENS: Record<string, any> = {
-  // Colors
-  $primary: '#3B82F6',
-  $secondary: '#8B5CF6',
-  $success: '#10B981',
-  $warning: '#F59E0B',
-  $error: '#EF4444',
-  $info: '#06B6D4',
-  $background: '#0A0A0A',
-  $backgroundLight: '#1A1A1A',
-  $backgroundLighter: '#2A2A2A',
-  $text: '#FFFFFF',
-  $textSecondary: '#A0A0A0',
-  $textMuted: '#707070',
+// Futuristic theme tokens mapping
+// These match the CSS variables in dashboard-theme.css
+const DEFAULT_THEME_TOKENS: Record<string, any> = {
+  // Colors - Futuristic Data Viz Theme
+  $primary: '#00D9FF',
+  $secondary: '#B794F6',
+  $accent: '#FF6B9D',
+  $success: '#00FFA3',
+  $warning: '#FFB800',
+  $error: '#FF3366',
+  $info: '#00D9FF',
+  $background: '#0A0E1A',
+  $backgroundLight: '#131829',
+  $backgroundLighter: '#1A2035',
+  $backgroundDark: '#050812',
+  $surface: '#121825',
+  $surfaceLight: '#1A2338',
+  $surfaceDark: '#0D1220',
+  $text: '#E8F0FF',
+  $textSecondary: '#8BA3CC',
+  $textMuted: '#5A6B8C',
+  $textInverse: '#0A0E1A',
+  $border: '#2A3F5F',
+  $borderLight: '#3D5170',
+  $borderDark: '#1A2840',
+  $chart1: '#00D9FF',
+  $chart2: '#B794F6',
+  $chart3: '#00FFA3',
+  $chart4: '#FF6B9D',
+  $chart5: '#FFB800',
+  $chart6: '#6366F1',
+  $chart7: '#14B8A6',
+  $chart8: '#F472B6',
+  $highlight: '#00D9FF',
+  $overlay: 'rgba(10, 14, 26, 0.85)',
+  $shadow: 'rgba(0, 0, 0, 0.5)',
 
   // Spacing (0-24, 4px increments)
   $0: 0,
@@ -66,7 +87,7 @@ export function resolveStyle(style: StyleConfig, config: DashboardConfig): any {
   for (const [key, value] of Object.entries(style)) {
     if (typeof value === 'string' && value.startsWith('$')) {
       // Resolve theme token
-      const tokenValue = THEME_TOKENS[value];
+      const tokenValue = DEFAULT_THEME_TOKENS[value];
       if (tokenValue !== undefined) {
         resolved[key] = tokenValue;
       } else {
@@ -89,7 +110,7 @@ export function resolveStyle(style: StyleConfig, config: DashboardConfig): any {
 
 export function resolveTokenValue(value: string): any {
   if (typeof value === 'string' && value.startsWith('$')) {
-    return THEME_TOKENS[value] ?? value;
+    return DEFAULT_THEME_TOKENS[value] ?? value;
   }
   return value;
 }

@@ -27,10 +27,61 @@ export type GlobalConfig = {
     reconnectInterval?: number;
   };
   theme?: 'light' | 'dark';
+  colors?: ColorPalette;
   transitions?: {
     duration?: number;
     easing?: EasingType;
   };
+};
+
+export type ColorPalette = {
+  // Primary colors
+  primary?: string;
+  secondary?: string;
+  accent?: string;
+
+  // Status colors
+  success?: string;
+  warning?: string;
+  error?: string;
+  info?: string;
+
+  // Background colors
+  background?: string;
+  backgroundLight?: string;
+  backgroundLighter?: string;
+  backgroundDark?: string;
+
+  // Surface colors (for cards, panels)
+  surface?: string;
+  surfaceLight?: string;
+  surfaceDark?: string;
+
+  // Text colors
+  text?: string;
+  textSecondary?: string;
+  textMuted?: string;
+  textInverse?: string;
+
+  // Border colors
+  border?: string;
+  borderLight?: string;
+  borderDark?: string;
+
+  // Data visualization colors
+  chart1?: string;
+  chart2?: string;
+  chart3?: string;
+  chart4?: string;
+  chart5?: string;
+  chart6?: string;
+  chart7?: string;
+  chart8?: string;
+
+  // Semantic colors
+  highlight?: string;
+  overlay?: string;
+  shadow?: string;
 };
 
 export type EasingType =

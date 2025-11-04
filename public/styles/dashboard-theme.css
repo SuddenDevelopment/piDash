@@ -1,0 +1,270 @@
+/**
+ * piDash Futuristic Theme
+ *
+ * Sophisticated color palette optimized for advanced data visualization
+ * - Deep space backgrounds with blue tint
+ * - Electric cyan for high-tech aesthetics
+ * - High contrast thin lines, subtle large areas
+ * - Vibrant neon colors for data
+ *
+ * Usage: Link this CSS file in your HTML to apply the theme
+ */
+
+:root {
+  /* ============================================
+     PRIMARY COLORS
+     ============================================ */
+  --primary: #00D9FF;           /* Electric cyan - main brand */
+  --secondary: #B794F6;         /* Soft purple - secondary accent */
+  --accent: #FF6B9D;            /* Vibrant pink - tertiary accent */
+
+  /* ============================================
+     STATUS COLORS
+     ============================================ */
+  --success: #00FFA3;           /* Bright green - success states */
+  --warning: #FFB800;           /* Vibrant orange - warnings */
+  --error: #FF3366;             /* Neon red - errors */
+  --info: #00D9FF;              /* Cyan - informational */
+
+  /* ============================================
+     BACKGROUND COLORS (Layered depth)
+     ============================================ */
+  --background: #0A0E1A;        /* Base background - deep space */
+  --background-light: #131829;  /* Elevated surface */
+  --background-lighter: #1A2035; /* More elevated */
+  --background-dark: #050812;   /* Recessed areas */
+
+  /* ============================================
+     SURFACE COLORS (Cards, panels, containers)
+     ============================================ */
+  --surface: #121825;           /* Default panel/card surface */
+  --surface-light: #1A2338;     /* Elevated panels */
+  --surface-dark: #0D1220;      /* Recessed panels */
+
+  /* ============================================
+     TEXT COLORS (Hierarchy)
+     ============================================ */
+  --text: #E8F0FF;              /* Primary text - highest contrast */
+  --text-secondary: #8BA3CC;    /* Secondary text - medium contrast */
+  --text-muted: #5A6B8C;        /* Muted text - hints, labels */
+  --text-inverse: #0A0E1A;      /* Text on light backgrounds */
+
+  /* ============================================
+     BORDER COLORS (Thin, high contrast lines)
+     ============================================ */
+  --border: #2A3F5F;            /* Standard border - visible but subtle */
+  --border-light: #3D5170;      /* Lighter border */
+  --border-dark: #1A2840;       /* Darker border */
+
+  /* ============================================
+     DATA VISUALIZATION COLORS
+     8 distinct hues for charts and graphs
+     ============================================ */
+  --chart-1: #00D9FF;           /* Cyan */
+  --chart-2: #B794F6;           /* Purple */
+  --chart-3: #00FFA3;           /* Green */
+  --chart-4: #FF6B9D;           /* Pink */
+  --chart-5: #FFB800;           /* Orange */
+  --chart-6: #6366F1;           /* Indigo */
+  --chart-7: #14B8A6;           /* Teal */
+  --chart-8: #F472B6;           /* Rose */
+
+  /* ============================================
+     SEMANTIC COLORS
+     ============================================ */
+  --highlight: #00D9FF;         /* Highlight/selection color */
+  --overlay: rgba(10, 14, 26, 0.85); /* Modal/dropdown overlay */
+  --shadow: rgba(0, 0, 0, 0.5); /* Drop shadow */
+
+  /* ============================================
+     GRADIENTS (For advanced effects)
+     ============================================ */
+  --gradient-primary: linear-gradient(135deg, #00D9FF 0%, #0080FF 100%);
+  --gradient-secondary: linear-gradient(135deg, #B794F6 0%, #8B5CF6 100%);
+  --gradient-surface: linear-gradient(180deg, #131829 0%, #0D1220 100%);
+
+  /* ============================================
+     EFFECTS
+     ============================================ */
+  --glow-primary: 0 0 20px rgba(0, 217, 255, 0.3);
+  --glow-secondary: 0 0 20px rgba(183, 148, 246, 0.3);
+  --shadow-sm: 0 2px 4px var(--shadow);
+  --shadow-md: 0 4px 8px var(--shadow);
+  --shadow-lg: 0 8px 16px var(--shadow);
+}
+
+/* ============================================
+   GLOBAL STYLES
+   ============================================ */
+
+body {
+  background-color: var(--background);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+/* Background utilities */
+.bg-primary { background-color: var(--primary); }
+.bg-secondary { background-color: var(--secondary); }
+.bg-surface { background-color: var(--surface); }
+.bg-surface-light { background-color: var(--surface-light); }
+.bg-surface-dark { background-color: var(--surface-dark); }
+
+/* Text utilities */
+.text-primary { color: var(--primary); }
+.text-secondary { color: var(--text-secondary); }
+.text-muted { color: var(--text-muted); }
+.text-success { color: var(--success); }
+.text-warning { color: var(--warning); }
+.text-error { color: var(--error); }
+
+/* Border utilities */
+.border { border: 1px solid var(--border); }
+.border-light { border-color: var(--border-light); }
+.border-dark { border-color: var(--border-dark); }
+.border-primary { border-color: var(--primary); }
+
+/* Glow effects */
+.glow-primary { box-shadow: var(--glow-primary); }
+.glow-secondary { box-shadow: var(--glow-secondary); }
+
+/* ============================================
+   COMPONENT STYLES
+   ============================================ */
+
+/* Cards and panels */
+.card {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: var(--shadow-md);
+}
+
+/* Buttons */
+.button-primary {
+  background-color: var(--primary);
+  color: var(--text-inverse);
+  border: none;
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.button-primary:hover {
+  background-color: #00B8E6;
+  box-shadow: var(--glow-primary);
+  transform: translateY(-1px);
+}
+
+/* Inputs */
+.input {
+  background-color: var(--surface-dark);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 8px 12px;
+  border-radius: 4px;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(0, 217, 255, 0.1);
+}
+
+/* ============================================
+   DATA VISUALIZATION HELPERS
+   ============================================ */
+
+/* Chart color classes */
+.chart-1 { color: var(--chart-1); }
+.chart-2 { color: var(--chart-2); }
+.chart-3 { color: var(--chart-3); }
+.chart-4 { color: var(--chart-4); }
+.chart-5 { color: var(--chart-5); }
+.chart-6 { color: var(--chart-6); }
+.chart-7 { color: var(--chart-7); }
+.chart-8 { color: var(--chart-8); }
+
+/* Chart background classes */
+.chart-bg-1 { background-color: var(--chart-1); }
+.chart-bg-2 { background-color: var(--chart-2); }
+.chart-bg-3 { background-color: var(--chart-3); }
+.chart-bg-4 { background-color: var(--chart-4); }
+.chart-bg-5 { background-color: var(--chart-5); }
+.chart-bg-6 { background-color: var(--chart-6); }
+.chart-bg-7 { background-color: var(--chart-7); }
+.chart-bg-8 { background-color: var(--chart-8); }
+
+/* ============================================
+   ANIMATION KEYFRAMES
+   ============================================ */
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(0, 217, 255, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(0, 217, 255, 0.6);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.4s ease-out;
+}
+
+/* ============================================
+   RESPONSIVE ADJUSTMENTS
+   ============================================ */
+
+@media (max-width: 768px) {
+  :root {
+    /* Slightly larger text on mobile */
+    font-size: 16px;
+  }
+
+  .card {
+    padding: 12px;
+  }
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+
+@media print {
+  :root {
+    --background: #FFFFFF;
+    --text: #000000;
+    --border: #CCCCCC;
+  }
+
+  .glow-primary,
+  .glow-secondary {
+    box-shadow: none;
+  }
+}

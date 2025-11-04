@@ -9,6 +9,12 @@ export default function RootLayout() {
   useEffect(() => {
     // Set viewport and body styles for web
     if (Platform.OS === 'web') {
+      // Load dashboard theme CSS
+      const themeLink = document.createElement('link');
+      themeLink.rel = 'stylesheet';
+      themeLink.href = '/styles/dashboard-theme.css';
+      document.head.appendChild(themeLink);
+
       // Set viewport meta tag
       const viewport = document.querySelector('meta[name="viewport"]');
       if (viewport) {
