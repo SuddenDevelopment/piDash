@@ -23,8 +23,8 @@ export function DashboardPreview({
   // Calculate scale to fit preview
   useEffect(() => {
     if (position === 'right') {
-      // For right panel, scale to fit nicely in sidebar
-      setScale(0.5); // 400x240
+      // For right panel, show at 100% actual size
+      setScale(1.0); // 800x480 (actual Pi display size)
     } else if (position === 'bottom') {
       setScale(0.6); // 480x288
     } else {
@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   rightContainer: {
-    width: 450,
+    width: 850,
     height: '100%',
     borderLeftWidth: 2,
     borderLeftColor: '#2A3F5F',

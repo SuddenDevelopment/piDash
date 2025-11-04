@@ -13,9 +13,10 @@ import { validateDashboardConfig } from '@/lib/dashboard-validator';
 type DashboardRendererProps = {
   config: DashboardConfig;
   onError?: (error: string) => void;
+  onRefresh?: () => void;
 };
 
-export function DashboardRenderer({ config, onError }: DashboardRendererProps) {
+export function DashboardRenderer({ config, onError, onRefresh }: DashboardRendererProps) {
   const [currentPageId, setCurrentPageId] = useState<string>(config.navigation.initialPage);
   const [isValidated, setIsValidated] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
@@ -81,13 +82,26 @@ export function DashboardRenderer({ config, onError }: DashboardRendererProps) {
         navigationConfig={config.navigation}
       />
 
-      {/* Settings Icon */}
-      <TouchableOpacity
-        style={styles.settingsButton}
-        onPress={() => setShowSettings(true)}
-      >
-        <Text style={styles.settingsIcon}>⚙️</Text>
-      </TouchableOpacity>
+      {/* Top Right Menu */}
+      <View style={styles.topRightMenu}>
+        {/* Refresh Button */}
+        {onRefresh && (
+          <TouchableOpacity
+            style={styles.menuButton}
+            onPress={onRefresh}
+          >
+            <Text style={styles.menuIcon}>↻</Text>
+          </TouchableOpacity>
+        )}
+
+        {/* Settings Button */}
+        <TouchableOpacity
+          style={styles.menuButton}
+          onPress={() => setShowSettings(true)}
+        >
+          <Text style={styles.menuIcon}>⚙️</Text>
+        </TouchableOpacity>
+      </View>
 
       {/* Settings Modal */}
       <SettingsModal
@@ -105,19 +119,25 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-  settingsButton: {
+  topRightMenu: {
     position: 'absolute',
     top: 12,
     right: 12,
+    flexDirection: 'row',
+    gap: 8,
+    zIndex: 200,
+  },
+  menuButton: {
     width: 44,
     height: 44,
     borderRadius: 22,
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
     justifyContent: 'center',
     alignItems: 'center',
-    zIndex: 200,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.2)',
   },
-  settingsIcon: {
+  menuIcon: {
     fontSize: 24,
   },
 });

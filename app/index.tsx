@@ -52,6 +52,12 @@ export default function Dashboard() {
     }
   };
 
+  const handleRefresh = async () => {
+    console.log('Refreshing dashboard configuration...');
+    setLoading(true);
+    await loadConfig();
+  };
+
   const loadInitialVersion = async () => {
     try {
       const response = await fetch(`${API_BASE_URL}/api/version`);
@@ -126,6 +132,7 @@ export default function Dashboard() {
           <DashboardRenderer
             config={config}
             onError={setError}
+            onRefresh={handleRefresh}
           />
         </View>
       </View>

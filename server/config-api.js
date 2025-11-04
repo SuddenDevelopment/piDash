@@ -13,9 +13,48 @@
 const express = require('express');
 const fs = require('fs').promises;
 const path = require('path');
+const multer = require('multer');
 
 const app = express();
 const PORT = 3001;
+
+// Configure multer for image uploads
+const storage = multer.diskStorage({
+  destination: async (req, file, cb) => {
+    const uploadDir = path.join(__dirname, '../public/images');
+    try {
+      await fs.mkdir(uploadDir, { recursive: true });
+      cb(null, uploadDir);
+    } catch (error) {
+      cb(error);
+    }
+  },
+  filename: (req, file, cb) => {
+    // Preserve original filename with timestamp to avoid collisions
+    const timestamp = Date.now();
+    const ext = path.extname(file.originalname);
+    const basename = path.basename(file.originalname, ext);
+    cb(null, `${basename}-${timestamp}${ext}`);
+  }
+});
+
+const upload = multer({
+  storage,
+  limits: {
+    fileSize: 10 * 1024 * 1024 // 10MB limit
+  },
+  fileFilter: (req, file, cb) => {
+    // Accept images only
+    const allowedTypes = /jpeg|jpg|png|gif|webp|svg/;
+    const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+    const mimetype = allowedTypes.test(file.mimetype);
+
+    if (mimetype && extname) {
+      return cb(null, true);
+    }
+    cb(new Error('Only image files are allowed (jpeg, jpg, png, gif, webp, svg)'));
+  }
+});
 
 // Middleware
 app.use(express.json({ limit: '10mb' }));
@@ -28,6 +67,9 @@ app.use((req, res, next) => {
   }
   next();
 });
+
+// Serve uploaded images
+app.use('/images', express.static(path.join(__dirname, '../public/images')));
 
 // Paths
 const CONFIG_PATH = path.join(__dirname, '../config/dashboards/custom-dashboard.json');
@@ -266,6 +308,126 @@ app.post('/api/version/bump', async (req, res) => {
   }
 });
 
+// GET /api/images - List all uploaded images
+app.get('/api/images', async (req, res) => {
+  try {
+    const imagesDir = path.join(__dirname, '../public/images');
+
+    // Ensure directory exists
+    try {
+      await fs.mkdir(imagesDir, { recursive: true });
+    } catch (err) {
+      // Directory might already exist, that's fine
+    }
+
+    const files = await fs.readdir(imagesDir);
+
+    // Filter out non-image files and README
+    const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg'];
+    const images = [];
+
+    for (const file of files) {
+      const ext = path.extname(file).toLowerCase();
+      if (imageExtensions.includes(ext)) {
+        const filePath = path.join(imagesDir, file);
+        const stats = await fs.stat(filePath);
+
+        images.push({
+          filename: file,
+          url: `/images/${file}`,
+          size: stats.size,
+          uploadedAt: stats.mtime
+        });
+      }
+    }
+
+    // Sort by upload date, newest first
+    images.sort((a, b) => b.uploadedAt - a.uploadedAt);
+
+    res.json({
+      success: true,
+      images,
+      count: images.length
+    });
+  } catch (error) {
+    console.error('Error listing images:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to list images',
+      details: error.message
+    });
+  }
+});
+
+// POST /api/images/upload - Upload a new image
+app.post('/api/images/upload', upload.single('image'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        error: 'No image file provided'
+      });
+    }
+
+    res.json({
+      success: true,
+      message: 'Image uploaded successfully',
+      image: {
+        filename: req.file.filename,
+        url: `/images/${req.file.filename}`,
+        size: req.file.size,
+        mimetype: req.file.mimetype
+      }
+    });
+  } catch (error) {
+    console.error('Error uploading image:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to upload image',
+      details: error.message
+    });
+  }
+});
+
+// DELETE /api/images/:filename - Delete an image
+app.delete('/api/images/:filename', async (req, res) => {
+  try {
+    const { filename } = req.params;
+    const filePath = path.join(__dirname, '../public/images', filename);
+
+    // Security check: ensure filename doesn't contain path traversal
+    if (filename.includes('..') || filename.includes('/') || filename.includes('\\')) {
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid filename'
+      });
+    }
+
+    // Don't allow deleting README
+    if (filename === 'README.md') {
+      return res.status(400).json({
+        success: false,
+        error: 'Cannot delete README file'
+      });
+    }
+
+    await fs.unlink(filePath);
+
+    res.json({
+      success: true,
+      message: 'Image deleted successfully',
+      filename
+    });
+  } catch (error) {
+    console.error('Error deleting image:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to delete image',
+      details: error.message
+    });
+  }
+});
+
 // Start server
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`
@@ -277,12 +439,17 @@ app.listen(PORT, '0.0.0.0', () => {
 ║  Access: http://localhost:${PORT}                         ║
 ║                                                        ║
 ║  Endpoints:                                            ║
-║  - GET  /api/config          Load dashboard config    ║
-║  - POST /api/config          Save dashboard config    ║
-║  - GET  /api/css             Load CSS theme           ║
-║  - POST /api/css             Save CSS theme           ║
+║  - GET  /api/config             Load dashboard config ║
+║  - POST /api/config             Save dashboard config ║
+║  - GET  /api/css                Load CSS theme        ║
+║  - POST /api/css                Save CSS theme        ║
+║  - GET  /api/images             List uploaded images  ║
+║  - POST /api/images/upload      Upload new image      ║
+║  - DELETE /api/images/:filename Delete image          ║
 ║  - POST /api/dashboard/refresh  Trigger refresh       ║
-║  - GET  /api/status          Health check             ║
+║  - GET  /api/status             Health check          ║
+║  - GET  /api/version            Get version           ║
+║  - POST /api/version/bump       Bump version          ║
 ╚════════════════════════════════════════════════════════╝
   `);
 });

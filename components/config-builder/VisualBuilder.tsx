@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Alert } from 'react-native';
 import { DashboardConfig, Page, Panel, LayoutConfig, PanelType } from '@/types/dashboard-schema';
+import { ImageOverlayEditor } from './ImageOverlayEditor';
 
 type VisualBuilderProps = {
   config: DashboardConfig;
@@ -13,6 +14,17 @@ export function VisualBuilder({ config, onChange }: VisualBuilderProps) {
   );
 
   const currentPage = config.pages.find((p) => p.id === selectedPage);
+
+  // Helper to detect if a page is an image overlay page
+  const isImageOverlayPage = (page: Page | undefined): boolean => {
+    if (!page) return false;
+    const hasImageContainer = page.panels?.some((panel: any) =>
+      panel.type === 'container' &&
+      panel.style?.backgroundImage &&
+      panel.style.backgroundImage.includes('url(')
+    );
+    return hasImageContainer || false;
+  };
 
   const addNewPage = () => {
     const newPageId = `page-${Date.now()}`;
@@ -178,8 +190,17 @@ export function VisualBuilder({ config, onChange }: VisualBuilderProps) {
           </TouchableOpacity>
         </View>
 
-        {/* Layout Configuration */}
-        <View style={styles.section}>
+        {/* Image Overlay Editor (for image overlay pages) */}
+        {isImageOverlayPage(currentPage) ? (
+          <ImageOverlayEditor
+            pageId={currentPage!.id}
+            config={config}
+            onChange={updatePage}
+          />
+        ) : (
+          <>
+            {/* Layout Configuration */}
+            <View style={styles.section}>
           <Text style={styles.sectionTitle}>Layout Configuration</Text>
 
           <View style={styles.formRow}>
@@ -511,6 +532,8 @@ export function VisualBuilder({ config, onChange }: VisualBuilderProps) {
             </View>
           )}
         </View>
+          </>
+        )}
       </ScrollView>
     </View>
   );
