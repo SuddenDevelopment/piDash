@@ -102,6 +102,7 @@ export function ImageOverlayEditor({ pageId, config, onChange }: ImageOverlayEdi
       if (panel.type === 'container') {
         return {
           ...panel,
+          flex: 1,
           style: {
             ...panel.style,
             backgroundImage: `url('${imageUrl}')`,
@@ -119,6 +120,7 @@ export function ImageOverlayEditor({ pageId, config, onChange }: ImageOverlayEdi
       if (panel.type === 'container') {
         return {
           ...panel,
+          flex: 1,
           style: {
             ...panel.style,
             backgroundSize: size,

@@ -334,7 +334,7 @@ app.get('/api/images', async (req, res) => {
 
         images.push({
           filename: file,
-          url: `/images/${file}`,
+          url: `http://localhost:3001/images/${file}`,
           size: stats.size,
           uploadedAt: stats.mtime
         });
@@ -374,7 +374,7 @@ app.post('/api/images/upload', upload.single('image'), async (req, res) => {
       message: 'Image uploaded successfully',
       image: {
         filename: req.file.filename,
-        url: `/images/${req.file.filename}`,
+        url: `http://localhost:3001/images/${req.file.filename}`,
         size: req.file.size,
         mimetype: req.file.mimetype
       }

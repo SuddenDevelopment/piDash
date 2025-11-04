@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import { View, Text as RNText, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text as RNText, TouchableOpacity, StyleSheet, ImageBackground } from 'react-native';
 import type { Panel, DashboardConfig } from '@/types/dashboard-schema';
 import { resolveStyle } from './utils/styleResolver';
 import { LabelRenderer } from './LabelRenderer';
@@ -18,6 +18,31 @@ type PanelRendererProps = {
 export function PanelRenderer({ panel, config, onNavigateTo }: PanelRendererProps) {
   const panelStyle = panel.style ? resolveStyle(panel.style, config) : {};
   const flexStyle = panel.flex ? { flex: panel.flex } : {};
+
+  // Extract background image if present (React Native needs ImageBackground component)
+  let backgroundImageUri: string | null = null;
+  let resizeMode: 'cover' | 'contain' | 'stretch' | 'center' = 'cover';
+
+  if (panelStyle.backgroundImage) {
+    // Extract URL from CSS url('...') format
+    const match = panelStyle.backgroundImage.match(/url\(['"]?([^'"()]+)['"]?\)/);
+    if (match) {
+      backgroundImageUri = match[1];
+    }
+
+    // Map CSS backgroundSize to React Native resizeMode
+    if (panelStyle.backgroundSize === 'contain') {
+      resizeMode = 'contain';
+    } else if (panelStyle.backgroundSize === 'cover') {
+      resizeMode = 'cover';
+    }
+
+    // Remove CSS properties not supported in React Native
+    delete panelStyle.backgroundImage;
+    delete panelStyle.backgroundSize;
+    delete panelStyle.backgroundPosition;
+    delete panelStyle.backgroundRepeat;
+  }
 
   // Handle click events
   const hasClickEvent = panel.events?.some(e => e.type === 'onClick');
@@ -36,6 +61,30 @@ export function PanelRenderer({ panel, config, onNavigateTo }: PanelRendererProp
 
   const WrapperComponent = hasClickEvent ? TouchableOpacity : View;
   const wrapperProps = hasClickEvent ? { onPress: handlePress, activeOpacity: 0.7 } : {};
+
+  // If there's a background image, use ImageBackground
+  if (backgroundImageUri) {
+    // For image backgrounds, we need to combine flex and panelStyle
+    const containerStyle = { ...flexStyle, ...panelStyle };
+
+    return (
+      <WrapperComponent style={[containerStyle]} {...wrapperProps}>
+        <ImageBackground
+          source={{ uri: backgroundImageUri }}
+          style={styles.imageBackground}
+          resizeMode={resizeMode}
+        >
+          {/* Label overlay */}
+          {panel.label && (
+            <LabelRenderer label={panel.label} config={config} />
+          )}
+
+          {/* Panel content */}
+          {content}
+        </ImageBackground>
+      </WrapperComponent>
+    );
+  }
 
   return (
     <WrapperComponent style={[panelStyle, flexStyle]} {...wrapperProps}>
@@ -174,6 +223,10 @@ function renderCanvasPlaceholder(panel: Panel, config: DashboardConfig): React.R
 const styles = StyleSheet.create({
   containerContent: {
     flex: 1,
+  },
+  imageBackground: {
+    width: '100%',
+    height: '100%',
   },
   text: {
     fontSize: 14,
