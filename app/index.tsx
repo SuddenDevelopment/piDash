@@ -123,12 +123,6 @@ export default function Dashboard() {
         >
           <StatusBar style="light" hidden />
 
-          {configSource === 'custom' && (
-            <View style={styles.configBadge}>
-              <Text style={styles.configBadgeText}>Custom Config</Text>
-            </View>
-          )}
-
           <DashboardRenderer
             config={config}
             onError={setError}
@@ -176,20 +170,5 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#A0A0A0',
     textAlign: 'center',
-  },
-  configBadge: {
-    position: 'absolute',
-    top: 10,
-    right: 10,
-    backgroundColor: '#00FFA3',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 6,
-    zIndex: 1000,
-  },
-  configBadgeText: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#0A0A0A',
   },
 });

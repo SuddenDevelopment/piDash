@@ -139,8 +139,16 @@ export function VisualBuilder({ config, onChange }: VisualBuilderProps) {
     <View style={styles.container}>
       {/* Page Selector */}
       <View style={styles.pageSelector}>
-        <Text style={styles.sectionTitle}>Pages</Text>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.pageList}>
+        <View style={styles.pageSelectorHeader}>
+          <Text style={styles.sectionTitle}>Pages</Text>
+          <Text style={styles.scrollHint}>← Scroll for more →</Text>
+        </View>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={true}
+          style={styles.pageList}
+          contentContainerStyle={styles.pageListContent}
+        >
           {config.pages.map((page) => (
             <TouchableOpacity
               key={page.id}
@@ -576,9 +584,23 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 16,
   },
+  pageSelectorHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 4,
+  },
+  scrollHint: {
+    fontSize: 12,
+    color: '#5A6B8C',
+    fontStyle: 'italic',
+  },
   pageList: {
     flexDirection: 'row',
     marginTop: 8,
+  },
+  pageListContent: {
+    paddingRight: 16,
   },
   pageTab: {
     paddingHorizontal: 16,
