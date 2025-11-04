@@ -161,7 +161,10 @@ const styles = StyleSheet.create({
   },
   navButtonText: {
     fontSize: 18,
+    lineHeight: 18,
     color: 'rgba(255, 255, 255, 0.8)',
     fontWeight: 'bold',
+    textAlignVertical: 'center',
+    includeFontPadding: false,
   },
 });
