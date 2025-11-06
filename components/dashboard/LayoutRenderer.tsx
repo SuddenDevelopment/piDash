@@ -66,9 +66,18 @@ function buildLayoutStyle(layout: LayoutConfig): any {
   }
 
   // Dimensions
+  // Note: Don't set height: "100%" when using flex - it conflicts with flex: 1 on children
+  // Instead, rely on flex: 1 in the parent style to fill available space
   if (layout.height !== undefined) {
-    style.height = layout.height === 'auto' ? 'auto' : layout.height;
+    if (layout.height === 'auto') {
+      style.height = 'auto';
+    } else if (layout.height !== '100%') {
+      // Only set explicit numeric heights, skip "100%" to let flex handle it
+      style.height = layout.height;
+    }
+    // If height is "100%", don't set it - parent should have flex: 1 instead
   }
+
   if (layout.width !== undefined) {
     style.width = layout.width === 'auto' ? 'auto' : layout.width;
   }

@@ -34,7 +34,15 @@ export default function Dashboard() {
 
   const loadConfig = async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/config`);
+      // Add cache-busting parameter to prevent browser caching
+      const cacheBuster = Date.now();
+      const response = await fetch(`${API_BASE_URL}/api/config?_=${cacheBuster}`, {
+        cache: 'no-cache',
+        headers: {
+          'Cache-Control': 'no-cache',
+          'Pragma': 'no-cache'
+        }
+      });
       const data = await response.json();
 
       if (data.success) {

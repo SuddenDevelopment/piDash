@@ -3,10 +3,11 @@
  */
 
 import React, { useEffect, useRef } from 'react';
-import { Animated, StyleSheet, Dimensions } from 'react-native';
+import { Animated, StyleSheet } from 'react-native';
 import type { Page, DashboardConfig } from '@/types/dashboard-schema';
 import { LayoutRenderer } from './LayoutRenderer';
 import { getTransitionAnimation } from './utils/animations';
+import { DISPLAY_CONFIG } from '@/config/display';
 
 type PageRendererProps = {
   page: Page;
@@ -14,7 +15,8 @@ type PageRendererProps = {
   onNavigateTo: (pageId: string) => void;
 };
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+const SCREEN_WIDTH = DISPLAY_CONFIG.width;
+const SCREEN_HEIGHT = DISPLAY_CONFIG.height;
 
 export function PageRenderer({ page, config, onNavigateTo }: PageRendererProps) {
   const fadeAnim = useRef(new Animated.Value(0)).current;

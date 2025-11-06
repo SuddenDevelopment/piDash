@@ -189,7 +189,15 @@ export default function Settings() {
       if (data.success) {
         setConfig(parsedConfig);
         setConfigSource('custom');
-        Alert.alert('Success', 'Dashboard configuration saved successfully!', [{ text: 'OK' }]);
+
+        // Bump deployment version to trigger auto-reload on dashboard
+        try {
+          await fetch(`${API_BASE_URL}/api/version/bump`, { method: 'POST' });
+        } catch (err) {
+          console.log('Could not bump version, dashboard may need manual refresh');
+        }
+
+        Alert.alert('Success', 'Dashboard configuration saved! The dashboard will auto-reload.', [{ text: 'OK' }]);
       } else {
         Alert.alert('Error', data.error || 'Failed to save configuration');
       }
@@ -232,14 +240,15 @@ export default function Settings() {
 
   const refreshDashboard = async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/dashboard/refresh`, {
+      // Bump the deployment version to trigger automatic reload
+      const response = await fetch(`${API_BASE_URL}/api/version/bump`, {
         method: 'POST',
       });
 
       const data = await response.json();
 
       if (data.success) {
-        Alert.alert('Success', 'Dashboard refresh signal sent. Reload the dashboard to see changes.', [
+        Alert.alert('Success', 'Dashboard will automatically reload with new configuration.', [
           {
             text: 'Go to Dashboard',
             onPress: () => router.push('/'),
@@ -252,7 +261,7 @@ export default function Settings() {
       }
     } catch (error) {
       console.error('Error refreshing dashboard:', error);
-      Alert.alert('Error', 'Failed to send refresh signal');
+      Alert.alert('Error', 'Failed to trigger dashboard refresh');
     }
   };
 

@@ -14,9 +14,28 @@ const express = require('express');
 const fs = require('fs').promises;
 const path = require('path');
 const multer = require('multer');
+const os = require('os');
 
 const app = express();
 const PORT = 3001;
+
+// Get local network IP address
+function getLocalIpAddress() {
+  const interfaces = os.networkInterfaces();
+  for (const name of Object.keys(interfaces)) {
+    for (const iface of interfaces[name]) {
+      // Skip internal and non-IPv4 addresses
+      if (iface.family === 'IPv4' && !iface.internal) {
+        return iface.address;
+      }
+    }
+  }
+  return 'localhost';
+}
+
+const LOCAL_IP = getLocalIpAddress();
+const BASE_URL = `http://${LOCAL_IP}:${PORT}`;
+console.log(`Server base URL: ${BASE_URL}`);
 
 // Configure multer for image uploads
 const storage = multer.diskStorage({
@@ -334,7 +353,7 @@ app.get('/api/images', async (req, res) => {
 
         images.push({
           filename: file,
-          url: `http://localhost:3001/images/${file}`,
+          url: `${BASE_URL}/images/${file}`,
           size: stats.size,
           uploadedAt: stats.mtime
         });
@@ -374,7 +393,7 @@ app.post('/api/images/upload', upload.single('image'), async (req, res) => {
       message: 'Image uploaded successfully',
       image: {
         filename: req.file.filename,
-        url: `http://localhost:3001/images/${req.file.filename}`,
+        url: `${BASE_URL}/images/${req.file.filename}`,
         size: req.file.size,
         mimetype: req.file.mimetype
       }

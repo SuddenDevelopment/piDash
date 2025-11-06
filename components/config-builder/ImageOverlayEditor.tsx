@@ -275,7 +275,7 @@ export function ImageOverlayEditor({ pageId, config, onChange }: ImageOverlayEdi
                 onPress={() => updateBackgroundImage(img.url)}
               >
                 <Image
-                  source={{ uri: `${API_BASE_URL}${img.url}` }}
+                  source={{ uri: img.url }}
                   style={styles.imageThumbnail}
                   resizeMode="cover"
                 />

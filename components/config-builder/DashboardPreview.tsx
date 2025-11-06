@@ -1,7 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Platform } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { DISPLAY_CONFIG } from '@/config/display';
 import { DashboardConfig } from '@/types/dashboard-schema';
+import { DashboardRenderer } from '@/components/dashboard/DashboardRenderer';
+import { SettingsProvider } from '@/contexts/SettingsContext';
 
 type DashboardPreviewProps = {
   config: DashboardConfig;
@@ -18,7 +20,6 @@ export function DashboardPreview({
 }: DashboardPreviewProps) {
   const [scale, setScale] = useState(1);
   const [refreshKey, setRefreshKey] = useState(0);
-  const iframeRef = useRef<HTMLIFrameElement>(null);
 
   // Calculate scale to fit preview
   useEffect(() => {
@@ -38,9 +39,6 @@ export function DashboardPreview({
   }, [config]);
 
   if (!isVisible) return null;
-
-  const scaledWidth = DISPLAY_CONFIG.width * scale;
-  const scaledHeight = DISPLAY_CONFIG.height * scale;
 
   const containerStyle = position === 'floating'
     ? styles.floatingContainer
@@ -82,33 +80,19 @@ export function DashboardPreview({
           style={[
             styles.previewWrapper,
             {
-              width: scaledWidth,
-              height: scaledHeight,
+              width: DISPLAY_CONFIG.width,
+              height: DISPLAY_CONFIG.height,
+              transform: [{ scale }],
             }
           ]}
         >
-          {Platform.OS === 'web' ? (
-            <iframe
+          <SettingsProvider>
+            <DashboardRenderer
               key={refreshKey}
-              ref={iframeRef as any}
-              src={`${window.location.origin}/`}
-              style={{
-                width: DISPLAY_CONFIG.width,
-                height: DISPLAY_CONFIG.height,
-                transform: `scale(${scale})`,
-                transformOrigin: 'top left',
-                border: 'none',
-                background: '#0A0A0A',
-              }}
-              title="Dashboard Preview"
+              config={config}
+              onError={(error) => console.error('Preview error:', error)}
             />
-          ) : (
-            <View style={styles.fallback}>
-              <Text style={styles.fallbackText}>
-                Live preview available on web only
-              </Text>
-            </View>
-          )}
+          </SettingsProvider>
         </View>
 
         {/* Dimension Labels */}
@@ -125,7 +109,7 @@ export function DashboardPreview({
       {/* Info Footer */}
       <View style={styles.footer}>
         <Text style={styles.footerText}>
-          Live preview - Changes reflect after saving and refreshing dashboard
+          Live preview - Shows real-time changes as you edit (unsaved)
         </Text>
       </View>
     </View>

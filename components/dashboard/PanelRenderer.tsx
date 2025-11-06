@@ -19,6 +19,12 @@ export function PanelRenderer({ panel, config, onNavigateTo }: PanelRendererProp
   const panelStyle = panel.style ? resolveStyle(panel.style, config) : {};
   const flexStyle = panel.flex ? { flex: panel.flex } : {};
 
+  // Remove height: "100%" from panelStyle if flex is defined
+  // This prevents conflicts between percentage heights and flex sizing
+  if (panel.flex && panelStyle.height === '100%') {
+    delete panelStyle.height;
+  }
+
   // Extract background image if present (React Native needs ImageBackground component)
   let backgroundImageUri: string | null = null;
   let resizeMode: 'cover' | 'contain' | 'stretch' | 'center' = 'cover';

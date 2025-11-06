@@ -29,7 +29,7 @@
         {
           "id": "welcome-title",
           "type": "text",
-          "text": "🚀 PiDash MVP",
+          "text": "Make Something Cool and Share",
           "style": {
             "fontSize": "$5xl",
             "fontWeight": "bold",
@@ -37,82 +37,6 @@
             "textAlign": "center",
             "marginBottom": 16
           }
-        },
-        {
-          "id": "welcome-subtitle",
-          "type": "text",
-          "text": "JSON-Driven Dashboard System",
-          "style": {
-            "fontSize": "$xl",
-            "color": "$textSecondary",
-            "textAlign": "center",
-            "marginBottom": 32
-          }
-        },
-        {
-          "id": "welcome-description",
-          "type": "text",
-          "text": "Swipe or use arrows to navigate →",
-          "style": {
-            "fontSize": "$md",
-            "color": "$textMuted",
-            "textAlign": "center"
-          }
-        },
-        {
-          "id": "features-container",
-          "type": "container",
-          "layout": {
-            "type": "flex",
-            "direction": "column",
-            "gap": 12
-          },
-          "style": {
-            "marginTop": 48,
-            "width": "100%"
-          },
-          "children": [
-            {
-              "id": "feature-1",
-              "type": "text",
-              "text": "✓ Multiple pages with transitions",
-              "style": {
-                "fontSize": "$md",
-                "color": "$success",
-                "textAlign": "center"
-              }
-            },
-            {
-              "id": "feature-2",
-              "type": "text",
-              "text": "✓ Flex layouts (row/column)",
-              "style": {
-                "fontSize": "$md",
-                "color": "$success",
-                "textAlign": "center"
-              }
-            },
-            {
-              "id": "feature-3",
-              "type": "text",
-              "text": "✓ Label positioning (9 positions)",
-              "style": {
-                "fontSize": "$md",
-                "color": "$success",
-                "textAlign": "center"
-              }
-            },
-            {
-              "id": "feature-4",
-              "type": "text",
-              "text": "✓ Theme tokens",
-              "style": {
-                "fontSize": "$md",
-                "color": "$success",
-                "textAlign": "center"
-              }
-            }
-          ]
         }
       ]
     },
