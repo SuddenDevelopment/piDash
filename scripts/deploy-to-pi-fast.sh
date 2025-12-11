@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Fast Deploy - No Reboot
+# Use this during development for faster iteration
+
 # Default Configuration
 PI_USER="pi"
 PI_HOST="raspberrypi.local"
@@ -12,7 +15,7 @@ if [ -f "pi-config.local.sh" ]; then
     source pi-config.local.sh
 fi
 
-echo "🚀 Deploying to Raspberry Pi..."
+echo "⚡ Fast deploying to Raspberry Pi (no reboot)..."
 
 # Build the web bundle
 echo "📦 Building production bundle..."
@@ -60,13 +63,13 @@ ssh "$PI_USER@$PI_HOST" "chmod +x $PI_PATH/scripts/*.sh"
 echo "🔄 Restarting piDash service..."
 ssh "$PI_USER@$PI_HOST" "sudo systemctl restart pidash 2>/dev/null || echo 'Service not found, skipping restart'"
 
-echo "✅ Deployment complete!"
-echo ""
-echo "🔄 Rebooting Raspberry Pi to apply changes..."
-echo "⏳ Pi will be back online in ~30-60 seconds"
-echo ""
+# Trigger browser refresh by bumping deployment version
+echo "📱 Triggering browser refresh..."
+ssh "$PI_USER@$PI_HOST" "curl -X POST http://localhost:3001/api/version/bump -s > /dev/null 2>&1 || echo 'Could not trigger refresh (API not running)'"
 
-# Reboot the Pi
-ssh "$PI_USER@$PI_HOST" "sudo reboot"
-
-echo "🌐 Dashboard will be available at: http://$PI_HOST:3000"
+echo ""
+echo "✅ Fast deployment complete!"
+echo "🌐 Access at: http://$PI_HOST:3000"
+echo "📱 Manually refresh your browser (Ctrl+Shift+R)"
+echo ""
+echo "💡 Tip: Use 'npm run deploy:pi' for full deployment with reboot"

@@ -11,9 +11,9 @@ import {
   Switch,
   StyleSheet,
   Dimensions,
+  ScrollView,
 } from 'react-native';
 import { useSettings } from '@/contexts/SettingsContext';
-import { router } from 'expo-router';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -21,10 +21,11 @@ type SettingsModalProps = {
   visible: boolean;
   onClose: () => void;
   autoTransitionInterval?: number;
+  onRefresh?: () => void;
 };
 
-export function SettingsModal({ visible, onClose, autoTransitionInterval }: SettingsModalProps) {
-  const { settings, toggleAutoTransition } = useSettings();
+export function SettingsModal({ visible, onClose, autoTransitionInterval, onRefresh }: SettingsModalProps) {
+  const { settings, toggleAutoTransition, toggleConfigMode } = useSettings();
 
   return (
     <Modal
@@ -44,7 +45,7 @@ export function SettingsModal({ visible, onClose, autoTransitionInterval }: Sett
           </View>
 
           {/* Settings Content */}
-          <View style={styles.content}>
+          <ScrollView style={styles.content} contentContainerStyle={styles.contentContainer}>
             {/* Auto-Transition Toggle */}
             <View style={styles.settingRow}>
               <View style={styles.settingInfo}>
@@ -68,28 +69,48 @@ export function SettingsModal({ visible, onClose, autoTransitionInterval }: Sett
             {/* Divider */}
             <View style={styles.divider} />
 
-            {/* Configuration Builder Button */}
-            <TouchableOpacity
-              style={styles.configButton}
-              onPress={() => {
-                onClose();
-                router.push('/settings');
-              }}
-            >
-              <View style={styles.configButtonContent}>
-                <Text style={styles.configButtonIcon}>⚙️</Text>
-                <View style={styles.configButtonText}>
-                  <Text style={styles.configButtonTitle}>Configuration Builder</Text>
-                  <Text style={styles.configButtonDescription}>
-                    Edit dashboard JSON and CSS theme
-                  </Text>
-                </View>
-                <Text style={styles.configButtonArrow}>→</Text>
+            {/* Config Mode Toggle */}
+            <View style={styles.settingRow}>
+              <View style={styles.settingInfo}>
+                <Text style={styles.settingLabel}>Configuration Mode</Text>
+                <Text style={styles.settingDescription}>
+                  {settings.useDemoConfig
+                    ? 'Using demo configuration'
+                    : 'Using custom configuration'}
+                </Text>
               </View>
-            </TouchableOpacity>
+              <Switch
+                value={settings.useDemoConfig}
+                onValueChange={toggleConfigMode}
+                trackColor={{ false: '#3A3A3A', true: '#3B82F6' }}
+                thumbColor={settings.useDemoConfig ? '#FFFFFF' : '#A0A0A0'}
+                ios_backgroundColor="#3A3A3A"
+              />
+            </View>
 
             {/* Divider */}
             <View style={styles.divider} />
+
+            {/* Refresh Configuration Button */}
+            {onRefresh && (
+              <>
+                <TouchableOpacity
+                  style={styles.refreshButton}
+                  onPress={() => {
+                    onRefresh();
+                    onClose();
+                  }}
+                >
+                  <Text style={styles.refreshButtonText}>↻ Refresh Configuration</Text>
+                  <Text style={styles.refreshButtonSubtext}>
+                    Reload dashboard with latest config
+                  </Text>
+                </TouchableOpacity>
+
+                {/* Divider */}
+                <View style={styles.divider} />
+              </>
+            )}
 
             {/* Info Section */}
             <View style={styles.infoSection}>
@@ -97,7 +118,7 @@ export function SettingsModal({ visible, onClose, autoTransitionInterval }: Sett
               <Text style={styles.infoText}>PiDash MVP - JSON Dashboard System</Text>
               <Text style={styles.infoText}>Version 1.0.0</Text>
             </View>
-          </View>
+          </ScrollView>
 
           {/* Footer */}
           <View style={styles.footer}>
@@ -156,6 +177,8 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
+  },
+  contentContainer: {
     padding: 20,
   },
   settingRow: {
@@ -184,38 +207,24 @@ const styles = StyleSheet.create({
     backgroundColor: '#2A2A2A',
     marginVertical: 16,
   },
-  configButton: {
-    backgroundColor: '#2A2A2A',
-    borderRadius: 12,
-    padding: 16,
+  refreshButton: {
+    paddingVertical: 16,
+    paddingHorizontal: 16,
+    backgroundColor: '#1A2338',
+    borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#3A3A3A',
-  },
-  configButtonContent: {
-    flexDirection: 'row',
+    borderColor: '#3B82F6',
     alignItems: 'center',
   },
-  configButtonIcon: {
-    fontSize: 28,
-    marginRight: 16,
-  },
-  configButtonText: {
-    flex: 1,
-  },
-  configButtonTitle: {
+  refreshButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: '#3B82F6',
     marginBottom: 4,
   },
-  configButtonDescription: {
-    fontSize: 13,
-    color: '#A0A0A0',
-  },
-  configButtonArrow: {
-    fontSize: 24,
-    color: '#3B82F6',
-    marginLeft: 12,
+  refreshButtonSubtext: {
+    fontSize: 12,
+    color: '#8BA3CC',
   },
   infoSection: {
     marginTop: 24,

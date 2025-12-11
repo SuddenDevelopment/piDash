@@ -6,9 +6,132 @@ import { ImageOverlayEditor } from './ImageOverlayEditor';
 type VisualBuilderProps = {
   config: DashboardConfig;
   onChange: (config: DashboardConfig) => void;
+  onResetConfig?: () => void;
+  onShowPreview?: () => void;
 };
 
-export function VisualBuilder({ config, onChange }: VisualBuilderProps) {
+// Layout Preview Component
+const LayoutPreview = ({ type }: { type: 'flex' | 'grid' | 'absolute' | '1x2' | '2x2' | '3x2' | '3x3' }) => {
+  const renderFlexPreview = () => (
+    <View style={styles.layoutPreviewContainer}>
+      <View style={styles.layoutPreviewBox}>
+        <View style={[styles.layoutPreviewItem, { flex: 1 }]} />
+        <View style={[styles.layoutPreviewItem, { flex: 1 }]} />
+        <View style={[styles.layoutPreviewItem, { flex: 1 }]} />
+      </View>
+      <Text style={styles.layoutPreviewLabel}>Items flow in sequence</Text>
+    </View>
+  );
+
+  const renderGridPreview = () => (
+    <View style={styles.layoutPreviewContainer}>
+      <View style={styles.layoutPreviewBox}>
+        <View style={{ flexDirection: 'row', flex: 1, gap: 4 }}>
+          <View style={[styles.layoutPreviewItem, { flex: 1 }]} />
+          <View style={[styles.layoutPreviewItem, { flex: 1 }]} />
+        </View>
+        <View style={{ flexDirection: 'row', flex: 1, gap: 4 }}>
+          <View style={[styles.layoutPreviewItem, { flex: 1 }]} />
+          <View style={[styles.layoutPreviewItem, { flex: 1 }]} />
+        </View>
+      </View>
+      <Text style={styles.layoutPreviewLabel}>Items arranged in grid</Text>
+    </View>
+  );
+
+  const renderAbsolutePreview = () => (
+    <View style={styles.layoutPreviewContainer}>
+      <View style={styles.layoutPreviewBox}>
+        <View style={[styles.layoutPreviewItem, { position: 'absolute', top: 8, left: 8, width: 40, height: 30 }]} />
+        <View style={[styles.layoutPreviewItem, { position: 'absolute', top: 20, right: 8, width: 35, height: 25 }]} />
+        <View style={[styles.layoutPreviewItem, { position: 'absolute', bottom: 8, left: 20, width: 45, height: 28 }]} />
+      </View>
+      <Text style={styles.layoutPreviewLabel}>Items positioned freely</Text>
+    </View>
+  );
+
+  const render1x2Preview = () => (
+    <View style={styles.layoutPreviewContainer}>
+      <View style={styles.layoutPreviewBox}>
+        <View style={{ flexDirection: 'row', width: '100%', height: '100%' }}>
+          <View style={[styles.layoutPreviewItem, { flex: 1 }]} />
+          <View style={[styles.layoutPreviewItem, { flex: 1 }]} />
+        </View>
+      </View>
+      <Text style={styles.layoutPreviewLabel}>1 row × 2 columns (400×480 each) - Full screen, no gaps</Text>
+    </View>
+  );
+
+  const render2x2Preview = () => (
+    <View style={styles.layoutPreviewContainer}>
+      <View style={styles.layoutPreviewBox}>
+        <View style={{ flexDirection: 'row', width: '100%', height: '50%' }}>
+          <View style={[styles.layoutPreviewItem, { flex: 1 }]} />
+          <View style={[styles.layoutPreviewItem, { flex: 1 }]} />
+        </View>
+        <View style={{ flexDirection: 'row', width: '100%', height: '50%' }}>
+          <View style={[styles.layoutPreviewItem, { flex: 1 }]} />
+          <View style={[styles.layoutPreviewItem, { flex: 1 }]} />
+        </View>
+      </View>
+      <Text style={styles.layoutPreviewLabel}>2 rows × 2 columns (400×240 each) - Full screen, no gaps</Text>
+    </View>
+  );
+
+  const render3x2Preview = () => (
+    <View style={styles.layoutPreviewContainer}>
+      <View style={styles.layoutPreviewBox}>
+        <View style={{ flexDirection: 'row', width: '100%', height: '33.33%' }}>
+          <View style={[styles.layoutPreviewItem, { flex: 1 }]} />
+          <View style={[styles.layoutPreviewItem, { flex: 1 }]} />
+        </View>
+        <View style={{ flexDirection: 'row', width: '100%', height: '33.33%' }}>
+          <View style={[styles.layoutPreviewItem, { flex: 1 }]} />
+          <View style={[styles.layoutPreviewItem, { flex: 1 }]} />
+        </View>
+        <View style={{ flexDirection: 'row', width: '100%', height: '33.33%' }}>
+          <View style={[styles.layoutPreviewItem, { flex: 1 }]} />
+          <View style={[styles.layoutPreviewItem, { flex: 1 }]} />
+        </View>
+      </View>
+      <Text style={styles.layoutPreviewLabel}>3 rows × 2 columns (400×160 each) - Full screen, no gaps</Text>
+    </View>
+  );
+
+  const render3x3Preview = () => (
+    <View style={styles.layoutPreviewContainer}>
+      <View style={styles.layoutPreviewBox}>
+        <View style={{ flexDirection: 'row', width: '100%', height: '33.33%' }}>
+          <View style={[styles.layoutPreviewItem, { flex: 1 }]} />
+          <View style={[styles.layoutPreviewItem, { flex: 1 }]} />
+          <View style={[styles.layoutPreviewItem, { flex: 1 }]} />
+        </View>
+        <View style={{ flexDirection: 'row', width: '100%', height: '33.33%' }}>
+          <View style={[styles.layoutPreviewItem, { flex: 1 }]} />
+          <View style={[styles.layoutPreviewItem, { flex: 1 }]} />
+          <View style={[styles.layoutPreviewItem, { flex: 1 }]} />
+        </View>
+        <View style={{ flexDirection: 'row', width: '100%', height: '33.33%' }}>
+          <View style={[styles.layoutPreviewItem, { flex: 1 }]} />
+          <View style={[styles.layoutPreviewItem, { flex: 1 }]} />
+          <View style={[styles.layoutPreviewItem, { flex: 1 }]} />
+        </View>
+      </View>
+      <Text style={styles.layoutPreviewLabel}>3 rows × 3 columns (~267×160 each) - Full screen, no gaps</Text>
+    </View>
+  );
+
+  if (type === 'flex') return renderFlexPreview();
+  if (type === 'grid') return renderGridPreview();
+  if (type === 'absolute') return renderAbsolutePreview();
+  if (type === '1x2') return render1x2Preview();
+  if (type === '2x2') return render2x2Preview();
+  if (type === '3x2') return render3x2Preview();
+  if (type === '3x3') return render3x3Preview();
+  return null;
+};
+
+export function VisualBuilder({ config, onChange, onShowPreview }: VisualBuilderProps) {
   const [selectedPage, setSelectedPage] = useState<string | null>(
     config.pages.length > 0 ? config.pages[0].id : null
   );
@@ -140,8 +263,15 @@ export function VisualBuilder({ config, onChange }: VisualBuilderProps) {
       {/* Page Selector */}
       <View style={styles.pageSelector}>
         <View style={styles.pageSelectorHeader}>
-          <Text style={styles.sectionTitle}>Pages</Text>
-          <Text style={styles.scrollHint}>← Scroll for more →</Text>
+          <View style={styles.headerLeft}>
+            <Text style={styles.sectionTitle}>Pages</Text>
+            <Text style={styles.scrollHint}>← Scroll for more →</Text>
+          </View>
+          {onShowPreview && (
+            <TouchableOpacity style={styles.previewButton} onPress={onShowPreview}>
+              <Text style={styles.previewButtonText}>👁️ Dashboard Preview</Text>
+            </TouchableOpacity>
+          )}
         </View>
         <ScrollView
           horizontal
@@ -214,7 +344,7 @@ export function VisualBuilder({ config, onChange }: VisualBuilderProps) {
           <View style={styles.formRow}>
             <Text style={styles.label}>Layout Type</Text>
             <View style={styles.buttonGroup}>
-              {['flex', 'grid', 'absolute'].map((type) => (
+              {['flex', 'grid', 'absolute', '1x2', '2x2', '3x2', '3x3'].map((type) => (
                 <TouchableOpacity
                   key={type}
                   style={[
@@ -235,6 +365,9 @@ export function VisualBuilder({ config, onChange }: VisualBuilderProps) {
               ))}
             </View>
           </View>
+
+          {/* Layout Type Preview */}
+          <LayoutPreview type={currentPage.layout.type} />
 
           {currentPage.layout.type === 'flex' && (
             <View style={styles.formRow}>
@@ -290,29 +423,41 @@ export function VisualBuilder({ config, onChange }: VisualBuilderProps) {
             </>
           )}
 
-          <View style={styles.formRow}>
-            <Text style={styles.label}>Gap (px)</Text>
-            <TextInput
-              style={styles.input}
-              value={String(currentPage.layout.gap || 0)}
-              onChangeText={(text) => updateLayout(currentPage.id, { gap: parseInt(text) || 0 })}
-              keyboardType="number-pad"
-              placeholder="16"
-              placeholderTextColor="#5A6B8C"
-            />
-          </View>
+          {!['1x2', '2x2', '3x2', '3x3'].includes(currentPage.layout.type) && (
+            <>
+              <View style={styles.formRow}>
+                <Text style={styles.label}>Gap (px)</Text>
+                <TextInput
+                  style={styles.input}
+                  value={String(currentPage.layout.gap || 0)}
+                  onChangeText={(text) => updateLayout(currentPage.id, { gap: parseInt(text) || 0 })}
+                  keyboardType="number-pad"
+                  placeholder="16"
+                  placeholderTextColor="#5A6B8C"
+                />
+              </View>
 
-          <View style={styles.formRow}>
-            <Text style={styles.label}>Padding (px)</Text>
-            <TextInput
-              style={styles.input}
-              value={String(currentPage.layout.padding || 0)}
-              onChangeText={(text) => updateLayout(currentPage.id, { padding: parseInt(text) || 0 })}
-              keyboardType="number-pad"
-              placeholder="16"
-              placeholderTextColor="#5A6B8C"
-            />
-          </View>
+              <View style={styles.formRow}>
+                <Text style={styles.label}>Padding (px)</Text>
+                <TextInput
+                  style={styles.input}
+                  value={String(currentPage.layout.padding || 0)}
+                  onChangeText={(text) => updateLayout(currentPage.id, { padding: parseInt(text) || 0 })}
+                  keyboardType="number-pad"
+                  placeholder="16"
+                  placeholderTextColor="#5A6B8C"
+                />
+              </View>
+            </>
+          )}
+
+          {['1x2', '2x2', '3x2', '3x3'].includes(currentPage.layout.type) && (
+            <View style={styles.infoBox}>
+              <Text style={styles.infoText}>
+                ℹ️ Full-screen grid layout: No padding or gaps. Panels automatically sized to fill screen (800×480).
+              </Text>
+            </View>
+          )}
 
           {currentPage.layout.type === 'flex' && (
             <>
@@ -590,10 +735,28 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 4,
   },
+  headerLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
   scrollHint: {
     fontSize: 12,
     color: '#5A6B8C',
     fontStyle: 'italic',
+  },
+  previewButton: {
+    paddingHorizontal: 14,
+    paddingVertical: 7,
+    backgroundColor: '#00D9FF',
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: '#00D9FF',
+  },
+  previewButtonText: {
+    fontSize: 13,
+    color: '#0A0E1A',
+    fontWeight: '700',
   },
   pageList: {
     flexDirection: 'row',
@@ -788,5 +951,52 @@ const styles = StyleSheet.create({
   emptyPanels: {
     padding: 40,
     alignItems: 'center',
+  },
+  layoutPreviewContainer: {
+    marginTop: 12,
+    marginBottom: 16,
+    backgroundColor: '#131829',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#2A3F5F',
+    padding: 16,
+    alignItems: 'center',
+  },
+  layoutPreviewBox: {
+    width: '100%',
+    height: 120,
+    backgroundColor: '#0A0E1A',
+    borderRadius: 6,
+    borderWidth: 2,
+    borderColor: '#00D9FF',
+    borderStyle: 'dashed',
+    padding: 8,
+    marginBottom: 8,
+    gap: 4,
+  },
+  layoutPreviewItem: {
+    backgroundColor: '#00D9FF',
+    borderRadius: 4,
+    opacity: 0.6,
+  },
+  layoutPreviewLabel: {
+    fontSize: 12,
+    color: '#8BA3CC',
+    fontStyle: 'italic',
+    textAlign: 'center',
+  },
+  infoBox: {
+    backgroundColor: '#1A2338',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#3B82F6',
+    padding: 12,
+    marginTop: 8,
+    marginBottom: 8,
+  },
+  infoText: {
+    fontSize: 13,
+    color: '#8BA3CC',
+    lineHeight: 18,
   },
 });

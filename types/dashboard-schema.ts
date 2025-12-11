@@ -14,6 +14,35 @@ export type DashboardConfig = {
   navigation: NavigationConfig;
   dataSources: Record<string, DataSource>;
   globalEvents?: GlobalEvent[];
+  events?: EventsConfig;
+};
+
+// Events configuration (WebSocket real-time events)
+export type EventsConfig = {
+  handlers?: DashboardEvent[];
+  sources?: {
+    websocket?: {
+      enabled: boolean;
+      url?: string;
+      token?: string;
+      reconnectInterval?: number;
+    };
+  };
+};
+
+// Dashboard event from event system
+export type DashboardEvent = {
+  id: string;
+  type?: string;
+  actions: EventAction[];
+  timestamp?: number;
+  metadata?: Record<string, any>;
+};
+
+// Event action types
+export type EventAction = {
+  type: string;
+  [key: string]: any;
 };
 
 // ============================================================================
@@ -110,7 +139,7 @@ export type Page = {
 };
 
 export type LayoutConfig = {
-  type: 'flex' | 'grid' | 'absolute';
+  type: 'flex' | 'grid' | 'absolute' | '1x2' | '2x2' | '3x2' | '3x3';
   direction?: 'row' | 'column';
   gap?: number;
   padding?: number | PaddingConfig;

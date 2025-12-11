@@ -9,29 +9,29 @@
   },
   "pages": [
     {
-      "id": "welcome",
-      "name": "Welcome",
+      "id": "flex-layout",
+      "name": "Flex Layout",
       "layout": {
         "type": "flex",
         "direction": "column",
         "gap": 16,
         "padding": 16,
         "justify": "center",
-        "align": "center"
+        "align": "stretch"
       },
       "transitions": {
         "enter": {
           "type": "fade",
-          "duration": 500
+          "duration": 400
         }
       },
       "panels": [
         {
-          "id": "welcome-title",
+          "id": "flex-title",
           "type": "text",
-          "text": "🚀 PiDash MVP",
+          "text": "Flex Layout Example",
           "style": {
-            "fontSize": "$5xl",
+            "fontSize": "$3xl",
             "fontWeight": "bold",
             "color": "$primary",
             "textAlign": "center",
@@ -39,91 +39,23 @@
           }
         },
         {
-          "id": "welcome-subtitle",
+          "id": "flex-description",
           "type": "text",
-          "text": "JSON-Driven Dashboard System",
-          "style": {
-            "fontSize": "$xl",
-            "color": "$textSecondary",
-            "textAlign": "center",
-            "marginBottom": 32
-          }
-        },
-        {
-          "id": "welcome-description",
-          "type": "text",
-          "text": "Swipe or use arrows to navigate →",
+          "text": "Items arranged using flexbox - can flow vertically or horizontally with gap and padding",
           "style": {
             "fontSize": "$md",
-            "color": "$textMuted",
-            "textAlign": "center"
+            "color": "$textSecondary",
+            "textAlign": "center",
+            "marginBottom": 24
           }
-        },
-        {
-          "id": "features-container",
-          "type": "container",
-          "layout": {
-            "type": "flex",
-            "direction": "column",
-            "gap": 12
-          },
-          "style": {
-            "marginTop": 48,
-            "width": "100%"
-          },
-          "children": [
-            {
-              "id": "feature-1",
-              "type": "text",
-              "text": "✓ Multiple pages with transitions",
-              "style": {
-                "fontSize": "$md",
-                "color": "$success",
-                "textAlign": "center"
-              }
-            },
-            {
-              "id": "feature-2",
-              "type": "text",
-              "text": "✓ Flex layouts (row/column)",
-              "style": {
-                "fontSize": "$md",
-                "color": "$success",
-                "textAlign": "center"
-              }
-            },
-            {
-              "id": "feature-3",
-              "type": "text",
-              "text": "✓ Label positioning (9 positions)",
-              "style": {
-                "fontSize": "$md",
-                "color": "$success",
-                "textAlign": "center"
-              }
-            },
-            {
-              "id": "feature-4",
-              "type": "text",
-              "text": "✓ Theme tokens",
-              "style": {
-                "fontSize": "$md",
-                "color": "$success",
-                "textAlign": "center"
-              }
-            }
-          ]
         }
       ]
     },
     {
-      "id": "row-layout",
-      "name": "Row Layout",
+      "id": "layout-1x2",
+      "name": "1x2 Grid",
       "layout": {
-        "type": "flex",
-        "direction": "column",
-        "gap": 16,
-        "padding": 16
+        "type": "1x2"
       },
       "transitions": {
         "enter": {
@@ -134,582 +66,44 @@
       },
       "panels": [
         {
-          "id": "page-title",
+          "id": "1x2-cell-1",
           "type": "text",
-          "text": "Horizontal Row Layout",
+          "text": "Panel 1\n(Left Half)\n400×480px",
           "style": {
+            "bg": "#3B82F6",
+            "color": "#FFFFFF",
             "fontSize": "$3xl",
             "fontWeight": "bold",
-            "color": "$primary",
-            "marginBottom": 8
+            "textAlign": "center",
+            "justifyContent": "center",
+            "alignItems": "center",
+            "height": "100%",
+            "padding": 24
           }
         },
         {
-          "id": "metrics-row",
-          "type": "container",
-          "layout": {
-            "type": "flex",
-            "direction": "row",
-            "gap": 16,
-            "height": 120
-          },
-          "children": [
-            {
-              "id": "metric-1",
-              "type": "metric",
-              "flex": 1,
-              "style": {
-                "bg": "$backgroundLight",
-                "borderRadius": "$lg",
-                "padding": 16
-              },
-              "label": {
-                "text": "CPU",
-                "position": "top-left",
-                "style": {
-                  "fontSize": "$sm",
-                  "color": "$textSecondary"
-                }
-              },
-              "value": {
-                "source": "mock://data",
-                "path": "cpu",
-                "format": "{value}%",
-                "style": {
-                  "fontSize": "$4xl",
-                  "color": "$primary",
-                  "fontWeight": "bold"
-                }
-              }
-            },
-            {
-              "id": "metric-2",
-              "type": "metric",
-              "flex": 1,
-              "style": {
-                "bg": "$backgroundLight",
-                "borderRadius": "$lg",
-                "padding": 16
-              },
-              "label": {
-                "text": "Memory",
-                "position": "top-center",
-                "style": {
-                  "fontSize": "$sm",
-                  "color": "$textSecondary"
-                }
-              },
-              "value": {
-                "source": "mock://data",
-                "path": "memory",
-                "format": "{value} MB",
-                "style": {
-                  "fontSize": "$4xl",
-                  "color": "$success",
-                  "fontWeight": "bold"
-                }
-              }
-            },
-            {
-              "id": "metric-3",
-              "type": "metric",
-              "flex": 1,
-              "style": {
-                "bg": "$backgroundLight",
-                "borderRadius": "$lg",
-                "padding": 16
-              },
-              "label": {
-                "text": "Temperature",
-                "position": "top-right",
-                "style": {
-                  "fontSize": "$sm",
-                  "color": "$textSecondary"
-                }
-              },
-              "value": {
-                "source": "mock://data",
-                "path": "temp",
-                "format": "{value}°C",
-                "style": {
-                  "fontSize": "$4xl",
-                  "color": "$warning",
-                  "fontWeight": "bold"
-                }
-              }
-            }
-          ]
-        },
-        {
-          "id": "chart-placeholder",
-          "type": "chart",
-          "chartType": "line",
-          "layout": {
-            "type": "flex",
-            "height": 200
-          },
+          "id": "1x2-cell-2",
+          "type": "text",
+          "text": "Panel 2\n(Right Half)\n400×480px",
           "style": {
-            "bg": "$backgroundLight",
-            "borderRadius": "$lg",
-            "padding": 16
-          },
-          "label": {
-            "text": "CPU History",
-            "position": "top-center",
-            "style": {
-              "fontSize": "$lg",
-              "fontWeight": "600",
-              "color": "$text"
-            }
+            "bg": "#10B981",
+            "color": "#FFFFFF",
+            "fontSize": "$3xl",
+            "fontWeight": "bold",
+            "textAlign": "center",
+            "justifyContent": "center",
+            "alignItems": "center",
+            "height": "100%",
+            "padding": 24
           }
         }
       ]
     },
     {
-      "id": "column-layout",
-      "name": "Column Layout",
+      "id": "layout-2x2",
+      "name": "2x2 Grid",
       "layout": {
-        "type": "flex",
-        "direction": "column",
-        "gap": 16,
-        "padding": 16
-      },
-      "transitions": {
-        "enter": {
-          "type": "slide",
-          "direction": "left",
-          "duration": 400
-        }
-      },
-      "panels": [
-        {
-          "id": "page-title-2",
-          "type": "text",
-          "text": "Vertical Column Layout",
-          "style": {
-            "fontSize": "$3xl",
-            "fontWeight": "bold",
-            "color": "$secondary",
-            "marginBottom": 8
-          }
-        },
-        {
-          "id": "content-row",
-          "type": "container",
-          "layout": {
-            "type": "flex",
-            "direction": "row",
-            "gap": 16
-          },
-          "children": [
-            {
-              "id": "left-column",
-              "type": "container",
-              "flex": 1,
-              "layout": {
-                "type": "flex",
-                "direction": "column",
-                "gap": 16
-              },
-              "children": [
-                {
-                  "id": "status-card",
-                  "type": "container",
-                  "layout": {
-                    "type": "flex",
-                    "height": 100
-                  },
-                  "style": {
-                    "bg": "$success",
-                    "borderRadius": "$lg",
-                    "padding": 16
-                  },
-                  "label": {
-                    "text": "Status",
-                    "position": "top-left",
-                    "style": {
-                      "fontSize": "$sm",
-                      "color": "rgba(255, 255, 255, 0.8)"
-                    }
-                  },
-                  "children": [
-                    {
-                      "id": "status-text",
-                      "type": "text",
-                      "text": "✓ Online",
-                      "style": {
-                        "fontSize": "$2xl",
-                        "fontWeight": "bold",
-                        "color": "$text",
-                        "textAlign": "center"
-                      }
-                    }
-                  ]
-                },
-                {
-                  "id": "info-card",
-                  "type": "container",
-                  "layout": {
-                    "type": "flex",
-                    "height": 100
-                  },
-                  "style": {
-                    "bg": "$info",
-                    "borderRadius": "$lg",
-                    "padding": 16
-                  },
-                  "label": {
-                    "text": "Info",
-                    "position": "bottom-left",
-                    "style": {
-                      "fontSize": "$sm",
-                      "color": "rgba(255, 255, 255, 0.8)"
-                    }
-                  },
-                  "children": [
-                    {
-                      "id": "info-text",
-                      "type": "text",
-                      "text": "Version 1.0",
-                      "style": {
-                        "fontSize": "$xl",
-                        "fontWeight": "600",
-                        "color": "$text",
-                        "textAlign": "center"
-                      }
-                    }
-                  ]
-                },
-                {
-                  "id": "warning-card",
-                  "type": "container",
-                  "layout": {
-                    "type": "flex",
-                    "height": 100
-                  },
-                  "style": {
-                    "bg": "$warning",
-                    "borderRadius": "$lg",
-                    "padding": 16
-                  },
-                  "label": {
-                    "text": "Alert",
-                    "position": "center-left",
-                    "style": {
-                      "fontSize": "$sm",
-                      "color": "rgba(0, 0, 0, 0.8)"
-                    }
-                  },
-                  "children": [
-                    {
-                      "id": "warning-text",
-                      "type": "text",
-                      "text": "⚠ Check logs",
-                      "style": {
-                        "fontSize": "$xl",
-                        "fontWeight": "600",
-                        "color": "$text",
-                        "textAlign": "center"
-                      }
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "id": "right-column",
-              "type": "container",
-              "flex": 1,
-              "layout": {
-                "type": "flex",
-                "direction": "column",
-                "gap": 16
-              },
-              "children": [
-                {
-                  "id": "data-card",
-                  "type": "table",
-                  "layout": {
-                    "type": "flex"
-                  },
-                  "style": {
-                    "bg": "$backgroundLight",
-                    "borderRadius": "$lg",
-                    "padding": 16,
-                    "height": 200
-                  },
-                  "label": {
-                    "text": "Data Table",
-                    "position": "top-center",
-                    "style": {
-                      "fontSize": "$md",
-                      "fontWeight": "600"
-                    }
-                  }
-                },
-                {
-                  "id": "canvas-card",
-                  "type": "canvas",
-                  "canvasType": "r3f",
-                  "layout": {
-                    "type": "flex"
-                  },
-                  "style": {
-                    "bg": "$backgroundLight",
-                    "borderRadius": "$lg",
-                    "padding": 16,
-                    "flex": 1
-                  },
-                  "label": {
-                    "text": "3D Canvas",
-                    "position": "bottom-right",
-                    "style": {
-                      "fontSize": "$sm",
-                      "color": "$textSecondary"
-                    }
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "nested-layout",
-      "name": "Nested Layout",
-      "layout": {
-        "type": "flex",
-        "direction": "column",
-        "gap": 12,
-        "padding": 12
-      },
-      "transitions": {
-        "enter": {
-          "type": "scale",
-          "duration": 400
-        }
-      },
-      "panels": [
-        {
-          "id": "nested-title",
-          "type": "text",
-          "text": "N-Tier Nested Layout",
-          "style": {
-            "fontSize": "$3xl",
-            "fontWeight": "bold",
-            "color": "$info",
-            "marginBottom": 4
-          }
-        },
-        {
-          "id": "level-1",
-          "type": "container",
-          "layout": {
-            "type": "flex",
-            "direction": "row",
-            "gap": 12
-          },
-          "style": {
-            "bg": "rgba(59, 130, 246, 0.1)",
-            "borderRadius": "$md",
-            "padding": 12
-          },
-          "label": {
-            "text": "Level 1 (Row)",
-            "position": "top-left",
-            "style": {
-              "fontSize": "$xs",
-              "color": "$primary"
-            }
-          },
-          "children": [
-            {
-              "id": "level-2-left",
-              "type": "container",
-              "flex": 1,
-              "layout": {
-                "type": "flex",
-                "direction": "column",
-                "gap": 12
-              },
-              "style": {
-                "bg": "rgba(139, 92, 246, 0.1)",
-                "borderRadius": "$md",
-                "padding": 12
-              },
-              "label": {
-                "text": "Level 2 (Column)",
-                "position": "top-left",
-                "style": {
-                  "fontSize": "$xs",
-                  "color": "$secondary"
-                }
-              },
-              "children": [
-                {
-                  "id": "level-3-top",
-                  "type": "container",
-                  "layout": {
-                    "type": "flex",
-                    "direction": "row",
-                    "gap": 8,
-                    "height": 80
-                  },
-                  "style": {
-                    "bg": "rgba(16, 185, 129, 0.1)",
-                    "borderRadius": "$sm",
-                    "padding": 8
-                  },
-                  "label": {
-                    "text": "Level 3 (Row)",
-                    "position": "center",
-                    "style": {
-                      "fontSize": "$2xs",
-                      "color": "$success"
-                    }
-                  },
-                  "children": [
-                    {
-                      "id": "leaf-1",
-                      "type": "text",
-                      "text": "A",
-                      "flex": 1,
-                      "style": {
-                        "bg": "$success",
-                        "borderRadius": "$xs",
-                        "padding": 8,
-                        "fontSize": "$xl",
-                        "fontWeight": "bold",
-                        "textAlign": "center",
-                        "color": "$text"
-                      }
-                    },
-                    {
-                      "id": "leaf-2",
-                      "type": "text",
-                      "text": "B",
-                      "flex": 1,
-                      "style": {
-                        "bg": "$info",
-                        "borderRadius": "$xs",
-                        "padding": 8,
-                        "fontSize": "$xl",
-                        "fontWeight": "bold",
-                        "textAlign": "center",
-                        "color": "$text"
-                      }
-                    }
-                  ]
-                },
-                {
-                  "id": "level-3-bottom",
-                  "type": "text",
-                  "text": "Nested Container C",
-                  "style": {
-                    "bg": "$warning",
-                    "borderRadius": "$sm",
-                    "padding": 16,
-                    "fontSize": "$lg",
-                    "fontWeight": "600",
-                    "textAlign": "center",
-                    "color": "$text",
-                    "height": 80
-                  }
-                }
-              ]
-            },
-            {
-              "id": "level-2-right",
-              "type": "container",
-              "flex": 1,
-              "layout": {
-                "type": "flex",
-                "direction": "column",
-                "gap": 8
-              },
-              "style": {
-                "bg": "rgba(239, 68, 68, 0.1)",
-                "borderRadius": "$md",
-                "padding": 12
-              },
-              "label": {
-                "text": "Level 2 (Column)",
-                "position": "top-right",
-                "style": {
-                  "fontSize": "$xs",
-                  "color": "$error"
-                }
-              },
-              "children": [
-                {
-                  "id": "metric-d",
-                  "type": "metric",
-                  "style": {
-                    "bg": "$primary",
-                    "borderRadius": "$sm",
-                    "padding": 12,
-                    "height": 60
-                  },
-                  "label": {
-                    "text": "D",
-                    "position": "top-left",
-                    "style": {
-                      "fontSize": "$2xs",
-                      "color": "rgba(255, 255, 255, 0.8)"
-                    }
-                  }
-                },
-                {
-                  "id": "metric-e",
-                  "type": "metric",
-                  "style": {
-                    "bg": "$secondary",
-                    "borderRadius": "$sm",
-                    "padding": 12,
-                    "height": 60
-                  },
-                  "label": {
-                    "text": "E",
-                    "position": "center-right",
-                    "style": {
-                      "fontSize": "$2xs",
-                      "color": "rgba(255, 255, 255, 0.8)"
-                    }
-                  }
-                },
-                {
-                  "id": "metric-f",
-                  "type": "metric",
-                  "style": {
-                    "bg": "$error",
-                    "borderRadius": "$sm",
-                    "padding": 12,
-                    "flex": 1
-                  },
-                  "label": {
-                    "text": "F",
-                    "position": "bottom-right",
-                    "style": {
-                      "fontSize": "$2xs",
-                      "color": "rgba(255, 255, 255, 0.8)"
-                    }
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "label-showcase",
-      "name": "Label Positions",
-      "layout": {
-        "type": "flex",
-        "direction": "column",
-        "gap": 12,
-        "padding": 12
+        "type": "2x2"
       },
       "transitions": {
         "enter": {
@@ -719,276 +113,348 @@
       },
       "panels": [
         {
-          "id": "label-title",
+          "id": "2x2-cell-1",
           "type": "text",
-          "text": "Label Position Showcase",
+          "text": "Panel 1\nTop Left\n400×240px",
           "style": {
-            "fontSize": "$3xl",
+            "bg": "#EF4444",
+            "color": "#FFFFFF",
+            "fontSize": "$2xl",
             "fontWeight": "bold",
-            "color": "$success",
-            "marginBottom": 4,
-            "textAlign": "center"
+            "textAlign": "center",
+            "justifyContent": "center",
+            "alignItems": "center",
+            "height": "100%",
+            "padding": 20
           }
         },
         {
-          "id": "label-subtitle",
+          "id": "2x2-cell-2",
           "type": "text",
-          "text": "All 9 anchor positions demonstrated",
+          "text": "Panel 2\nTop Right\n400×240px",
           "style": {
-            "fontSize": "$md",
-            "color": "$textSecondary",
-            "marginBottom": 12,
-            "textAlign": "center"
+            "bg": "#F59E0B",
+            "color": "#FFFFFF",
+            "fontSize": "$2xl",
+            "fontWeight": "bold",
+            "textAlign": "center",
+            "justifyContent": "center",
+            "alignItems": "center",
+            "height": "100%",
+            "padding": 20
           }
         },
         {
-          "id": "label-grid",
-          "type": "container",
-          "layout": {
-            "type": "flex",
-            "direction": "column",
-            "gap": 12
-          },
+          "id": "2x2-cell-3",
+          "type": "text",
+          "text": "Panel 3\nBottom Left\n400×240px",
           "style": {
-            "flex": 1,
-            "height": "100%"
-          },
-          "children": [
-            {
-              "id": "label-row-1",
-              "type": "container",
-              "flex": 1,
-              "layout": {
-                "type": "flex",
-                "direction": "row",
-                "gap": 12
-              },
-              "style": {
-                "height": "100%"
-              },
-              "children": [
-                {
-                  "id": "pos-top-left",
-                  "type": "container",
-                  "flex": 1,
-                  "style": {
-                    "bg": "$backgroundLight",
-                    "borderRadius": "$md",
-                    "padding": 8,
-                    "height": "100%"
-                  },
-                  "label": {
-                    "text": "top-left",
-                    "position": "top-left",
-                    "style": {
-                      "fontSize": "$xs",
-                      "color": "$primary",
-                      "fontWeight": "600"
-                    }
-                  }
-                },
-                {
-                  "id": "pos-top-center",
-                  "type": "container",
-                  "flex": 1,
-                  "style": {
-                    "bg": "$backgroundLight",
-                    "borderRadius": "$md",
-                    "padding": 8,
-                    "height": "100%"
-                  },
-                  "label": {
-                    "text": "top-center",
-                    "position": "top-center",
-                    "style": {
-                      "fontSize": "$xs",
-                      "color": "$success",
-                      "fontWeight": "600"
-                    }
-                  }
-                },
-                {
-                  "id": "pos-top-right",
-                  "type": "container",
-                  "flex": 1,
-                  "style": {
-                    "bg": "$backgroundLight",
-                    "borderRadius": "$md",
-                    "padding": 8,
-                    "height": "100%"
-                  },
-                  "label": {
-                    "text": "top-right",
-                    "position": "top-right",
-                    "style": {
-                      "fontSize": "$xs",
-                      "color": "$warning",
-                      "fontWeight": "600"
-                    }
-                  }
-                }
-              ]
-            },
-            {
-              "id": "label-row-2",
-              "type": "container",
-              "flex": 1,
-              "layout": {
-                "type": "flex",
-                "direction": "row",
-                "gap": 12
-              },
-              "style": {
-                "height": "100%"
-              },
-              "children": [
-                {
-                  "id": "pos-center-left",
-                  "type": "container",
-                  "flex": 1,
-                  "style": {
-                    "bg": "$backgroundLight",
-                    "borderRadius": "$md",
-                    "padding": 8,
-                    "height": "100%"
-                  },
-                  "label": {
-                    "text": "center-left",
-                    "position": "center-left",
-                    "style": {
-                      "fontSize": "$xs",
-                      "color": "$info",
-                      "fontWeight": "600"
-                    }
-                  }
-                },
-                {
-                  "id": "pos-center",
-                  "type": "container",
-                  "flex": 1,
-                  "style": {
-                    "bg": "$backgroundLight",
-                    "borderRadius": "$md",
-                    "padding": 8,
-                    "height": "100%"
-                  },
-                  "label": {
-                    "text": "center",
-                    "position": "center",
-                    "style": {
-                      "fontSize": "$xs",
-                      "color": "$secondary",
-                      "fontWeight": "600"
-                    }
-                  }
-                },
-                {
-                  "id": "pos-center-right",
-                  "type": "container",
-                  "flex": 1,
-                  "style": {
-                    "bg": "$backgroundLight",
-                    "borderRadius": "$md",
-                    "padding": 8,
-                    "height": "100%"
-                  },
-                  "label": {
-                    "text": "center-right",
-                    "position": "center-right",
-                    "style": {
-                      "fontSize": "$xs",
-                      "color": "$error",
-                      "fontWeight": "600"
-                    }
-                  }
-                }
-              ]
-            },
-            {
-              "id": "label-row-3",
-              "type": "container",
-              "flex": 1,
-              "layout": {
-                "type": "flex",
-                "direction": "row",
-                "gap": 12
-              },
-              "style": {
-                "height": "100%"
-              },
-              "children": [
-                {
-                  "id": "pos-bottom-left",
-                  "type": "container",
-                  "flex": 1,
-                  "style": {
-                    "bg": "$backgroundLight",
-                    "borderRadius": "$md",
-                    "padding": 8,
-                    "height": "100%"
-                  },
-                  "label": {
-                    "text": "bottom-left",
-                    "position": "bottom-left",
-                    "style": {
-                      "fontSize": "$xs",
-                      "color": "$primary",
-                      "fontWeight": "600"
-                    }
-                  }
-                },
-                {
-                  "id": "pos-bottom-center",
-                  "type": "container",
-                  "flex": 1,
-                  "style": {
-                    "bg": "$backgroundLight",
-                    "borderRadius": "$md",
-                    "padding": 8,
-                    "height": "100%"
-                  },
-                  "label": {
-                    "text": "bottom-center",
-                    "position": "bottom-center",
-                    "style": {
-                      "fontSize": "$xs",
-                      "color": "$success",
-                      "fontWeight": "600"
-                    }
-                  }
-                },
-                {
-                  "id": "pos-bottom-right",
-                  "type": "container",
-                  "flex": 1,
-                  "style": {
-                    "bg": "$backgroundLight",
-                    "borderRadius": "$md",
-                    "padding": 8,
-                    "height": "100%"
-                  },
-                  "label": {
-                    "text": "bottom-right",
-                    "position": "bottom-right",
-                    "style": {
-                      "fontSize": "$xs",
-                      "color": "$warning",
-                      "fontWeight": "600"
-                    }
-                  }
-                }
-              ]
-            }
-          ]
+            "bg": "#8B5CF6",
+            "color": "#FFFFFF",
+            "fontSize": "$2xl",
+            "fontWeight": "bold",
+            "textAlign": "center",
+            "justifyContent": "center",
+            "alignItems": "center",
+            "height": "100%",
+            "padding": 20
+          }
+        },
+        {
+          "id": "2x2-cell-4",
+          "type": "text",
+          "text": "Panel 4\nBottom Right\n400×240px",
+          "style": {
+            "bg": "#EC4899",
+            "color": "#FFFFFF",
+            "fontSize": "$2xl",
+            "fontWeight": "bold",
+            "textAlign": "center",
+            "justifyContent": "center",
+            "alignItems": "center",
+            "height": "100%",
+            "padding": 20
+          }
         }
       ]
     },
     {
-      "id": "three-column-layout",
-      "name": "3 Columns",
+      "id": "layout-3x2",
+      "name": "3x2 Grid",
       "layout": {
-        "type": "flex",
-        "direction": "column",
+        "type": "3x2"
+      },
+      "transitions": {
+        "enter": {
+          "type": "scale",
+          "duration": 400
+        }
+      },
+      "panels": [
+        {
+          "id": "3x2-cell-1",
+          "type": "text",
+          "text": "Panel 1\nRow 1, Left\n400×160px",
+          "style": {
+            "bg": "#06B6D4",
+            "color": "#FFFFFF",
+            "fontSize": "$xl",
+            "fontWeight": "bold",
+            "textAlign": "center",
+            "justifyContent": "center",
+            "alignItems": "center",
+            "height": "100%",
+            "padding": 16
+          }
+        },
+        {
+          "id": "3x2-cell-2",
+          "type": "text",
+          "text": "Panel 2\nRow 1, Right\n400×160px",
+          "style": {
+            "bg": "#0EA5E9",
+            "color": "#FFFFFF",
+            "fontSize": "$xl",
+            "fontWeight": "bold",
+            "textAlign": "center",
+            "justifyContent": "center",
+            "alignItems": "center",
+            "height": "100%",
+            "padding": 16
+          }
+        },
+        {
+          "id": "3x2-cell-3",
+          "type": "text",
+          "text": "Panel 3\nRow 2, Left\n400×160px",
+          "style": {
+            "bg": "#10B981",
+            "color": "#FFFFFF",
+            "fontSize": "$xl",
+            "fontWeight": "bold",
+            "textAlign": "center",
+            "justifyContent": "center",
+            "alignItems": "center",
+            "height": "100%",
+            "padding": 16
+          }
+        },
+        {
+          "id": "3x2-cell-4",
+          "type": "text",
+          "text": "Panel 4\nRow 2, Right\n400×160px",
+          "style": {
+            "bg": "#14B8A6",
+            "color": "#FFFFFF",
+            "fontSize": "$xl",
+            "fontWeight": "bold",
+            "textAlign": "center",
+            "justifyContent": "center",
+            "alignItems": "center",
+            "height": "100%",
+            "padding": 16
+          }
+        },
+        {
+          "id": "3x2-cell-5",
+          "type": "text",
+          "text": "Panel 5\nRow 3, Left\n400×160px",
+          "style": {
+            "bg": "#F59E0B",
+            "color": "#FFFFFF",
+            "fontSize": "$xl",
+            "fontWeight": "bold",
+            "textAlign": "center",
+            "justifyContent": "center",
+            "alignItems": "center",
+            "height": "100%",
+            "padding": 16
+          }
+        },
+        {
+          "id": "3x2-cell-6",
+          "type": "text",
+          "text": "Panel 6\nRow 3, Right\n400×160px",
+          "style": {
+            "bg": "#F97316",
+            "color": "#FFFFFF",
+            "fontSize": "$xl",
+            "fontWeight": "bold",
+            "textAlign": "center",
+            "justifyContent": "center",
+            "alignItems": "center",
+            "height": "100%",
+            "padding": 16
+          }
+        }
+      ]
+    },
+    {
+      "id": "layout-3x3",
+      "name": "3x3 Grid",
+      "layout": {
+        "type": "3x3"
+      },
+      "transitions": {
+        "enter": {
+          "type": "fade",
+          "duration": 400
+        }
+      },
+      "panels": [
+        {
+          "id": "3x3-cell-1",
+          "type": "text",
+          "text": "1\nTop-Left",
+          "style": {
+            "bg": "#EF4444",
+            "color": "#FFFFFF",
+            "fontSize": "$lg",
+            "fontWeight": "bold",
+            "textAlign": "center",
+            "justifyContent": "center",
+            "alignItems": "center",
+            "height": "100%",
+            "padding": 12
+          }
+        },
+        {
+          "id": "3x3-cell-2",
+          "type": "text",
+          "text": "2\nTop-Center",
+          "style": {
+            "bg": "#F59E0B",
+            "color": "#FFFFFF",
+            "fontSize": "$lg",
+            "fontWeight": "bold",
+            "textAlign": "center",
+            "justifyContent": "center",
+            "alignItems": "center",
+            "height": "100%",
+            "padding": 12
+          }
+        },
+        {
+          "id": "3x3-cell-3",
+          "type": "text",
+          "text": "3\nTop-Right",
+          "style": {
+            "bg": "#10B981",
+            "color": "#FFFFFF",
+            "fontSize": "$lg",
+            "fontWeight": "bold",
+            "textAlign": "center",
+            "justifyContent": "center",
+            "alignItems": "center",
+            "height": "100%",
+            "padding": 12
+          }
+        },
+        {
+          "id": "3x3-cell-4",
+          "type": "text",
+          "text": "4\nMid-Left",
+          "style": {
+            "bg": "#3B82F6",
+            "color": "#FFFFFF",
+            "fontSize": "$lg",
+            "fontWeight": "bold",
+            "textAlign": "center",
+            "justifyContent": "center",
+            "alignItems": "center",
+            "height": "100%",
+            "padding": 12
+          }
+        },
+        {
+          "id": "3x3-cell-5",
+          "type": "text",
+          "text": "5\nCenter",
+          "style": {
+            "bg": "#8B5CF6",
+            "color": "#FFFFFF",
+            "fontSize": "$lg",
+            "fontWeight": "bold",
+            "textAlign": "center",
+            "justifyContent": "center",
+            "alignItems": "center",
+            "height": "100%",
+            "padding": 12
+          }
+        },
+        {
+          "id": "3x3-cell-6",
+          "type": "text",
+          "text": "6\nMid-Right",
+          "style": {
+            "bg": "#EC4899",
+            "color": "#FFFFFF",
+            "fontSize": "$lg",
+            "fontWeight": "bold",
+            "textAlign": "center",
+            "justifyContent": "center",
+            "alignItems": "center",
+            "height": "100%",
+            "padding": 12
+          }
+        },
+        {
+          "id": "3x3-cell-7",
+          "type": "text",
+          "text": "7\nBottom-Left",
+          "style": {
+            "bg": "#06B6D4",
+            "color": "#FFFFFF",
+            "fontSize": "$lg",
+            "fontWeight": "bold",
+            "textAlign": "center",
+            "justifyContent": "center",
+            "alignItems": "center",
+            "height": "100%",
+            "padding": 12
+          }
+        },
+        {
+          "id": "3x3-cell-8",
+          "type": "text",
+          "text": "8\nBottom-Center",
+          "style": {
+            "bg": "#14B8A6",
+            "color": "#FFFFFF",
+            "fontSize": "$lg",
+            "fontWeight": "bold",
+            "textAlign": "center",
+            "justifyContent": "center",
+            "alignItems": "center",
+            "height": "100%",
+            "padding": 12
+          }
+        },
+        {
+          "id": "3x3-cell-9",
+          "type": "text",
+          "text": "9\nBottom-Right",
+          "style": {
+            "bg": "#F97316",
+            "color": "#FFFFFF",
+            "fontSize": "$lg",
+            "fontWeight": "bold",
+            "textAlign": "center",
+            "justifyContent": "center",
+            "alignItems": "center",
+            "height": "100%",
+            "padding": 12
+          }
+        }
+      ]
+    },
+    {
+      "id": "grid-layout",
+      "name": "Grid Layout",
+      "layout": {
+        "type": "grid",
+        "columns": 3,
+        "rows": 2,
         "gap": 16,
         "padding": 16
       },
@@ -1001,513 +467,198 @@
       },
       "panels": [
         {
-          "id": "three-col-title",
+          "id": "grid-title",
           "type": "text",
-          "text": "Three Column Layout",
+          "text": "Grid Layout Example (with gaps)",
           "style": {
-            "fontSize": "$3xl",
+            "fontSize": "$2xl",
             "fontWeight": "bold",
-            "color": "$primary",
-            "marginBottom": 8,
+            "color": "$secondary",
+            "textAlign": "center",
+            "padding": 16,
+            "bg": "$backgroundLight",
+            "borderRadius": "$lg"
+          }
+        },
+        {
+          "id": "grid-item-1",
+          "type": "text",
+          "text": "Grid Item 1",
+          "style": {
+            "bg": "$primary",
+            "borderRadius": "$lg",
+            "padding": 16,
+            "fontSize": "$lg",
+            "color": "#FFFFFF",
+            "fontWeight": "600",
             "textAlign": "center"
           }
         },
         {
-          "id": "three-columns-container",
-          "type": "container",
-          "layout": {
-            "type": "flex",
-            "direction": "row",
-            "gap": 16
-          },
-          "children": [
-            {
-              "id": "column-1",
-              "type": "container",
-              "flex": 1,
-              "layout": {
-                "type": "flex",
-                "direction": "column",
-                "gap": 12
-              },
-              "children": [
-                {
-                  "id": "col1-metric-1",
-                  "type": "metric",
-                  "style": {
-                    "bg": "$primary",
-                    "borderRadius": "$lg",
-                    "padding": 16,
-                    "height": 120
-                  },
-                  "label": {
-                    "text": "Metric A",
-                    "position": "top-left",
-                    "style": {
-                      "fontSize": "$sm",
-                      "color": "rgba(255, 255, 255, 0.8)"
-                    }
-                  },
-                  "value": {
-                    "source": "mock://data",
-                    "path": "cpu",
-                    "format": "{value}%",
-                    "style": {
-                      "fontSize": "$3xl",
-                      "color": "$text",
-                      "fontWeight": "bold"
-                    }
-                  }
-                },
-                {
-                  "id": "col1-metric-2",
-                  "type": "metric",
-                  "style": {
-                    "bg": "$backgroundLight",
-                    "borderRadius": "$lg",
-                    "padding": 16,
-                    "height": 120
-                  },
-                  "label": {
-                    "text": "Status",
-                    "position": "top-center",
-                    "style": {
-                      "fontSize": "$sm",
-                      "color": "$textSecondary"
-                    }
-                  },
-                  "value": {
-                    "source": "mock://data",
-                    "path": "status",
-                    "format": "{value}",
-                    "style": {
-                      "fontSize": "$2xl",
-                      "color": "$success",
-                      "fontWeight": "600"
-                    }
-                  }
-                },
-                {
-                  "id": "col1-chart",
-                  "type": "chart",
-                  "chartType": "bar",
-                  "style": {
-                    "bg": "$backgroundLight",
-                    "borderRadius": "$lg",
-                    "padding": 16,
-                    "flex": 1
-                  },
-                  "label": {
-                    "text": "Chart A",
-                    "position": "top-center",
-                    "style": {
-                      "fontSize": "$md",
-                      "fontWeight": "600"
-                    }
-                  }
-                }
-              ]
-            },
-            {
-              "id": "column-2",
-              "type": "container",
-              "flex": 1,
-              "layout": {
-                "type": "flex",
-                "direction": "column",
-                "gap": 12
-              },
-              "children": [
-                {
-                  "id": "col2-metric-1",
-                  "type": "metric",
-                  "style": {
-                    "bg": "$success",
-                    "borderRadius": "$lg",
-                    "padding": 16,
-                    "height": 120
-                  },
-                  "label": {
-                    "text": "Metric B",
-                    "position": "top-left",
-                    "style": {
-                      "fontSize": "$sm",
-                      "color": "rgba(255, 255, 255, 0.8)"
-                    }
-                  },
-                  "value": {
-                    "source": "mock://data",
-                    "path": "memory",
-                    "format": "{value} MB",
-                    "style": {
-                      "fontSize": "$3xl",
-                      "color": "$text",
-                      "fontWeight": "bold"
-                    }
-                  }
-                },
-                {
-                  "id": "col2-table",
-                  "type": "table",
-                  "style": {
-                    "bg": "$backgroundLight",
-                    "borderRadius": "$lg",
-                    "padding": 16,
-                    "flex": 1
-                  },
-                  "label": {
-                    "text": "Data Table",
-                    "position": "top-center",
-                    "style": {
-                      "fontSize": "$md",
-                      "fontWeight": "600"
-                    }
-                  }
-                },
-                {
-                  "id": "col2-metric-2",
-                  "type": "metric",
-                  "style": {
-                    "bg": "$backgroundLight",
-                    "borderRadius": "$lg",
-                    "padding": 16,
-                    "height": 100
-                  },
-                  "label": {
-                    "text": "Info",
-                    "position": "center",
-                    "style": {
-                      "fontSize": "$sm",
-                      "color": "$textSecondary"
-                    }
-                  }
-                }
-              ]
-            },
-            {
-              "id": "column-3",
-              "type": "container",
-              "flex": 1,
-              "layout": {
-                "type": "flex",
-                "direction": "column",
-                "gap": 12
-              },
-              "children": [
-                {
-                  "id": "col3-canvas",
-                  "type": "canvas",
-                  "canvasType": "r3f",
-                  "style": {
-                    "bg": "$backgroundLight",
-                    "borderRadius": "$lg",
-                    "padding": 16,
-                    "height": 200
-                  },
-                  "label": {
-                    "text": "3D Viz",
-                    "position": "top-center",
-                    "style": {
-                      "fontSize": "$md",
-                      "fontWeight": "600"
-                    }
-                  }
-                },
-                {
-                  "id": "col3-metric-1",
-                  "type": "metric",
-                  "style": {
-                    "bg": "$warning",
-                    "borderRadius": "$lg",
-                    "padding": 16,
-                    "height": 120
-                  },
-                  "label": {
-                    "text": "Metric C",
-                    "position": "top-left",
-                    "style": {
-                      "fontSize": "$sm",
-                      "color": "rgba(0, 0, 0, 0.8)"
-                    }
-                  },
-                  "value": {
-                    "source": "mock://data",
-                    "path": "temp",
-                    "format": "{value}°C",
-                    "style": {
-                      "fontSize": "$3xl",
-                      "color": "$text",
-                      "fontWeight": "bold"
-                    }
-                  }
-                },
-                {
-                  "id": "col3-chart",
-                  "type": "chart",
-                  "chartType": "line",
-                  "style": {
-                    "bg": "$backgroundLight",
-                    "borderRadius": "$lg",
-                    "padding": 16,
-                    "flex": 1
-                  },
-                  "label": {
-                    "text": "Trends",
-                    "position": "top-center",
-                    "style": {
-                      "fontSize": "$md",
-                      "fontWeight": "600"
-                    }
-                  }
-                }
-              ]
-            }
-          ]
+          "id": "grid-item-2",
+          "type": "text",
+          "text": "Grid Item 2",
+          "style": {
+            "bg": "$success",
+            "borderRadius": "$lg",
+            "padding": 16,
+            "fontSize": "$lg",
+            "color": "#FFFFFF",
+            "fontWeight": "600",
+            "textAlign": "center"
+          }
+        },
+        {
+          "id": "grid-item-3",
+          "type": "text",
+          "text": "Grid Item 3",
+          "style": {
+            "bg": "$warning",
+            "borderRadius": "$lg",
+            "padding": 16,
+            "fontSize": "$lg",
+            "color": "#FFFFFF",
+            "fontWeight": "600",
+            "textAlign": "center"
+          }
+        },
+        {
+          "id": "grid-item-4",
+          "type": "text",
+          "text": "Grid Item 4",
+          "style": {
+            "bg": "$info",
+            "borderRadius": "$lg",
+            "padding": 16,
+            "fontSize": "$lg",
+            "color": "#FFFFFF",
+            "fontWeight": "600",
+            "textAlign": "center"
+          }
         }
       ]
     },
     {
-      "id": "image-overlay",
-      "name": "Image Overlay",
+      "id": "absolute-layout",
+      "name": "Absolute Layout",
       "layout": {
-        "type": "flex",
-        "direction": "column",
+        "type": "absolute",
         "padding": 0
       },
       "transitions": {
         "enter": {
-          "type": "fade",
-          "duration": 500
-        }
-      },
-      "panels": [
-        {
-          "id": "image-container",
-          "type": "container",
-          "layout": {
-            "type": "flex",
-            "direction": "column",
-            "justify": "center",
-            "align": "center"
-          },
-          "style": {
-            "flex": 1,
-            "height": "100%",
-            "width": "100%",
-            "backgroundImage": "url('/images/your-image.jpg')",
-            "backgroundSize": "contain",
-            "backgroundPosition": "center",
-            "backgroundRepeat": "no-repeat",
-            "bg": "$background",
-            "position": "relative"
-          },
-          "children": [
-            {
-              "id": "overlay-text-1",
-              "type": "text",
-              "text": "🚀 Welcome to PiDash",
-              "style": {
-                "fontSize": "$4xl",
-                "fontWeight": "bold",
-                "color": "$primary",
-                "textAlign": "center",
-                "padding": 24,
-                "bg": "rgba(10, 14, 26, 0.85)",
-                "borderRadius": "$lg",
-                "animation": "fadeIn 1s ease-in 1.5s forwards",
-                "opacity": 0,
-                "marginBottom": 16
-              }
-            },
-            {
-              "id": "overlay-text-2",
-              "type": "text",
-              "text": "Image overlay with delayed text animations",
-              "style": {
-                "fontSize": "$xl",
-                "color": "$textSecondary",
-                "textAlign": "center",
-                "padding": 16,
-                "bg": "rgba(10, 14, 26, 0.7)",
-                "borderRadius": "$md",
-                "animation": "fadeIn 1s ease-in 3s forwards",
-                "opacity": 0
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "quadrant-layout",
-      "name": "Quadrants",
-      "layout": {
-        "type": "flex",
-        "direction": "column",
-        "gap": 16,
-        "padding": 16
-      },
-      "transitions": {
-        "enter": {
           "type": "scale",
           "duration": 400
         }
       },
       "panels": [
         {
-          "id": "quad-title",
-          "type": "text",
-          "text": "Quadrant Layout (Full Height)",
+          "id": "absolute-bg",
+          "type": "container",
           "style": {
+            "position": "absolute",
+            "top": 0,
+            "left": 0,
+            "right": 0,
+            "bottom": 0,
+            "bg": "$background"
+          }
+        },
+        {
+          "id": "absolute-title",
+          "type": "text",
+          "text": "Absolute Layout",
+          "style": {
+            "position": "absolute",
+            "top": 20,
+            "left": 0,
+            "right": 0,
             "fontSize": "$3xl",
             "fontWeight": "bold",
-            "color": "$secondary",
-            "marginBottom": 8,
+            "color": "$info",
+            "textAlign": "center",
+            "padding": 16
+          }
+        },
+        {
+          "id": "absolute-description",
+          "type": "text",
+          "text": "Items positioned with exact coordinates",
+          "style": {
+            "position": "absolute",
+            "top": 80,
+            "left": 0,
+            "right": 0,
+            "fontSize": "$md",
+            "color": "$textSecondary",
             "textAlign": "center"
           }
         },
         {
-          "id": "quadrant-grid",
-          "type": "container",
-          "layout": {
-            "type": "flex",
-            "direction": "column",
-            "gap": 16
-          },
+          "id": "absolute-panel-1",
+          "type": "text",
+          "text": "Top Left\nPanel",
           "style": {
-            "flex": 1,
-            "height": "100%"
-          },
-          "children": [
-            {
-              "id": "quad-row-1",
-              "type": "container",
-              "flex": 1,
-              "layout": {
-                "type": "flex",
-                "direction": "row",
-                "gap": 16
-              },
-              "style": {
-                "height": "100%"
-              },
-              "children": [
-                {
-                  "id": "quadrant-1",
-                  "type": "metric",
-                  "flex": 1,
-                  "style": {
-                    "bg": "$primary",
-                    "borderRadius": "$lg",
-                    "padding": 24,
-                    "height": "100%"
-                  },
-                  "label": {
-                    "text": "Quadrant 1",
-                    "position": "top-left",
-                    "style": {
-                      "fontSize": "$lg",
-                      "color": "rgba(255, 255, 255, 0.9)",
-                      "fontWeight": "600"
-                    }
-                  },
-                  "value": {
-                    "source": "mock://data",
-                    "path": "cpu",
-                    "format": "{value}%",
-                    "style": {
-                      "fontSize": "$5xl",
-                      "color": "$text",
-                      "fontWeight": "bold"
-                    }
-                  }
-                },
-                {
-                  "id": "quadrant-2",
-                  "type": "chart",
-                  "chartType": "line",
-                  "flex": 1,
-                  "style": {
-                    "bg": "$success",
-                    "borderRadius": "$lg",
-                    "padding": 24,
-                    "height": "100%"
-                  },
-                  "label": {
-                    "text": "Quadrant 2",
-                    "position": "top-center",
-                    "style": {
-                      "fontSize": "$lg",
-                      "color": "rgba(255, 255, 255, 0.9)",
-                      "fontWeight": "600"
-                    }
-                  }
-                }
-              ]
-            },
-            {
-              "id": "quad-row-2",
-              "type": "container",
-              "flex": 1,
-              "layout": {
-                "type": "flex",
-                "direction": "row",
-                "gap": 16
-              },
-              "style": {
-                "height": "100%"
-              },
-              "children": [
-                {
-                  "id": "quadrant-3",
-                  "type": "table",
-                  "flex": 1,
-                  "style": {
-                    "bg": "$warning",
-                    "borderRadius": "$lg",
-                    "padding": 24,
-                    "height": "100%"
-                  },
-                  "label": {
-                    "text": "Quadrant 3",
-                    "position": "bottom-left",
-                    "style": {
-                      "fontSize": "$lg",
-                      "color": "rgba(0, 0, 0, 0.8)",
-                      "fontWeight": "600"
-                    }
-                  }
-                },
-                {
-                  "id": "quadrant-4",
-                  "type": "canvas",
-                  "canvasType": "r3f",
-                  "flex": 1,
-                  "style": {
-                    "bg": "$info",
-                    "borderRadius": "$lg",
-                    "padding": 24,
-                    "height": "100%"
-                  },
-                  "label": {
-                    "text": "Quadrant 4",
-                    "position": "bottom-right",
-                    "style": {
-                      "fontSize": "$lg",
-                      "color": "rgba(255, 255, 255, 0.9)",
-                      "fontWeight": "600"
-                    }
-                  }
-                }
-              ]
-            }
-          ]
+            "position": "absolute",
+            "top": 140,
+            "left": 40,
+            "width": 200,
+            "height": 120,
+            "bg": "$primary",
+            "borderRadius": "$lg",
+            "padding": 16,
+            "fontSize": "$lg",
+            "color": "#FFFFFF",
+            "fontWeight": "600",
+            "textAlign": "center",
+            "justifyContent": "center"
+          }
+        },
+        {
+          "id": "absolute-panel-2",
+          "type": "text",
+          "text": "Top Right\nPanel",
+          "style": {
+            "position": "absolute",
+            "top": 140,
+            "right": 40,
+            "width": 200,
+            "height": 120,
+            "bg": "$success",
+            "borderRadius": "$lg",
+            "padding": 16,
+            "fontSize": "$lg",
+            "color": "#FFFFFF",
+            "fontWeight": "600",
+            "textAlign": "center",
+            "justifyContent": "center"
+          }
+        },
+        {
+          "id": "absolute-panel-3",
+          "type": "text",
+          "text": "Bottom Center Panel",
+          "style": {
+            "position": "absolute",
+            "bottom": 40,
+            "left": 200,
+            "right": 200,
+            "height": 100,
+            "bg": "$warning",
+            "borderRadius": "$lg",
+            "padding": 16,
+            "fontSize": "$lg",
+            "color": "#FFFFFF",
+            "fontWeight": "600",
+            "textAlign": "center",
+            "justifyContent": "center"
+          }
         }
       ]
     }
   ],
   "navigation": {
-    "initialPage": "welcome",
+    "initialPage": "flex-layout",
     "transitions": {
       "default": {
         "type": "slide",

@@ -84,16 +84,6 @@ export function DashboardRenderer({ config, onError, onRefresh }: DashboardRende
 
       {/* Top Right Menu */}
       <View style={styles.topRightMenu}>
-        {/* Refresh Button */}
-        {onRefresh && (
-          <TouchableOpacity
-            style={styles.menuButton}
-            onPress={onRefresh}
-          >
-            <Text style={styles.menuIcon}>↻</Text>
-          </TouchableOpacity>
-        )}
-
         {/* Settings Button */}
         <TouchableOpacity
           style={styles.menuButton}
@@ -108,6 +98,7 @@ export function DashboardRenderer({ config, onError, onRefresh }: DashboardRende
         visible={showSettings}
         onClose={() => setShowSettings(false)}
         autoTransitionInterval={autoTransitionInterval}
+        onRefresh={onRefresh}
       />
     </View>
   );

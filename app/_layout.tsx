@@ -4,6 +4,8 @@ import { Platform } from 'react-native';
 import { GluestackUIProvider } from '@gluestack-ui/themed';
 import { config } from '../config/gluestack-ui.config';
 import { DISPLAY_CONFIG } from '../config/display';
+import { SettingsProvider } from '../contexts/SettingsContext';
+import { WebSocketProvider } from '../contexts/WebSocketContext';
 
 export default function RootLayout() {
   useEffect(() => {
@@ -63,16 +65,20 @@ export default function RootLayout() {
 
   return (
     <GluestackUIProvider config={config}>
-      <Stack
-        screenOptions={{
-          headerShown: false,
-          contentStyle: {
-            backgroundColor: '#111827',
-            margin: 0,
-            padding: 0,
-          },
-        }}
-      />
+      <SettingsProvider>
+        <WebSocketProvider>
+          <Stack
+            screenOptions={{
+              headerShown: false,
+              contentStyle: {
+                backgroundColor: '#111827',
+                margin: 0,
+                padding: 0,
+              },
+            }}
+          />
+        </WebSocketProvider>
+      </SettingsProvider>
     </GluestackUIProvider>
   );
 }

@@ -1,0 +1,240 @@
+{
+  "examples": [
+    {
+      "name": "Navigate to Flex Layout Page",
+      "description": "Navigate to the flex layout example page",
+      "event": {
+        "id": "nav-flex",
+        "type": "navigation.request",
+        "actions": [
+          {
+            "type": "navigate",
+            "target": "/"
+          }
+        ]
+      },
+      "curl": "curl -X POST http://localhost:3001/api/events/trigger -H 'Content-Type: application/json' -d '{\"id\":\"nav-flex\",\"actions\":[{\"type\":\"navigate\",\"target\":\"/\"}]}'"
+    },
+    {
+      "name": "Show Info Notification",
+      "description": "Display an informational notification",
+      "event": {
+        "id": "notify-info",
+        "type": "notification.info",
+        "actions": [
+          {
+            "type": "notify",
+            "title": "Information",
+            "message": "This is an info notification from the WebSocket server",
+            "severity": "info",
+            "duration": 3000
+          }
+        ]
+      },
+      "curl": "curl -X POST http://localhost:3001/api/events/trigger -H 'Content-Type: application/json' -d '{\"id\":\"notify-info\",\"actions\":[{\"type\":\"notify\",\"title\":\"Information\",\"message\":\"This is an info notification\",\"severity\":\"info\"}]}'"
+    },
+    {
+      "name": "Show Success Notification",
+      "description": "Display a success notification",
+      "event": {
+        "id": "notify-success",
+        "type": "notification.success",
+        "actions": [
+          {
+            "type": "notify",
+            "title": "Success!",
+            "message": "Operation completed successfully",
+            "severity": "success",
+            "duration": 3000
+          }
+        ]
+      },
+      "curl": "curl -X POST http://localhost:3001/api/events/trigger -H 'Content-Type: application/json' -d '{\"id\":\"notify-success\",\"actions\":[{\"type\":\"notify\",\"title\":\"Success!\",\"message\":\"Operation completed successfully\",\"severity\":\"success\"}]}'"
+    },
+    {
+      "name": "Show Warning Notification",
+      "description": "Display a warning notification",
+      "event": {
+        "id": "notify-warning",
+        "type": "notification.warning",
+        "actions": [
+          {
+            "type": "notify",
+            "title": "Warning",
+            "message": "CPU usage is above 80%",
+            "severity": "warning",
+            "duration": 5000
+          }
+        ]
+      },
+      "curl": "curl -X POST http://localhost:3001/api/events/trigger -H 'Content-Type: application/json' -d '{\"id\":\"notify-warning\",\"actions\":[{\"type\":\"notify\",\"title\":\"Warning\",\"message\":\"CPU usage is above 80%\",\"severity\":\"warning\",\"duration\":5000}]}'"
+    },
+    {
+      "name": "Show Error Notification",
+      "description": "Display an error notification",
+      "event": {
+        "id": "notify-error",
+        "type": "notification.error",
+        "actions": [
+          {
+            "type": "notify",
+            "title": "Error",
+            "message": "Failed to connect to database",
+            "severity": "error",
+            "duration": 5000
+          }
+        ]
+      },
+      "curl": "curl -X POST http://localhost:3001/api/events/trigger -H 'Content-Type: application/json' -d '{\"id\":\"notify-error\",\"actions\":[{\"type\":\"notify\",\"title\":\"Error\",\"message\":\"Failed to connect to database\",\"severity\":\"error\",\"duration\":5000}]}'"
+    },
+    {
+      "name": "Pause Auto-Transitions",
+      "description": "Pause automatic page transitions",
+      "event": {
+        "id": "pause-transitions",
+        "type": "transition.control",
+        "actions": [
+          {
+            "type": "transition.pause"
+          },
+          {
+            "type": "notify",
+            "title": "Transitions Paused",
+            "message": "Auto-transitions have been paused",
+            "severity": "info"
+          }
+        ]
+      },
+      "curl": "curl -X POST http://localhost:3001/api/events/trigger -H 'Content-Type: application/json' -d '{\"id\":\"pause-transitions\",\"actions\":[{\"type\":\"transition.pause\"},{\"type\":\"notify\",\"title\":\"Transitions Paused\",\"message\":\"Auto-transitions paused\",\"severity\":\"info\"}]}'"
+    },
+    {
+      "name": "Resume Auto-Transitions",
+      "description": "Resume automatic page transitions",
+      "event": {
+        "id": "resume-transitions",
+        "type": "transition.control",
+        "actions": [
+          {
+            "type": "transition.resume"
+          },
+          {
+            "type": "notify",
+            "title": "Transitions Resumed",
+            "message": "Auto-transitions have been resumed",
+            "severity": "success"
+          }
+        ]
+      },
+      "curl": "curl -X POST http://localhost:3001/api/events/trigger -H 'Content-Type: application/json' -d '{\"id\":\"resume-transitions\",\"actions\":[{\"type\":\"transition.resume\"},{\"type\":\"notify\",\"title\":\"Transitions Resumed\",\"message\":\"Auto-transitions resumed\",\"severity\":\"success\"}]}'"
+    },
+    {
+      "name": "Critical Alert with Navigation",
+      "description": "Show critical alert and navigate to system monitor",
+      "event": {
+        "id": "critical-alert",
+        "type": "system.alert.critical",
+        "actions": [
+          {
+            "type": "notify",
+            "title": "Critical Alert",
+            "message": "System temperature is critically high!",
+            "severity": "error",
+            "duration": 10000
+          },
+          {
+            "type": "transition.pause"
+          }
+        ]
+      },
+      "curl": "curl -X POST http://localhost:3001/api/events/trigger -H 'Content-Type: application/json' -d '{\"id\":\"critical-alert\",\"actions\":[{\"type\":\"notify\",\"title\":\"Critical Alert\",\"message\":\"System temperature critically high!\",\"severity\":\"error\",\"duration\":10000},{\"type\":\"transition.pause\"}]}'"
+    },
+    {
+      "name": "Update Config (In-Memory)",
+      "description": "Update a configuration value in memory only",
+      "event": {
+        "id": "config-update",
+        "type": "config.update",
+        "actions": [
+          {
+            "type": "config.update",
+            "path": "autoTransitionEnabled",
+            "value": false,
+            "persistent": false
+          },
+          {
+            "type": "notify",
+            "title": "Config Updated",
+            "message": "Auto-transitions disabled (in-memory only)",
+            "severity": "info"
+          }
+        ]
+      },
+      "curl": "curl -X POST http://localhost:3001/api/events/trigger -H 'Content-Type: application/json' -d '{\"id\":\"config-update\",\"actions\":[{\"type\":\"config.update\",\"path\":\"autoTransitionEnabled\",\"value\":false},{\"type\":\"notify\",\"title\":\"Config Updated\",\"message\":\"Auto-transitions disabled\",\"severity\":\"info\"}]}'"
+    },
+    {
+      "name": "Refresh Dashboard",
+      "description": "Trigger a full dashboard refresh",
+      "event": {
+        "id": "refresh-dashboard",
+        "type": "dashboard.refresh",
+        "actions": [
+          {
+            "type": "refresh",
+            "target": "all"
+          },
+          {
+            "type": "notify",
+            "title": "Refreshing",
+            "message": "Dashboard refresh triggered",
+            "severity": "info",
+            "duration": 2000
+          }
+        ]
+      },
+      "curl": "curl -X POST http://localhost:3001/api/events/trigger -H 'Content-Type: application/json' -d '{\"id\":\"refresh-dashboard\",\"actions\":[{\"type\":\"refresh\",\"target\":\"all\"},{\"type\":\"notify\",\"title\":\"Refreshing\",\"message\":\"Dashboard refresh triggered\",\"severity\":\"info\"}]}'"
+    },
+    {
+      "name": "Multiple Actions Demo",
+      "description": "Demonstrate multiple actions in sequence",
+      "event": {
+        "id": "multi-action-demo",
+        "type": "demo.multi",
+        "actions": [
+          {
+            "type": "notify",
+            "title": "Step 1",
+            "message": "Starting multi-action sequence...",
+            "severity": "info",
+            "duration": 2000
+          },
+          {
+            "type": "transition.pause"
+          },
+          {
+            "type": "config.update",
+            "path": "demoMode",
+            "value": true
+          }
+        ]
+      },
+      "curl": "curl -X POST http://localhost:3001/api/events/trigger -H 'Content-Type: application/json' -d '{\"id\":\"multi-action-demo\",\"actions\":[{\"type\":\"notify\",\"title\":\"Step 1\",\"message\":\"Starting sequence\",\"severity\":\"info\"},{\"type\":\"transition.pause\"}]}'"
+    }
+  ],
+  "testing": {
+    "description": "Testing instructions",
+    "steps": [
+      "1. Start the server: npm run api",
+      "2. Start the dashboard: npm run start:network",
+      "3. Open another terminal and run any curl command from the examples above",
+      "4. Watch the dashboard respond in real-time!"
+    ],
+    "notes": [
+      "- The WebSocket server runs on port 3001 at path /ws",
+      "- Default token is 'pidash-local-token-12345'",
+      "- Events are broadcast to all connected clients",
+      "- Notifications auto-dismiss after their duration (default 3000ms)",
+      "- Navigation uses expo-router paths",
+      "- Config updates are in-memory only by default (not saved to disk)"
+    ]
+  }
+}

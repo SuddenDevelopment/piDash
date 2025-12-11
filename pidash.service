@@ -1,0 +1,24 @@
+[Unit]
+Description=piDashboard with API Server
+After=network.target
+
+[Service]
+Type=forking
+User=pi
+WorkingDirectory=/home/pi/piDash
+
+# Start both API and web server
+ExecStart=/home/pi/piDash/scripts/start-pidash.sh
+ExecStop=/home/pi/piDash/scripts/stop-pidash.sh
+
+# Restart on failure
+Restart=always
+RestartSec=10
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=pidash
+
+[Install]
+WantedBy=multi-user.target

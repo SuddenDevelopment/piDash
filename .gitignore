@@ -65,6 +65,7 @@ Thumbs.db
 
 # Auto-generated files
 config/version.ts
+config/dashboards/active-dashboard.json
 
 # Optional npm cache directory
 .npm

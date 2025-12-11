@@ -2,19 +2,18 @@ import { View, Text, StyleSheet } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useState, useEffect } from 'react';
 import { DashboardRenderer } from '../components/dashboard/DashboardRenderer';
-import { SettingsProvider } from '../contexts/SettingsContext';
 import { DISPLAY_CONFIG } from '../config/display';
+import { API_BASE_URL } from '../config/api.config';
 
-// Import default dashboard config
-const defaultConfig = require('../config/dashboards/mvp-test.json');
-
-const API_BASE_URL = 'http://localhost:3001';
+// Import active dashboard config (prioritizes custom, falls back to default)
+// This file is generated at build time by scripts/prepare-config.js
+const activeConfig = require('../config/dashboards/active-dashboard.json');
 
 export default function Dashboard() {
-  const [config, setConfig] = useState(defaultConfig);
+  const [config, setConfig] = useState(activeConfig);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [configSource, setConfigSource] = useState<'default' | 'custom'>('default');
+  const [configSource, setConfigSource] = useState<'default' | 'custom'>('unknown');
   const [deploymentVersion, setDeploymentVersion] = useState<number | null>(null);
 
   // Load configuration from API
@@ -52,10 +51,10 @@ export default function Dashboard() {
       }
       setLoading(false);
     } catch (error) {
-      // Fallback to default config if API is not available
-      console.log('API not available, using default config');
-      setConfig(defaultConfig);
-      setConfigSource('default');
+      // Fallback to embedded config if API is not available
+      console.log('API not available, using embedded config from build');
+      setConfig(activeConfig);
+      setConfigSource('embedded');
       setLoading(false);
     }
   };
@@ -118,27 +117,25 @@ export default function Dashboard() {
   }
 
   return (
-    <SettingsProvider>
-      <View style={styles.container}>
-        <View
-          style={[
-            styles.dashboardContainer,
-            {
-              width: DISPLAY_CONFIG.width,
-              height: DISPLAY_CONFIG.height,
-            },
-          ]}
-        >
-          <StatusBar style="light" hidden />
+    <View style={styles.container}>
+      <View
+        style={[
+          styles.dashboardContainer,
+          {
+            width: DISPLAY_CONFIG.width,
+            height: DISPLAY_CONFIG.height,
+          },
+        ]}
+      >
+        <StatusBar style="light" hidden />
 
-          <DashboardRenderer
-            config={config}
-            onError={setError}
-            onRefresh={handleRefresh}
-          />
-        </View>
+        <DashboardRenderer
+          config={config}
+          onError={setError}
+          onRefresh={handleRefresh}
+        />
       </View>
-    </SettingsProvider>
+    </View>
   );
 }
 

@@ -25,15 +25,44 @@ export function LayoutRenderer({
 }: LayoutRendererProps) {
   const layoutStyle = buildLayoutStyle(layout);
 
+  // Calculate panel dimensions for full-screen grid layouts
+  const getPanelStyle = (layoutType: string) => {
+    switch (layoutType) {
+      case '1x2':
+        return { width: '50%', height: '100%' };
+      case '2x2':
+        return { width: '50%', height: '50%' };
+      case '3x2':
+        return { width: '50%', height: `${100/3}%` };
+      case '3x3':
+        return { width: `${100/3}%`, height: `${100/3}%` };
+      default:
+        return {};
+    }
+  };
+
+  const isFullScreenGrid = ['1x2', '2x2', '3x2', '3x3'].includes(layout.type);
+  const panelWrapperStyle = isFullScreenGrid ? getPanelStyle(layout.type) : {};
+
   return (
     <View style={[layoutStyle, parentStyle]}>
       {panels.map((panel, index) => (
-        <PanelRenderer
-          key={panel.id || `panel-${index}`}
-          panel={panel}
-          config={config}
-          onNavigateTo={onNavigateTo}
-        />
+        isFullScreenGrid ? (
+          <View key={panel.id || `panel-${index}`} style={panelWrapperStyle}>
+            <PanelRenderer
+              panel={panel}
+              config={config}
+              onNavigateTo={onNavigateTo}
+            />
+          </View>
+        ) : (
+          <PanelRenderer
+            key={panel.id || `panel-${index}`}
+            panel={panel}
+            config={config}
+            onNavigateTo={onNavigateTo}
+          />
+        )
       ))}
     </View>
   );
@@ -63,6 +92,18 @@ function buildLayoutStyle(layout: LayoutConfig): any {
     style.flexWrap = 'wrap';
   } else if (layout.type === 'absolute') {
     style.position = 'relative';
+  } else if (layout.type === '1x2' || layout.type === '2x2' || layout.type === '3x2' || layout.type === '3x3') {
+    // Full-screen grid layouts with no padding/gaps
+    style.display = 'flex';
+    style.flexDirection = 'row';
+    style.flexWrap = 'wrap';
+    style.width = '100%';
+    style.height = '100%';
+    style.padding = 0;
+    style.margin = 0;
+    style.gap = 0;
+    // Override any padding/gap that might be set
+    return style;
   }
 
   // Dimensions

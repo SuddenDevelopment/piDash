@@ -7,16 +7,19 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type Settings = {
   autoTransitionEnabled: boolean;
+  useDemoConfig: boolean;
 };
 
 type SettingsContextType = {
   settings: Settings;
   updateSettings: (updates: Partial<Settings>) => void;
   toggleAutoTransition: () => void;
+  toggleConfigMode: () => void;
 };
 
 const defaultSettings: Settings = {
   autoTransitionEnabled: true,
+  useDemoConfig: false,
 };
 
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
@@ -72,8 +75,15 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     }));
   };
 
+  const toggleConfigMode = () => {
+    setSettings(prev => ({
+      ...prev,
+      useDemoConfig: !prev.useDemoConfig,
+    }));
+  };
+
   return (
-    <SettingsContext.Provider value={{ settings, updateSettings, toggleAutoTransition }}>
+    <SettingsContext.Provider value={{ settings, updateSettings, toggleAutoTransition, toggleConfigMode }}>
       {children}
     </SettingsContext.Provider>
   );

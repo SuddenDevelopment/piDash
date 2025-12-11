@@ -11,13 +11,19 @@
  */
 
 const express = require('express');
+const http = require('http');
 const fs = require('fs').promises;
 const path = require('path');
 const multer = require('multer');
 const os = require('os');
+const WebSocketServer = require('./websocket-server');
 
 const app = express();
+const server = http.createServer(app);
 const PORT = 3001;
+
+// Initialize WebSocket server
+const wsServer = new WebSocketServer(server);
 
 // Get local network IP address
 function getLocalIpAddress() {
@@ -447,28 +453,87 @@ app.delete('/api/images/:filename', async (req, res) => {
   }
 });
 
+// POST /api/events/trigger - Trigger a real-time event
+app.post('/api/events/trigger', (req, res) => {
+  try {
+    const event = req.body;
+
+    // Basic validation
+    if (!event || !event.id) {
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid event: missing id'
+      });
+    }
+
+    if (!event.actions || !Array.isArray(event.actions)) {
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid event: actions must be an array'
+      });
+    }
+
+    // Broadcast event to all WebSocket clients
+    const clientCount = wsServer.broadcast(event);
+
+    res.json({
+      success: true,
+      message: 'Event broadcast successfully',
+      event: {
+        id: event.id,
+        actionsCount: event.actions.length
+      },
+      clientsNotified: clientCount,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error('Error triggering event:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to trigger event',
+      details: error.message
+    });
+  }
+});
+
+// GET /api/events/status - Get WebSocket server status
+app.get('/api/events/status', (req, res) => {
+  const status = wsServer.getStatus();
+  res.json({
+    success: true,
+    websocket: status,
+    timestamp: new Date().toISOString()
+  });
+});
+
 // Start server
-app.listen(PORT, '0.0.0.0', () => {
+server.listen(PORT, '0.0.0.0', () => {
+  const wsUrl = `ws://${LOCAL_IP}:${PORT}/ws`;
   console.log(`
-╔════════════════════════════════════════════════════════╗
-║  PiDash Configuration API Server                      ║
-╠════════════════════════════════════════════════════════╣
-║  Status: Running                                       ║
-║  Port: ${PORT}                                             ║
-║  Access: http://localhost:${PORT}                         ║
-║                                                        ║
-║  Endpoints:                                            ║
-║  - GET  /api/config             Load dashboard config ║
-║  - POST /api/config             Save dashboard config ║
-║  - GET  /api/css                Load CSS theme        ║
-║  - POST /api/css                Save CSS theme        ║
-║  - GET  /api/images             List uploaded images  ║
-║  - POST /api/images/upload      Upload new image      ║
-║  - DELETE /api/images/:filename Delete image          ║
-║  - POST /api/dashboard/refresh  Trigger refresh       ║
-║  - GET  /api/status             Health check          ║
-║  - GET  /api/version            Get version           ║
-║  - POST /api/version/bump       Bump version          ║
-╚════════════════════════════════════════════════════════╝
+╔═══════════════════════════════════════════════════════════╗
+║  PiDash Configuration API Server + WebSocket            ║
+╠═══════════════════════════════════════════════════════════╣
+║  Status: Running                                          ║
+║  Port: ${PORT}                                                ║
+║  HTTP: http://${LOCAL_IP}:${PORT}                                 ║
+║  WebSocket: ${wsUrl}     ║
+║                                                           ║
+║  REST Endpoints:                                          ║
+║  - GET  /api/config             Load dashboard config    ║
+║  - POST /api/config             Save dashboard config    ║
+║  - GET  /api/css                Load CSS theme           ║
+║  - POST /api/css                Save CSS theme           ║
+║  - GET  /api/images             List uploaded images     ║
+║  - POST /api/images/upload      Upload new image         ║
+║  - DELETE /api/images/:filename Delete image             ║
+║  - POST /api/dashboard/refresh  Trigger refresh          ║
+║  - GET  /api/status             Health check             ║
+║  - GET  /api/version            Get version              ║
+║  - POST /api/version/bump       Bump version             ║
+║                                                           ║
+║  WebSocket Endpoints:                                     ║
+║  - POST /api/events/trigger     Broadcast event to clients║
+║  - GET  /api/events/status      WebSocket server status  ║
+╚═══════════════════════════════════════════════════════════╝
   `);
 });

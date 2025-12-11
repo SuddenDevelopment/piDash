@@ -5,6 +5,7 @@ import { router } from 'expo-router';
 import { VisualBuilder } from '../components/config-builder/VisualBuilder';
 import { DashboardPreview } from '../components/config-builder/DashboardPreview';
 import { DashboardConfig } from '../types/dashboard-schema';
+import { API_BASE_URL } from '../config/api.config';
 
 // Type for AceEditor
 type AceEditorType = any;
@@ -21,8 +22,6 @@ if (Platform.OS === 'web') {
     import('ace-builds/src-noconflict/ext-language_tools');
   });
 }
-
-const API_BASE_URL = 'http://localhost:3001';
 
 export default function Settings() {
   const [config, setConfig] = useState<DashboardConfig | null>(null);
@@ -290,6 +289,117 @@ export default function Settings() {
     }
   };
 
+  const handleResetConfig = () => {
+    Alert.alert(
+      'Reset Configuration',
+      'This will reset to a single page with default flex layout. All current pages, panels, and settings will be lost. This only affects the in-memory config (not saved yet). Are you sure?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Reset',
+          style: 'destructive',
+          onPress: () => {
+            // Clear config first to force unmount
+            setConfig(null);
+            setSaving(true);
+
+            // Create a new config with one default page after a brief delay
+            setTimeout(() => {
+              const newPageId = `page-${Date.now()}`;
+              const newConfig: DashboardConfig = {
+                version: '1.0.0',
+                config: {
+                  theme: 'dark',
+                  transitions: {
+                    duration: 300,
+                    easing: 'easeInOut'
+                  }
+                },
+                pages: [
+                  {
+                    id: newPageId,
+                    name: 'Page 1',
+                    layout: {
+                      type: 'flex',
+                      direction: 'column',
+                      gap: 16,
+                      padding: 16,
+                    },
+                    panels: [],
+                  },
+                ],
+                navigation: {
+                  initialPage: newPageId,
+                  transitions: {
+                    default: {
+                      type: 'slide',
+                      direction: 'left',
+                      duration: 300
+                    }
+                  }
+                },
+                dataSources: {},
+              };
+
+              // Update both config and JSON
+              setConfig(newConfig);
+              setJsonConfig(JSON.stringify(newConfig, null, 2));
+
+              setSaving(false);
+              Alert.alert('Success', 'Configuration reset to 1 page with default flex layout. Remember to save if you want to persist this change.', [{ text: 'OK' }]);
+            }, 100);
+          },
+        },
+      ]
+    );
+  };
+
+  const handleLoadDemoConfig = async () => {
+    Alert.alert(
+      'Load Demo Configuration',
+      'This will load the demo configuration with example layouts and panels. Current changes will be lost (not saved yet). Are you sure?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Load Demo',
+          onPress: async () => {
+            setSaving(true);
+            try {
+              // Load demo config from the default file
+              const response = await fetch(`${API_BASE_URL}/api/config`);
+              const data = await response.json();
+
+              if (data.success && data.config) {
+                // Clear config first to force remount
+                setConfig(null);
+
+                setTimeout(() => {
+                  // Load the demo config
+                  setConfig(data.config);
+                  setJsonConfig(JSON.stringify(data.config, null, 2));
+                  setSaving(false);
+
+                  Alert.alert(
+                    'Demo Config Loaded',
+                    'Demo configuration loaded successfully. You can now explore the example layouts and panels. Remember to save if you want to persist any changes.',
+                    [{ text: 'OK' }]
+                  );
+                }, 100);
+              } else {
+                setSaving(false);
+                Alert.alert('Error', 'Failed to load demo configuration from server');
+              }
+            } catch (error) {
+              console.error('Error loading demo config:', error);
+              setSaving(false);
+              Alert.alert('Error', 'Failed to load demo configuration. Make sure the server is running.');
+            }
+          },
+        },
+      ]
+    );
+  };
+
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
@@ -360,7 +470,12 @@ export default function Settings() {
         {/* Editor */}
         <View style={styles.editorArea}>
           {activeTab === 'builder' && config && (
-            <VisualBuilder config={config} onChange={handleVisualBuilderChange} />
+            <VisualBuilder
+              key={config.navigation.initialPage}
+              config={config}
+              onChange={handleVisualBuilderChange}
+              onShowPreview={() => setPreviewVisible(true)}
+            />
           )}
 
           {activeTab === 'json' && (
@@ -468,6 +583,14 @@ export default function Settings() {
             <Text style={styles.formatButtonText}>Format JSON</Text>
           </TouchableOpacity>
         )}
+
+        <TouchableOpacity style={styles.resetConfigButton} onPress={handleResetConfig} disabled={saving}>
+          <Text style={styles.resetConfigButtonText}>⟲ Reset Config</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.loadDemoButton} onPress={handleLoadDemoConfig} disabled={saving}>
+          <Text style={styles.loadDemoButtonText}>📋 Load Demo</Text>
+        </TouchableOpacity>
 
         <TouchableOpacity style={styles.reloadButton} onPress={loadConfigurations} disabled={saving}>
           <Text style={styles.reloadButtonText}>⟳ Reload</Text>
@@ -647,6 +770,32 @@ const styles = StyleSheet.create({
     color: '#B794F6',
     fontSize: 14,
     fontWeight: '600',
+  },
+  resetConfigButton: {
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    backgroundColor: '#FF3366',
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: '#FF3366',
+  },
+  resetConfigButtonText: {
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: '700',
+  },
+  loadDemoButton: {
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    backgroundColor: '#10B981',
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: '#10B981',
+  },
+  loadDemoButtonText: {
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: '700',
   },
   reloadButton: {
     paddingHorizontal: 16,

@@ -10,9 +10,11 @@
     "web": "expo start --web",
     "api": "node server/config-api.js",
     "generate:version": "node scripts/generate-version.js",
-    "prebuild:web": "npm run generate:version",
+    "prepare:config": "node scripts/prepare-config.js",
+    "prebuild:web": "npm run prepare:config && npm run generate:version",
     "build:web": "expo export --platform web",
     "deploy:pi": "./scripts/deploy-to-pi.sh",
+    "deploy:pi:fast": "./scripts/deploy-to-pi-fast.sh",
     "watch:pi": "./scripts/watch-and-deploy.sh",
     "kiosk:enable": "./scripts/enable-kiosk-mode.sh"
   },
@@ -39,10 +41,12 @@
     "react-native-svg": "^15.14.0",
     "react-native-web": "~0.19.13",
     "typescript": "^5.3.3",
+    "ws": "^8.18.0",
     "zod": "^4.1.12"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
+    "@types/ws": "^8.5.12",
     "tsx": "^4.20.6"
   },
   "private": true
